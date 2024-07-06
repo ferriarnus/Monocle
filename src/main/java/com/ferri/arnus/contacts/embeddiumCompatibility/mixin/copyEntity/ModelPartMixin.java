@@ -64,10 +64,10 @@ public class ModelPartMixin implements ModelPartData {
 	private Map<String, ModelPart> children;
 
 	@Unique
-	private ModelPart[] sodium$children;
+	private ModelPart[] embeddium$children;
 
 	@Unique
-	private ModelCuboid[] sodium$cuboids;
+	private ModelCuboid[] embeddium$cuboids;
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onInit(List<ModelPart.Cube> cuboids, Map<String, ModelPart> children, CallbackInfo ci) {
@@ -78,8 +78,8 @@ public class ModelPartMixin implements ModelPartData {
 			copies[i] = accessor.sodium$copy();
 		}
 
-		this.sodium$cuboids = copies;
-		this.sodium$children = children.values()
+		this.embeddium$cuboids = copies;
+		this.embeddium$children = children.values()
 			.toArray(ModelPart[]::new);
 
 		// Try to catch errors caused by mods touching the collections after we've copied everything.
@@ -121,7 +121,7 @@ public class ModelPartMixin implements ModelPartData {
 
 	@Override
 	public ModelCuboid[] getCuboids() {
-		return this.sodium$cuboids;
+		return this.embeddium$cuboids;
 	}
 
 	@Override
@@ -136,6 +136,6 @@ public class ModelPartMixin implements ModelPartData {
 
 	@Override
 	public ModelPart[] getChildren() {
-		return this.sodium$children;
+		return this.embeddium$children;
 	}
 }

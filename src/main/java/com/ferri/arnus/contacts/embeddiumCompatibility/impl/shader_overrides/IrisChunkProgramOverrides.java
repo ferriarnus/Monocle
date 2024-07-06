@@ -34,7 +34,7 @@ import java.util.Optional;
 public class IrisChunkProgramOverrides {
 	private final EnumMap<IrisTerrainPass, GlProgram<IrisChunkShaderInterface>> programs = new EnumMap<>(IrisTerrainPass.class);
 	private boolean shadersCreated = false;
-	private int versionCounterForSodiumShaderReload = -1;
+	private int versionCounterForEmbeddiumShaderReload = -1;
 
 	private GlShader createVertexShader(IrisTerrainPass pass, EmbeddiumTerrainPipeline pipeline) {
 		Optional<String> irisVertexShader;
@@ -58,7 +58,7 @@ public class IrisChunkProgramOverrides {
 		}
 
 		return new GlShader(ShaderType.VERTEX, ResourceLocation.fromNamespaceAndPath("iris",
-			"sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".vsh"), source);
+			"embeddium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".vsh"), source);
 	}
 
 	private GlShader createGeometryShader(IrisTerrainPass pass, EmbeddiumTerrainPipeline pipeline) {
@@ -83,7 +83,7 @@ public class IrisChunkProgramOverrides {
 		}
 
 		return new GlShader(IrisShaderTypes.GEOMETRY, ResourceLocation.fromNamespaceAndPath("iris",
-			"sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".gsh"), source);
+			"embeddium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".gsh"), source);
 	}
 
 	private GlShader createTessControlShader(IrisTerrainPass pass, EmbeddiumTerrainPipeline pipeline) {
@@ -108,7 +108,7 @@ public class IrisChunkProgramOverrides {
 		}
 
 		return new GlShader(IrisShaderTypes.TESS_CONTROL, ResourceLocation.fromNamespaceAndPath("iris",
-			"sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".tcs"), source);
+			"embeddium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".tcs"), source);
 	}
 
 	private GlShader createTessEvalShader(IrisTerrainPass pass, EmbeddiumTerrainPipeline pipeline) {
@@ -133,7 +133,7 @@ public class IrisChunkProgramOverrides {
 		}
 
 		return new GlShader(IrisShaderTypes.TESS_EVAL, ResourceLocation.fromNamespaceAndPath("iris",
-			"sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".tes"), source);
+			"embeddium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".tes"), source);
 	}
 
 	private GlShader createFragmentShader(IrisTerrainPass pass, EmbeddiumTerrainPipeline pipeline) {
@@ -160,7 +160,7 @@ public class IrisChunkProgramOverrides {
 		}
 
 		return new GlShader(ShaderType.FRAGMENT, ResourceLocation.fromNamespaceAndPath("iris",
-			"sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".fsh"), source);
+			"embeddium-terrain-" + pass.toString().toLowerCase(Locale.ROOT) + ".fsh"), source);
 	}
 
 	private BlendModeOverride getBlendOverride(IrisTerrainPass pass, EmbeddiumTerrainPipeline pipeline) {
@@ -228,7 +228,7 @@ public class IrisChunkProgramOverrides {
 		}
 
 		try {
-			GlProgram.Builder builder = GlProgram.builder(ResourceLocation.fromNamespaceAndPath("sodium", "chunk_shader_for_"
+			GlProgram.Builder builder = GlProgram.builder(ResourceLocation.fromNamespaceAndPath("embeddium", "chunk_shader_for_"
 				+ pass.getName()));
 
 			if (geomShader != null) {
@@ -243,7 +243,7 @@ public class IrisChunkProgramOverrides {
 
 			return builder.attachShader(vertShader)
 				.attachShader(fragShader)
-				// The following 4 attributes are part of Sodium.
+				// The following 4 attributes are part of Embeddium.
 				.bindAttribute("a_PosId", ChunkShaderBindingPoints.ATTRIBUTE_POSITION_ID)
 				.bindAttribute("a_Color", ChunkShaderBindingPoints.ATTRIBUTE_COLOR)
 				.bindAttribute("a_TexCoord", ChunkShaderBindingPoints.ATTRIBUTE_BLOCK_TEXTURE)
@@ -256,7 +256,7 @@ public class IrisChunkProgramOverrides {
 				.link((shader) -> {
 					int handle = ((GlObject) shader).handle();
 					ShaderBindingContextExt contextExt = (ShaderBindingContextExt) shader;
-					GLDebug.nameObject(GL43C.GL_PROGRAM, handle, "sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT));
+					GLDebug.nameObject(GL43C.GL_PROGRAM, handle, "embeddium-terrain-" + pass.toString().toLowerCase(Locale.ROOT));
 					return new IrisChunkShaderInterface(handle, contextExt, pipeline, new ChunkShaderOptions(ChunkFogMode.SMOOTH, pass.toTerrainPass(), vertexType),
 						tessCShader != null || tessEShader != null, pass == IrisTerrainPass.SHADOW || pass == IrisTerrainPass.SHADOW_CUTOUT, blendOverride, bufferOverrides, alpha, pipeline.getCustomUniforms());
 				});
@@ -324,8 +324,8 @@ public class IrisChunkProgramOverrides {
 
 	@Nullable
 	public GlProgram<IrisChunkShaderInterface> getProgramOverride(TerrainRenderPass pass, ChunkVertexType vertexType) {
-		if (versionCounterForSodiumShaderReload != Iris.getPipelineManager().getVersionCounterForSodiumShaderReload()) {
-			versionCounterForSodiumShaderReload = Iris.getPipelineManager().getVersionCounterForSodiumShaderReload();
+		if (versionCounterForEmbeddiumShaderReload != Iris.getPipelineManager().getVersionCounterForSodiumShaderReload()) {
+			versionCounterForEmbeddiumShaderReload = Iris.getPipelineManager().getVersionCounterForSodiumShaderReload();
 			deleteShaders();
 		}
 

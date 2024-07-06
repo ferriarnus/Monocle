@@ -31,7 +31,7 @@ import java.util.SortedSet;
  * always moving.
  */
 @Mixin(EmbeddiumWorldRenderer.class)
-public abstract class MixinSodiumWorldRenderer {
+public abstract class MixinEmbeddiumWorldRenderer {
 	private static int beList = 0;
 	private static boolean renderLightsOnly;
 
@@ -41,8 +41,8 @@ public abstract class MixinSodiumWorldRenderer {
 
 			renderLightsOnly = lightsOnly;
 
-			((SodiumWorldRendererAccessor) EmbeddiumWorldRenderer.instance()).invokeRenderBlockEntities(modelView, Minecraft.getInstance().renderBuffers(), Long2ObjectMaps.emptyMap(), tickDelta, bufferSource, cameraX, cameraY, cameraZ, Minecraft.getInstance().getBlockEntityRenderDispatcher());
-			((SodiumWorldRendererAccessor) EmbeddiumWorldRenderer.instance()).invokeRenderGlobalBlockEntities(modelView, Minecraft.getInstance().renderBuffers(), Long2ObjectMaps.emptyMap(), tickDelta, bufferSource, cameraX, cameraY, cameraZ, Minecraft.getInstance().getBlockEntityRenderDispatcher());
+			((EmbeddiumWorldRendererAccessor) EmbeddiumWorldRenderer.instance()).invokeRenderBlockEntities(modelView, Minecraft.getInstance().renderBuffers(), Long2ObjectMaps.emptyMap(), tickDelta, bufferSource, cameraX, cameraY, cameraZ, Minecraft.getInstance().getBlockEntityRenderDispatcher());
+			((EmbeddiumWorldRendererAccessor) EmbeddiumWorldRenderer.instance()).invokeRenderGlobalBlockEntities(modelView, Minecraft.getInstance().renderBuffers(), Long2ObjectMaps.emptyMap(), tickDelta, bufferSource, cameraX, cameraY, cameraZ, Minecraft.getInstance().getBlockEntityRenderDispatcher());
 
 			renderLightsOnly = false;
 

@@ -4,7 +4,7 @@ import net.irisshaders.iris.vertices.views.QuadView;
 import org.embeddedt.embeddium.api.vertex.attributes.common.PositionAttribute;
 import org.embeddedt.embeddium.api.vertex.attributes.common.TextureAttribute;
 
-public class SodiumBufferBuilderPolygonView implements QuadView {
+public class EmbeddiumBufferBuilderPolygonView implements QuadView {
 	private long ptr;
 	private int attributeOffsetPosition;
 	private int attributeOffsetTexture;

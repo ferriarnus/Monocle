@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-// This is a modified version of a mixin in Sodium, with a check for if a shader pack is active.
+// This is a modified version of a mixin in embeddium, with a check for if a shader pack is active.
 @Mixin(LevelRenderer.class)
 public class MixinLevelRenderer {
 	@Shadow

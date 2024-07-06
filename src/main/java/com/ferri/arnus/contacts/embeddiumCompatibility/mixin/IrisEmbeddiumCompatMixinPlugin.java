@@ -14,14 +14,14 @@ import java.util.Set;
  * spamming the log if Sodium isn't present.
  */
 public class IrisEmbeddiumCompatMixinPlugin implements IMixinConfigPlugin {
-	private boolean validSodiumVersion = false;
+	private boolean validEmbeddiumVersion = false;
 
 	@Override
 	public void onLoad(String mixinPackage) {
 
-		validSodiumVersion = IrisPlatformHelpers.getInstance().isModLoaded("embeddium");
+		validEmbeddiumVersion = IrisPlatformHelpers.getInstance().isModLoaded("embeddium");
 
-		if (!validSodiumVersion) {
+		if (!validEmbeddiumVersion) {
 			// We can't use Iris' logger here due to classloading issues.
 			System.err.println("[Iris] Invalid/missing version of Embeddium detected, disabling compatibility mixins!");
 		}
@@ -35,7 +35,7 @@ public class IrisEmbeddiumCompatMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return validSodiumVersion;
+		return validEmbeddiumVersion;
 	}
 
 	@Override

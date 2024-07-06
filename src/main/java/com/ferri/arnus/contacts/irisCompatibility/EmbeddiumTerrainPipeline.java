@@ -286,7 +286,7 @@ public class EmbeddiumTerrainPipeline {
 		return Optional.empty();
 	}
 
-	public static String parseSodiumImport(String shader) {
+	public static String parseEmbeddiumImport(String shader) {
 		Pattern IMPORT_PATTERN = Pattern.compile("#import <(?<namespace>.*):(?<path>.*)>");
 		Matcher matcher = IMPORT_PATTERN.matcher(shader);
 
@@ -333,7 +333,7 @@ public class EmbeddiumTerrainPipeline {
 			terrainSolidTessEval = Optional.ofNullable(transformed.get(PatchShaderType.TESS_EVAL));
 			terrainSolidFragment = Optional.ofNullable(transformed.get(PatchShaderType.FRAGMENT));
 
-			ShaderPrinter.printProgram(sources.getName() + "_sodium_solid").addSources(transformed).print();
+			ShaderPrinter.printProgram(sources.getName() + "_embeddium_solid").addSources(transformed).print();
 		}, () -> {
 			terrainSolidBlendOverride = null;
 			terrainSolidBufferOverrides = Collections.emptyList();
@@ -369,7 +369,7 @@ public class EmbeddiumTerrainPipeline {
 			terrainCutoutTessEval = Optional.ofNullable(transformed.get(PatchShaderType.TESS_EVAL));
 			terrainCutoutFragment = Optional.ofNullable(transformed.get(PatchShaderType.FRAGMENT));
 
-			ShaderPrinter.printProgram(sources.getName() + "_sodium_cutout").addSources(transformed).print();
+			ShaderPrinter.printProgram(sources.getName() + "_embeddium_cutout").addSources(transformed).print();
 		}, () -> {
 			terrainCutoutBlendOverride = null;
 			terrainCutoutBufferOverrides = Collections.emptyList();
@@ -407,7 +407,7 @@ public class EmbeddiumTerrainPipeline {
 			translucentTessEval = Optional.ofNullable(transformed.get(PatchShaderType.TESS_EVAL));
 			translucentFragment = Optional.ofNullable(transformed.get(PatchShaderType.FRAGMENT));
 
-			ShaderPrinter.printProgram(sources.getName() + "_sodium").addSources(transformed).print();
+			ShaderPrinter.printProgram(sources.getName() + "_embeddium").addSources(transformed).print();
 		}, () -> {
 			translucentBlendOverride = null;
 			translucentBufferOverrides = Collections.emptyList();
@@ -453,9 +453,9 @@ public class EmbeddiumTerrainPipeline {
 			shadowCutoutFragment = Optional.ofNullable(transformedCutout.get(PatchShaderType.FRAGMENT));
 			shadowFragment = Optional.ofNullable(transformed.get(PatchShaderType.FRAGMENT));
 
-			ShaderPrinter.printProgram(sources.getName() + "_sodium")
+			ShaderPrinter.printProgram(sources.getName() + "_embeddium")
 				.addSources(transformed)
-				.setName(sources.getName() + "_sodium_cutout")
+				.setName(sources.getName() + "_embeddium_cutout")
 				.addSource(PatchShaderType.FRAGMENT, shadowCutoutFragment.orElse(null))
 				.print();
 		}, () -> {
@@ -616,7 +616,7 @@ public class EmbeddiumTerrainPipeline {
 	}
 
 	public ProgramUniforms.Builder initUniforms(int programId) {
-		ProgramUniforms.Builder uniforms = ProgramUniforms.builder("<sodium shaders>", programId);
+		ProgramUniforms.Builder uniforms = ProgramUniforms.builder("<embeddium shaders>", programId);
 
 		CommonUniforms.addDynamicUniforms(uniforms, FogMode.PER_VERTEX);
 		customUniforms.assignTo(uniforms);

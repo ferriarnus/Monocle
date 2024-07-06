@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import java.util.SortedSet;
 
 @Mixin(EmbeddiumWorldRenderer.class)
-public interface SodiumWorldRendererAccessor {
+public interface EmbeddiumWorldRendererAccessor {
 	@Invoker
 	void invokeRenderBlockEntities(PoseStack matrices, RenderBuffers bufferBuilders, Long2ObjectMap<SortedSet<BlockDestructionProgress>> blockBreakingProgressions, float tickDelta, MultiBufferSource.BufferSource immediate, double x, double y, double z, BlockEntityRenderDispatcher blockEntityRenderer);
 
