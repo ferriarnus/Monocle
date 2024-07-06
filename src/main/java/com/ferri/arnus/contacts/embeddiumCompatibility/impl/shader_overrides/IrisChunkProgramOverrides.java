@@ -1,8 +1,8 @@
 package com.ferri.arnus.contacts.embeddiumCompatibility.impl.shader_overrides;
 
 import com.ferri.arnus.contacts.embeddiumCompatibility.impl.IrisChunkShaderBindingPoints;
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumTerrainPipeline;
-import com.ferri.arnus.contacts.irisCompatibility.WorldRenderingPipelineExtension;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumTerrainPipeline;
+import com.ferri.arnus.contacts.irisCompatibility.impl.WorldRenderingPipelineExtension;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.blending.AlphaTest;

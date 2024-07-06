@@ -1,4 +1,4 @@
-package com.ferri.arnus.contacts.irisCompatibility;
+package com.ferri.arnus.contacts.irisCompatibility.impl;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.irisshaders.iris.gl.blending.AlphaTest;

@@ -1,4 +1,4 @@
-package com.ferri.arnus.contacts.irisCompatibility;
+package com.ferri.arnus.contacts.irisCompatibility.impl;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.query.Root;

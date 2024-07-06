@@ -1,4 +1,4 @@
-package com.ferri.arnus.contacts.irisCompatibility;
+package com.ferri.arnus.contacts.irisCompatibility.impl;
 
 public interface WorldRenderingPipelineExtension {
 

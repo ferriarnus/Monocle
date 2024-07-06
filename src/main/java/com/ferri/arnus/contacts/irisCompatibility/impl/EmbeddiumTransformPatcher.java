@@ -1,6 +1,6 @@
-package com.ferri.arnus.contacts.irisCompatibility;
+package com.ferri.arnus.contacts.irisCompatibility.impl;
 
-import com.ferri.arnus.contacts.mixins.TransformPatcherInvoker;
+import com.ferri.arnus.contacts.irisCompatibility.mixin.TransformPatcherInvoker;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.irisshaders.iris.gl.blending.AlphaTest;
 import net.irisshaders.iris.gl.state.ShaderAttributeInputs;

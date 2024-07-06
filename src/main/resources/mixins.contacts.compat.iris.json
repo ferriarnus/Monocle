@@ -1,5 +1,5 @@
 {
-  "package": "com.ferri.arnus.contacts.mixins",
+  "package": "com.ferri.arnus.contacts.irisCompatibility.mixin",
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "refmap": "contacts.refmap.json",

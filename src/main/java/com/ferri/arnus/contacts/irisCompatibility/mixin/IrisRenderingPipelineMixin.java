@@ -1,7 +1,7 @@
-package com.ferri.arnus.contacts.mixins;
+package com.ferri.arnus.contacts.irisCompatibility.mixin;
 
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumTerrainPipeline;
-import com.ferri.arnus.contacts.irisCompatibility.WorldRenderingPipelineExtension;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumTerrainPipeline;
+import com.ferri.arnus.contacts.irisCompatibility.impl.WorldRenderingPipelineExtension;
 import com.google.common.collect.ImmutableSet;
 import net.irisshaders.iris.gl.framebuffer.GlFramebuffer;
 import net.irisshaders.iris.pipeline.IrisRenderingPipeline;

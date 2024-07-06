@@ -1,16 +1,15 @@
-package com.ferri.arnus.contacts.mixins;
+package com.ferri.arnus.contacts.irisCompatibility.mixin;
 
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumCoreTransformer;
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumParameters;
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumPatch;
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumTransformer;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumCoreTransformer;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumParameters;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumPatch;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumTransformer;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.douira.glsl_transformer.ast.node.Profile;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.Version;
 import io.github.douira.glsl_transformer.ast.node.VersionStatement;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.ASTParser;
 import io.github.douira.glsl_transformer.ast.transform.EnumASTTransformer;
 import net.irisshaders.iris.pipeline.transform.Patch;
 import net.irisshaders.iris.pipeline.transform.PatchShaderType;
@@ -25,7 +24,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import java.util.Map;
 import java.util.Objects;
 
 @Mixin(TransformPatcher.class)

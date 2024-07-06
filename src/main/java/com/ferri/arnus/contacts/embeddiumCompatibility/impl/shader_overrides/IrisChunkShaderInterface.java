@@ -1,6 +1,6 @@
 package com.ferri.arnus.contacts.embeddiumCompatibility.impl.shader_overrides;
 
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumTerrainPipeline;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumTerrainPipeline;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.gl.blending.BlendModeOverride;

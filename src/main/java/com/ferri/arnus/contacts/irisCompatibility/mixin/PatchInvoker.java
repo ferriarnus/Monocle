@@ -1,4 +1,4 @@
-package com.ferri.arnus.contacts.mixins;
+package com.ferri.arnus.contacts.irisCompatibility.mixin;
 
 import net.irisshaders.iris.pipeline.transform.Patch;
 import org.spongepowered.asm.mixin.Mixin;

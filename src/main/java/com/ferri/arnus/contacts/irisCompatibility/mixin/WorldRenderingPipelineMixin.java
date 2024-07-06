@@ -1,6 +1,6 @@
-package com.ferri.arnus.contacts.mixins;
+package com.ferri.arnus.contacts.irisCompatibility.mixin;
 
-import com.ferri.arnus.contacts.irisCompatibility.WorldRenderingPipelineExtension;
+import com.ferri.arnus.contacts.irisCompatibility.impl.WorldRenderingPipelineExtension;
 import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
 import org.spongepowered.asm.mixin.Mixin;
 

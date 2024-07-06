@@ -1,6 +1,6 @@
-package com.ferri.arnus.contacts.mixins;
+package com.ferri.arnus.contacts.irisCompatibility.mixin;
 
-import com.ferri.arnus.contacts.irisCompatibility.EmbeddiumPatch;
+import com.ferri.arnus.contacts.irisCompatibility.impl.EmbeddiumPatch;
 import net.irisshaders.iris.pipeline.transform.Patch;
 import org.apache.commons.lang3.ArrayUtils;
 import org.spongepowered.asm.mixin.Final;
