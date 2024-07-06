@@ -85,8 +85,29 @@ description='''${mod_description}'''
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+    modId="embeddium"
+    type="required"
+    versionRange="[1.0.0-beta.1+mc1.21]"
+    ordering="NONE"
+    side="CLIENT"
+
+
+[[dependencies.${mod_id}]]
+    modId="iris"
+    type="required"
+    versionRange="[1.8.0,)"
+    ordering="NONE"
+    side="CLIENT"
+
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
 # stop your mod loading on the server for example.
 #[features.${mod_id}]
 #openGLVersion="[3.2,)"
+
+[[mixins]]
+config = "mixins.contacts.compat.embeddium.json"
+
+[[mixins]]
+config = "mixins.contacts.compat.iris.json"

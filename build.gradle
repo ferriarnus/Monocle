@@ -19,7 +19,12 @@ version = mod_version
 group = mod_group_id
 
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
+
     mavenLocal()
+    maven { url = "https://maven.blamejared.com" }
 }
 
 base {
@@ -125,12 +130,18 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
+    implementation("iris:iris-neoforge:1.8.0-snapshot+mc1.21-local")
+    compileOnly("sodium:sodium-neoforge:0.6.0-alpha.1-modonly")
 
     // Example mod dependency using a file as dependency
     // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
+    implementation("org.embeddedt:embeddium-1.21:1.0.0-beta.1+mc1.21")
 
     // Example project dependency using a sister or child project:
     // implementation project(":myproject")
+
+    //TODO can we get this without importing
+    implementation("io.github.douira:glsl-transformer:2.0.1")
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
