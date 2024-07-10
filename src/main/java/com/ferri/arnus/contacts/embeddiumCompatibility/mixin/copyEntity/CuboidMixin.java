@@ -4,6 +4,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Direction;
 import org.embeddedt.embeddium.impl.model.ModelCuboidAccessor;
 import org.embeddedt.embeddium.impl.render.immediate.model.ModelCuboid;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,5 +28,10 @@ public class CuboidMixin implements ModelCuboidAccessor {
 	@Override
 	public ModelCuboid sodium$copy() {
 		return this.embeddium$cuboid;
+	}
+
+	@Override
+	public @Nullable ModelCuboid embeddium$getSimpleCuboid() {
+		return embeddium$cuboid;
 	}
 }
