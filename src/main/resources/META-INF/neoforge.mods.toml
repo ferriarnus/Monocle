@@ -107,7 +107,7 @@ description='''${mod_description}'''
 #openGLVersion="[3.2,)"
 
 [[mixins]]
-config = "mixins.contacts.compat.embeddium.json"
+config = "mixins.monocle.compat.embeddium.json"
 
 [[mixins]]
-config = "mixins.contacts.compat.iris.json"
+config = "mixins.monocle.compat.iris.json"

@@ -1,0 +1,20 @@
+{
+  "package": "com.ferri.arnus.monocle.irisCompatibility.mixin",
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "monocle.refmap.json",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "conformVisibility": true
+  },
+  "client": [
+    "IrisRenderingPipelineMixin",
+    "TransformPatcherInvoker",
+    "PatchInvoker",
+    "PatchMixin",
+    "TransformPatcherMixin",
+    "WorldRenderingPipelineMixin"
+  ]
+}
