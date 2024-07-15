@@ -21,6 +21,7 @@ public class MixinShaderType {
 	static {
 		int baseOrdinal = $VALUES.length;
 
+		/*
 		IrisShaderTypes.GEOMETRY
 			= ShaderTypeAccessor.createShaderType("GEOMETRY", baseOrdinal, GL32C.GL_GEOMETRY_SHADER);
 		IrisShaderTypes.TESS_CONTROL
@@ -29,5 +30,7 @@ public class MixinShaderType {
 			= ShaderTypeAccessor.createShaderType("TESS_EVAL", baseOrdinal + 2, GL42C.GL_TESS_EVALUATION_SHADER);
 
 		$VALUES = ArrayUtils.addAll($VALUES, IrisShaderTypes.GEOMETRY, IrisShaderTypes.TESS_CONTROL, IrisShaderTypes.TESS_EVAL);
+
+		 */
 	}
 }
