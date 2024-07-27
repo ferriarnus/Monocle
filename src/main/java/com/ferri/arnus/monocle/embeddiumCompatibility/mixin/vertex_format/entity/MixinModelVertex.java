@@ -1,99 +1,110 @@
 package com.ferri.arnus.monocle.embeddiumCompatibility.mixin.vertex_format.entity;
 
 import com.ferri.arnus.monocle.embeddiumCompatibility.impl.vertex_format.entity_xhfp.EntityVertex;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.irisshaders.iris.api.v0.IrisApi;
+import net.irisshaders.iris.uniforms.CapturedRenderingState;
 import net.irisshaders.iris.vertices.ImmediateState;
-import org.embeddedt.embeddium.api.math.MatrixHelper;
-import org.embeddedt.embeddium.api.util.ColorABGR;
-import org.embeddedt.embeddium.api.util.ColorU8;
+import org.embeddedt.embeddium.api.util.NormI8;
 import org.embeddedt.embeddium.api.vertex.buffer.VertexBufferWriter;
+import org.embeddedt.embeddium.api.vertex.format.VertexFormatDescription;
 import org.embeddedt.embeddium.api.vertex.format.common.ModelVertex;
 import org.embeddedt.embeddium.impl.model.quad.ModelQuadView;
 import org.embeddedt.embeddium.impl.render.immediate.model.BakedModelEncoder;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BakedModelEncoder.class)
 public class MixinModelVertex {
-	@Inject(method = "writeQuadVertices(Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lorg/embeddedt/embeddium/impl/model/quad/ModelQuadView;IIIZ)V", at = @At("HEAD"), cancellable = true)
-	private static void redirect2(VertexBufferWriter writer, PoseStack.Pose matrices, ModelQuadView quad, int color, int light, int overlay, boolean todo, CallbackInfo ci) {
-		if (shouldBeExtended()) {
-			ci.cancel();
-			EntityVertex.writeQuadVertices(writer, matrices, quad, light, overlay, color);
+	private static final int OFFSET_MID_TEXTURE = 42;
+
+	/**
+	 * @author IMS, embeddedt
+	 * @reason Set the shared flag for whether vertex data is being extended.
+	 */
+	@Inject(method = "writeQuadVertices(Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lorg/embeddedt/embeddium/impl/model/quad/ModelQuadView;IIIZ)V", at = @At("HEAD"))
+	private static void checkForExtension(VertexBufferWriter writer, PoseStack.Pose matrices, ModelQuadView quad, int color, int light, int overlay, boolean todo, CallbackInfo ci, @Share("shouldExtend") LocalBooleanRef shouldExtend) {
+		shouldExtend.set(shouldBeExtended());
+	}
+
+	/**
+	 * @author IMS, embeddedt
+	 * @reason Increase the allocated buffer size if using the extended vertex format.
+	 */
+	@ModifyConstant(method = "writeQuadVertices(Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lorg/embeddedt/embeddium/impl/model/quad/ModelQuadView;IIIZ)V", constant = @Constant(intValue = 4 * ModelVertex.STRIDE))
+	private static int getNewBufferSize(int prevSize, @Share("shouldExtend") LocalBooleanRef shouldExtend) {
+		return shouldExtend.get() ? (4 * EntityVertex.STRIDE) : prevSize;
+	}
+
+	/**
+	 * @author IMS, embeddedt
+	 * @reason Increase the stride used for advancing the buffer pointer if using the extended vertex format.
+	 */
+	@ModifyConstant(method = "writeQuadVertices(Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lorg/embeddedt/embeddium/impl/model/quad/ModelQuadView;IIIZ)V", constant = @Constant(longValue = ModelVertex.STRIDE))
+	private static long getNewStride(long prevSize, @Share("shouldExtend") LocalBooleanRef shouldExtend) {
+		return shouldExtend.get() ? EntityVertex.STRIDE : prevSize;
+	}
+
+	/**
+	 * @author IMS, embeddedt
+	 * @reason Inject extended properties (mid U/V, captured rendering state) into the buffer.
+	 */
+	@Inject(method = "writeQuadVertices(Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lorg/embeddedt/embeddium/impl/model/quad/ModelQuadView;IIIZ)V", at = @At(value = "INVOKE", target = "Lorg/embeddedt/embeddium/api/vertex/format/common/ModelVertex;write(JFFFIFFIII)V"))
+	private static void injectExtendedData(CallbackInfo ci, @Local(ordinal = 0, argsOnly = true) ModelQuadView quad, @Local(name = "ptr") long ptr, @Share("shouldExtend") LocalBooleanRef shouldExtend) {
+		if (shouldExtend.get()) {
+			writeExtendedData(quad, ptr);
 		}
 	}
 
 	/**
-	 * @author IMS
-	 * @reason Rewrite
+	 * @author IMS, embeddedt
+	 * @reason Do a second pass over the data and inject any extra properties (tangent, etc.)
 	 */
-	@Overwrite
-	public static void writeQuadVertices(VertexBufferWriter writer, PoseStack.Pose matrices, ModelQuadView quad, float r, float g, float b, float a, float[] brightnessTable, boolean colorize, int[] light, int overlay) {
-		Matrix3f matNormal = matrices.normal();
-		Matrix4f matPosition = matrices.pose();
-		MemoryStack stack = MemoryStack.stackPush();
-
-		try {
-			long buffer = stack.nmalloc(144);
-			long ptr = buffer;
-			int normal = MatrixHelper.transformNormal(matNormal, matrices.trustedNormals, quad.getLightFace());
-
-			for (int i = 0; i < 4; ++i) {
-				float x = quad.getX(i);
-				float y = quad.getY(i);
-				float z = quad.getZ(i);
-				float xt = MatrixHelper.transformPositionX(matPosition, x, y, z);
-				float yt = MatrixHelper.transformPositionY(matPosition, x, y, z);
-				float zt = MatrixHelper.transformPositionZ(matPosition, x, y, z);
-				float brightness = brightnessTable[i];
-				float fR;
-				float fG;
-				float fB;
-				int color;
-				if (colorize) {
-					color = quad.getColor(i);
-					float oR = ColorU8.byteToNormalizedFloat(ColorABGR.unpackRed(color));
-					float oG = ColorU8.byteToNormalizedFloat(ColorABGR.unpackGreen(color));
-					float oB = ColorU8.byteToNormalizedFloat(ColorABGR.unpackBlue(color));
-					fR = oR * brightness * r;
-					fG = oG * brightness * g;
-					fB = oB * brightness * b;
-				} else {
-					fR = brightness * r;
-					fG = brightness * g;
-					fB = brightness * b;
-				}
-
-				color = ColorABGR.pack(fR, fG, fB, a);
-				ModelVertex.write(ptr, xt, yt, zt, color, quad.getTexU(i), quad.getTexV(i), overlay, light[i], normal);
-				ptr += 36L;
-			}
-
-			writer.push(stack, buffer, 4, ModelVertex.FORMAT);
-		} catch (Throwable var34) {
-			if (stack != null) {
-				try {
-					stack.close();
-				} catch (Throwable var33) {
-					var34.addSuppressed(var33);
-				}
-			}
-
-			throw var34;
+	@Inject(method = "writeQuadVertices(Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lorg/embeddedt/embeddium/impl/model/quad/ModelQuadView;IIIZ)V", at = @At(value = "INVOKE", target = "Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;push(Lorg/lwjgl/system/MemoryStack;JILorg/embeddedt/embeddium/api/vertex/format/VertexFormatDescription;)V"))
+	private static void injectExtendedData(CallbackInfo ci, @Local(ordinal = 0, argsOnly = true) ModelQuadView quad, @Local(name = "ptr") long ptr, @Share("shouldExtend") LocalBooleanRef shouldExtend, @Local(name = "normal") int normal) {
+		if (shouldExtend.get()) {
+			endQuad(ptr, normal);
 		}
-
-		if (stack != null) {
-			stack.close();
-		}
-
 	}
+
+	/**
+	 * @author IMS, embeddedt
+	 * @reason Change the format used for pushing data if the extended format is used
+	 */
+	@ModifyArg(method = "writeQuadVertices(Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lorg/embeddedt/embeddium/impl/model/quad/ModelQuadView;IIIZ)V", at = @At(value = "INVOKE", target = "Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;push(Lorg/lwjgl/system/MemoryStack;JILorg/embeddedt/embeddium/api/vertex/format/VertexFormatDescription;)V"), index = 3)
+	private static VertexFormatDescription changePushFormat(VertexFormatDescription desc, @Share("shouldExtend") LocalBooleanRef shouldExtend) {
+		return shouldExtend.get() ? EntityVertex.FORMAT : desc;
+	}
+
+	@Unique
+	private static void endQuad(long ptr, int normal) {
+		EntityVertex.endQuad(ptr, NormI8.unpackX(normal), NormI8.unpackY(normal), NormI8.unpackZ(normal));
+	}
+
+	@Unique
+	private static void writeExtendedData(ModelQuadView quad, long ptr) {
+		float midU = ((quad.getTexU(0) + quad.getTexU(1) + quad.getTexU(2) + quad.getTexU(3)) * 0.25f);
+		float midV = ((quad.getTexV(0) + quad.getTexV(1) + quad.getTexV(2) + quad.getTexV(3)) * 0.25f);
+
+		MemoryUtil.memPutFloat(ptr + OFFSET_MID_TEXTURE, midU);
+		MemoryUtil.memPutFloat(ptr + OFFSET_MID_TEXTURE + 4, midV);
+
+		MemoryUtil.memPutShort(ptr + 36, (short) CapturedRenderingState.INSTANCE.getCurrentRenderedEntity());
+		MemoryUtil.memPutShort(ptr + 38, (short) CapturedRenderingState.INSTANCE.getCurrentRenderedBlockEntity());
+		MemoryUtil.memPutShort(ptr + 40, (short) CapturedRenderingState.INSTANCE.getCurrentRenderedItem());
+	}
+
+	// embeddedt - Previously the other writeQuadVertices method was overwritten here with a carbon copy of its contents, we remove this
 
 	private static boolean shouldBeExtended() {
 		return IrisApi.getInstance().isShaderPackInUse() && ImmediateState.renderWithExtendedVertexFormat;

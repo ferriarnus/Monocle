@@ -131,7 +131,7 @@ public final class EntityVertex {
 		}
 	}
 
-	private static void endQuad(long ptr, float normalX, float normalY, float normalZ) {
+	public static void endQuad(long ptr, float normalX, float normalY, float normalZ) {
 		quadView.setup(ptr, STRIDE);
 
 		int tangent = NormalHelper.computeTangent(normalX, normalY, normalZ, quadView);
