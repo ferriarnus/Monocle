@@ -130,7 +130,7 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
-    implementation("iris:iris-neoforge:1.8.0-snapshot+mc1.21-local")
+    jarJar(implementation("iris:iris-neoforge:[1.8.0-snapshot+mc1.21-local]"))
     //compileOnly("sodium:sodium-neoforge:0.6.0-alpha.1-modonly")
 
     // Example mod dependency using a file as dependency
