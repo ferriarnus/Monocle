@@ -88,7 +88,7 @@ public class MixinModelVertex {
 
 	@Unique
 	private static void endQuad(long ptr, int normal) {
-		EntityVertex.endQuad(ptr, NormI8.unpackX(normal), NormI8.unpackY(normal), NormI8.unpackZ(normal));
+		EntityVertex.endQuad(ptr - EntityVertex.STRIDE, NormI8.unpackX(normal), NormI8.unpackY(normal), NormI8.unpackZ(normal));
 	}
 
 	@Unique
