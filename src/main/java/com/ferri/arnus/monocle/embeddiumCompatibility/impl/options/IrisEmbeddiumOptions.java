@@ -43,10 +43,8 @@ public class IrisEmbeddiumOptions {
 				},
 				options -> IrisVideoSettings.getOverriddenShadowDistance(IrisVideoSettings.shadowDistance))
 			.setImpact(OptionImpact.HIGH)
-			.setEnabled(true)
+			.setEnabledPredicate(IrisVideoSettings::isShadowDistanceSliderEnabled)
 			.build();
-
-		//((OptionImplExtended) maxShadowDistanceSlider).iris$dynamicallyEnable(IrisVideoSettings::isShadowDistanceSliderEnabled);
 
 		return maxShadowDistanceSlider;
 	}
