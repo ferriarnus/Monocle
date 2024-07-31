@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Semi-critical mixin config plugin, disables mixins if Sodium isn't present,
- * since on 1.18+ we have mixins into Iris classes that crash the game instead of just
- * spamming the log if Sodium isn't present.
+ * Semi-critical mixin config plugin, disables mixins if Embeddium isn't present,
+ * since there are mixins into Iris classes that crash the game instead of just
+ * spamming the log if Embeddium isn't present.
  */
 public class IrisEmbeddiumCompatMixinPlugin implements IMixinConfigPlugin {
 	private boolean validEmbeddiumVersion = false;
@@ -22,8 +22,7 @@ public class IrisEmbeddiumCompatMixinPlugin implements IMixinConfigPlugin {
 		validEmbeddiumVersion = IrisPlatformHelpers.getInstance().isModLoaded("embeddium");
 
 		if (!validEmbeddiumVersion) {
-			// We can't use Iris' logger here due to classloading issues.
-			System.err.println("[Iris] Invalid/missing version of Embeddium detected, disabling compatibility mixins!");
+			System.err.println("[Monocle] Invalid/missing version of Embeddium detected, disabling compatibility mixins!");
 		}
 
 	}

@@ -10,6 +10,8 @@
     "conformVisibility": true
   },
   "client": [
+    "CrashReportExtenderMixin",
+    "DebugScreenOverlayMixin",
     "IrisRenderingPipelineMixin",
     "TransformPatcherInvoker",
     "PatchInvoker",

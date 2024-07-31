@@ -1,5 +1,6 @@
 package com.ferri.arnus.monocle;
 
+import net.neoforged.api.distmarker.Dist;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -9,7 +10,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod(Monocle.MODID)
+@Mod(value = Monocle.MODID, dist = Dist.CLIENT)
 public class Monocle {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "monocle";
