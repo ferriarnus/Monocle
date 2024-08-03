@@ -65,8 +65,11 @@ public class TransformPatcherMixin {
                             case VANILLA:
                                 VanillaTransformer.transform(transformer, tree, root, (VanillaParameters)parameters);
                                 break;
-                            case DH:
-                                DHTransformer.transform(transformer, tree, root, parameters);
+                            case DH_GENERIC:
+                                DHGenericTransformer.transform(transformer, tree, root, parameters);
+                                break;
+                            case DH_TERRAIN:
+                                DHTerrainTransformer.transform(transformer, tree, root, parameters);
                                 break;
                             default:
                                 if (parameters.patch == EmbeddiumPatch.EMBEDDIUM) {
