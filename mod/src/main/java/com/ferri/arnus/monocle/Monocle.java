@@ -18,6 +18,6 @@ public class Monocle {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public Monocle(IEventBus modEventBus, ModContainer modContainer) {
-
+        LOGGER.info("Loaded Monocle v{}", modContainer.getModInfo().getVersion().toString());
     }
 }
