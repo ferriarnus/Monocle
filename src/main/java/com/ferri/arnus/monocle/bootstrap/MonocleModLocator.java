@@ -20,7 +20,7 @@ public class MonocleModLocator implements IModFileCandidateLocator {
 
     @Override
     public void findCandidates(ILaunchContext context, IDiscoveryPipeline pipeline) {
-        URL url = MonocleModLocator.class.getResource("/META-INF/mod/monocle.jar");
+        URL url = MonocleModLocator.class.getResource("/META-INF/mod/monocle-mod-file.jar");
         try {
             Path path = url != null ? Paths.get(url.toURI()) : null;
             if(path == null || !Files.exists(path)) {

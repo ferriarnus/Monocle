@@ -23,7 +23,7 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = mod_id + "-mod-file"
 }
 
 // Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
@@ -137,6 +137,12 @@ dependencies {
 
     //TODO can we get this without importing
     implementation("io.github.douira:glsl-transformer:2.0.1")
+}
+
+jar {
+    manifest {
+        attributes["Automatic-Module-Name"] = "monocle_mod"
+    }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

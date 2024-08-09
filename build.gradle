@@ -30,11 +30,12 @@ dependencies {
 jar {
     manifest {
         attributes["FMLModType"] = "LIBRARY"
+        attributes["Automatic-Module-Name"] = "monocle_locator"
     }
     into("META-INF/mod") {
         from(configurations.jij) {
             rename { String filename ->
-                return "monocle.jar"
+                return "monocle-mod-file.jar"
             }
         }
     }
