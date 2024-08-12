@@ -1,5 +1,5 @@
 {
-  "package": "com.ferri.arnus.monocle.irisCompatibility.mixin",
+  "package": "dev.ferriarnus.monocle.irisCompatibility.mixin",
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "refmap": "monocle.refmap.json",

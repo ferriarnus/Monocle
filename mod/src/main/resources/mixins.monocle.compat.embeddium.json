@@ -1,6 +1,6 @@
 {
-  "package": "com.ferri.arnus.monocle.embeddiumCompatibility.mixin",
-  "plugin": "com.ferri.arnus.monocle.embeddiumCompatibility.mixin.IrisEmbeddiumCompatMixinPlugin",
+  "package": "dev.ferriarnus.monocle.embeddiumCompatibility.mixin",
+  "plugin": "dev.ferriarnus.monocle.embeddiumCompatibility.mixin.IrisEmbeddiumCompatMixinPlugin",
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "refmap": "monocle.refmap.json",
