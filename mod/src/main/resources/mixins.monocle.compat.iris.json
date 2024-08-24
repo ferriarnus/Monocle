@@ -17,6 +17,7 @@
     "PatchInvoker",
     "PatchMixin",
     "TransformPatcherMixin",
-    "WorldRenderingPipelineMixin"
+    "WorldRenderingPipelineMixin",
+    "ShadowRendererMixin"
   ]
 }

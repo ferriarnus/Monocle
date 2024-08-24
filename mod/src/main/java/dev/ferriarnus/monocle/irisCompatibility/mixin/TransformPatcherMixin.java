@@ -39,80 +39,81 @@ public class TransformPatcherMixin {
             VersionStatement versionStatement = tree.getVersionStatement();
             if (versionStatement == null) {
                 throw new IllegalStateException("Missing the version statement!");
-            } else {
-                Profile profile = versionStatement.profile;
-                Version version = versionStatement.version;
-                if (Objects.requireNonNull(parameters.patch) == Patch.COMPUTE) {
-                    versionStatement.profile = Profile.CORE;
-                    CommonTransformer.transform(transformer, tree, root, parameters, true);
+            }
+            Profile profile = versionStatement.profile;
+            Version version = versionStatement.version;
+            if (Objects.requireNonNull(parameters.patch) == Patch.COMPUTE) {// we can assume the version is at least 400 because it's a compute shader
+                versionStatement.profile = Profile.CORE;
+                CommonTransformer.transform(transformer, tree, root, parameters, true);
+            } else {// handling of Optifine's special core profile mode
+                boolean isLine = (parameters.patch == Patch.VANILLA && ((VanillaParameters) parameters).isLines());
+
+                if (profile == Profile.CORE || version.number >= 150 && profile == null || isLine) {
+                    // patch the version number to at least 330
+                    if (version.number < 330) {
+                        versionStatement.version = Version.GLSL33;
+                    }
+
+                    switch (parameters.patch) {
+                        case COMPOSITE:
+                            CompositeCoreTransformer.transform(transformer, tree, root, parameters);
+                            break;
+                        case SODIUM:
+                            SodiumParameters sodiumParameters = (SodiumParameters) parameters;
+                            SodiumCoreTransformer.transform(transformer, tree, root, sodiumParameters);
+                            break;
+                        case VANILLA:
+                            VanillaCoreTransformer.transform(transformer, tree, root, (VanillaParameters) parameters);
+                            break;
+                        default:
+                            if (parameters.patch == EmbeddiumPatch.EMBEDDIUM) {
+                                EmbeddiumParameters embeddiumParameters = (EmbeddiumParameters) parameters;
+                                EmbeddiumCoreTransformer.transform(transformer, tree, root, embeddiumParameters);
+                            } else {
+                                throw new UnsupportedOperationException("Unknown patch type: " + parameters.patch);
+                            }
+                    }
+
+                    if (parameters.type == PatchShaderType.FRAGMENT) {
+                        CompatibilityTransformer.transformFragmentCore(transformer, tree, root, parameters);
+                    }
                 } else {
-                    boolean isLine = parameters.patch == Patch.VANILLA && ((VanillaParameters)parameters).isLines();
-                    SodiumParameters sodiumParameters;
-                    if (profile != Profile.CORE && (version.number < 150 || profile != null) && !isLine) {
-                        if (version.number < 410) {
-                            versionStatement.version = Version.GLSL41;
-                        }
+                    // patch the version number to at least 330
+                    if (version.number < 330) {
+                        versionStatement.version = Version.GLSL33;
+                    }
+                    versionStatement.profile = Profile.CORE;
 
-                        versionStatement.profile = Profile.CORE;
-                        switch (parameters.patch) {
-                            case COMPOSITE:
-                                CompositeTransformer.transform(transformer, tree, root, parameters);
-                                break;
-                            case SODIUM:
-                                sodiumParameters = (SodiumParameters)parameters;
-                                SodiumTransformer.transform(transformer, tree, root, sodiumParameters);
-                                break;
-                            case VANILLA:
-                                VanillaTransformer.transform(transformer, tree, root, (VanillaParameters)parameters);
-                                break;
-                            case DH_GENERIC:
-                                DHGenericTransformer.transform(transformer, tree, root, parameters);
-                                break;
-                            case DH_TERRAIN:
-                                DHTerrainTransformer.transform(transformer, tree, root, parameters);
-                                break;
-                            default:
-                                if (parameters.patch == EmbeddiumPatch.EMBEDDIUM) {
-                                    EmbeddiumParameters embeddiumParameters = (EmbeddiumParameters) parameters;
-                                    EmbeddiumTransformer.transform(transformer, tree, root, embeddiumParameters);
-                                } else {
-                                    throw new UnsupportedOperationException("Unknown patch type: " + String.valueOf(parameters.patch));
-                                }
-                        }
-                    } else {
-                        if (version.number < 410) {
-                            versionStatement.version = Version.GLSL41;
-                        }
-
-                        switch (parameters.patch) {
-                            case COMPOSITE:
-                                CompositeCoreTransformer.transform(transformer, tree, root, parameters);
-                                break;
-                            case SODIUM:
-                                sodiumParameters = (SodiumParameters)parameters;
-                                SodiumCoreTransformer.transform(transformer, tree, root, sodiumParameters);
-                                break;
-                            case VANILLA:
-                                VanillaCoreTransformer.transform(transformer, tree, root, (VanillaParameters)parameters);
-                                break;
-                            default:
-                                if (parameters.patch == EmbeddiumPatch.EMBEDDIUM) {
-                                    EmbeddiumParameters embeddiumParameters = (EmbeddiumParameters) parameters;
-                                    EmbeddiumCoreTransformer.transform(transformer, tree, root, embeddiumParameters);
-                                } else {
-                                    throw new UnsupportedOperationException("Unknown patch type: " + String.valueOf(parameters.patch));
-                                }
-                        }
-
-                        if (parameters.type == PatchShaderType.FRAGMENT) {
-                            CompatibilityTransformer.transformFragmentCore(transformer, tree, root, parameters);
-                        }
+                    switch (parameters.patch) {
+                        case COMPOSITE:
+                            CompositeTransformer.transform(transformer, tree, root, parameters);
+                            break;
+                        case SODIUM:
+                            SodiumParameters sodiumParameters = (SodiumParameters) parameters;
+                            SodiumTransformer.transform(transformer, tree, root, sodiumParameters);
+                            break;
+                        case VANILLA:
+                            VanillaTransformer.transform(transformer, tree, root, (VanillaParameters) parameters);
+                            break;
+                        case DH_TERRAIN:
+                            DHTerrainTransformer.transform(transformer, tree, root, parameters);
+                            break;
+                        case DH_GENERIC:
+                            DHGenericTransformer.transform(transformer, tree, root, parameters);
+                            break;
+                        default:
+                            if (parameters.patch == EmbeddiumPatch.EMBEDDIUM) {
+                                EmbeddiumParameters embeddiumParameters = (EmbeddiumParameters) parameters;
+                                EmbeddiumTransformer.transform(transformer, tree, root, embeddiumParameters);
+                            } else {
+                                throw new UnsupportedOperationException("Unknown patch type: " + parameters.patch);
+                            }
                     }
                 }
-
-                TextureTransformer.transform(transformer, tree, root, parameters.getTextureStage(), parameters.getTextureMap());
-                CompatibilityTransformer.transformEach(transformer, tree, root, parameters);
             }
+            TextureTransformer.transform(transformer, tree, root,
+                    parameters.getTextureStage(), parameters.getTextureMap());
+            CompatibilityTransformer.transformEach(transformer, tree, root, parameters);
         };
     }
 }
