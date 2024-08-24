@@ -1,4 +1,4 @@
-package net.caffeinemc.mods.sodium.client.render.texture.SpriteUtil;
+package net.caffeinemc.mods.sodium.client.render.texture;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 

@@ -33,9 +33,9 @@ public abstract class MixinShaderChunkRenderer {
 
 		GlProgram<ChunkShaderInterface> program = null;
 
-		if (pipeline instanceof WorldRenderingPipelineExtension irisRenderingPipeline) {
-			irisRenderingPipeline.getEmbeddiumPrograms().getFramebuffer(pass).bind();
-			program = irisRenderingPipeline.getEmbeddiumPrograms().getProgram(pass);
+		if (pipeline instanceof IrisRenderingPipeline && pipeline instanceof WorldRenderingPipelineExtension extension) {
+			extension.getEmbeddiumPrograms().getFramebuffer(pass).bind();
+			program = extension.getEmbeddiumPrograms().getProgram(pass);
 		}
 
 		if (program == null) {
