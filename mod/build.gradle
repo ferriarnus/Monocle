@@ -20,6 +20,13 @@ repositories {
 
     mavenLocal()
     maven { url = "https://maven.blamejared.com" }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 base {
@@ -125,7 +132,8 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
-    implementation("org.taumc:iris-neoforge-1.21:${iris_chlorinated_version}")
+    //implementation("org.taumc:iris-neoforge-1.21:${iris_chlorinated_version}")
+    implementation "maven.modrinth:iris:1.8.0-beta.2+1.21-neoforge"
     //compileOnly("sodium:sodium-neoforge:0.6.0-alpha.1-modonly")
 
     // Example mod dependency using a file as dependency

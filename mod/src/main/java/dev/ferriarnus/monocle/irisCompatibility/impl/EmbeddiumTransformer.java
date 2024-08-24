@@ -36,21 +36,11 @@ public class EmbeddiumTransformer {
 			// See https://github.com/IrisShaders/Iris/issues/1149
 			root.rename("gl_MultiTexCoord2", "gl_MultiTexCoord1");
 
-			if (parameters.inputs.hasTex()) {
-				root.replaceReferenceExpressions(t, "gl_MultiTexCoord0",
+			root.replaceReferenceExpressions(t, "gl_MultiTexCoord0",
 					"vec4(_vert_tex_diffuse_coord, 0.0, 1.0)");
-			} else {
-				root.replaceReferenceExpressions(t, "gl_MultiTexCoord0",
-					"vec4(0.0, 0.0, 0.0, 1.0)");
-			}
 
-			if (parameters.inputs.hasLight()) {
-				root.replaceReferenceExpressions(t, "gl_MultiTexCoord1",
+			root.replaceReferenceExpressions(t, "gl_MultiTexCoord1",
 					"vec4(_vert_tex_light_coord, 0.0, 1.0)");
-			} else {
-				root.replaceReferenceExpressions(t, "gl_MultiTexCoord1",
-					"vec4(240.0, 240.0, 0.0, 1.0)");
-			}
 
 			CommonTransformer.patchMultiTexCoord3(t, tree, root, parameters);
 
@@ -60,20 +50,11 @@ public class EmbeddiumTransformer {
 			CommonTransformer.replaceGlMultiTexCoordBounded(t, root, 4, 7);
 		}
 
-		if (parameters.inputs.hasColor()) {
-			// TODO: Handle the fragment shader here
-			root.rename("gl_Color", "_vert_color");
-		} else {
-			root.replaceReferenceExpressions(t, "gl_Color", "vec4(1.0)");
-		}
+		root.rename("gl_Color", "_vert_color");
 
 		if (parameters.type.glShaderType == ShaderType.VERTEX) {
-			if (parameters.inputs.hasNormal()) {
-				root.rename("gl_Normal", "iris_Normal");
-				tree.parseAndInjectNode(t, ASTInjectionPoint.BEFORE_DECLARATIONS, "in vec3 iris_Normal;");
-			} else {
-				root.replaceReferenceExpressions(t, "gl_Normal", "vec3(0.0, 0.0, 1.0)");
-			}
+			root.rename("gl_Normal", "iris_Normal");
+			tree.parseAndInjectNode(t, ASTInjectionPoint.BEFORE_DECLARATIONS, "in vec3 iris_Normal;");
 		}
 
 		// TODO: Should probably add the normal matrix as a proper uniform that's

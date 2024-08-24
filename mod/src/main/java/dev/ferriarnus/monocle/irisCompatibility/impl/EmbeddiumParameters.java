@@ -7,61 +7,61 @@ import net.irisshaders.iris.gl.texture.TextureType;
 import net.irisshaders.iris.helpers.Tri;
 import net.irisshaders.iris.pipeline.transform.Patch;
 import net.irisshaders.iris.pipeline.transform.parameter.Parameters;
+import net.irisshaders.iris.pipeline.transform.parameter.SodiumParameters;
 import net.irisshaders.iris.shaderpack.texture.TextureStage;
+import org.embeddedt.embeddium.impl.render.chunk.vertex.format.ChunkVertexType;
 
 public class EmbeddiumParameters extends Parameters {
-	public final ShaderAttributeInputs inputs;
-	// WARNING: adding new fields requires updating hashCode and equals methods!
+	public final ChunkVertexType vertexType;
+	public final AlphaTest alpha;
 
-	// DO NOT include this field in hashCode or equals, it's mutable!
-	// (See use of setAlphaFor in TransformPatcher)
-	public AlphaTest alpha;
-
-	public EmbeddiumParameters(Patch patch,
-                               Object2ObjectMap<Tri<String, TextureType, TextureStage>, String> textureMap,
-                               AlphaTest alpha,
-                               ShaderAttributeInputs inputs) {
+	public EmbeddiumParameters(Patch patch, Object2ObjectMap<Tri<String, TextureType, TextureStage>, String> textureMap, AlphaTest alpha, ChunkVertexType vertexType) {
 		super(patch, textureMap);
-		this.inputs = inputs;
-
+		this.vertexType = vertexType;
 		this.alpha = alpha;
 	}
 
-	@Override
 	public AlphaTest getAlphaTest() {
-		return alpha;
+		return this.alpha;
 	}
 
-	@Override
 	public TextureStage getTextureStage() {
 		return TextureStage.GBUFFERS_AND_SHADOW;
 	}
 
-	@Override
+	public ChunkVertexType getVertexType() {
+		return this.vertexType;
+	}
+
 	public int hashCode() {
-		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((inputs == null) ? 0 : inputs.hashCode());
-		result = prime * result + ((alpha == null) ? 0 : alpha.hashCode());
+		result = 31 * result + (this.vertexType == null ? 0 : this.vertexType.hashCode());
+		result = 31 * result + (this.alpha == null ? 0 : this.alpha.hashCode());
 		return result;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		} else if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		} else if (this.getClass() != obj.getClass()) {
 			return false;
-		EmbeddiumParameters other = (EmbeddiumParameters) obj;
-		if (inputs == null) {
-			if (other.inputs != null)
+		} else {
+			EmbeddiumParameters other = (EmbeddiumParameters)obj;
+			if (this.vertexType == null) {
+				if (other.vertexType != null) {
+					return false;
+				}
+			} else if (!this.vertexType.equals(other.vertexType)) {
 				return false;
-		} else if (!inputs.equals(other.inputs))
-			return false;
-		if (alpha == null) {
-			return other.alpha == null;
-		} else return alpha.equals(other.alpha);
+			}
+
+			if (this.alpha == null) {
+				return other.alpha == null;
+			} else {
+				return this.alpha.equals(other.alpha);
+			}
+		}
 	}
 }

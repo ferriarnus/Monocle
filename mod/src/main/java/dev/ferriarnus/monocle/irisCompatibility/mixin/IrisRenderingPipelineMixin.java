@@ -1,12 +1,12 @@
 package dev.ferriarnus.monocle.irisCompatibility.mixin;
 
 import com.google.common.collect.ImmutableSet;
-import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumTerrainPipeline;
+import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumPrograms;
 import dev.ferriarnus.monocle.irisCompatibility.impl.WorldRenderingPipelineExtension;
 import net.irisshaders.iris.gl.framebuffer.GlFramebuffer;
 import net.irisshaders.iris.pipeline.IrisRenderingPipeline;
-import net.irisshaders.iris.pipeline.SodiumTerrainPipeline;
 import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
+import net.irisshaders.iris.pipeline.programs.SodiumPrograms;
 import net.irisshaders.iris.shaderpack.programs.ProgramFallbackResolver;
 import net.irisshaders.iris.shaderpack.programs.ProgramSet;
 import net.irisshaders.iris.targets.RenderTargets;
@@ -17,21 +17,22 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 @Mixin(IrisRenderingPipeline.class)
 public abstract class IrisRenderingPipelineMixin implements WorldRenderingPipeline, WorldRenderingPipelineExtension {
 
     @Unique
-    private EmbeddiumTerrainPipeline embeddiumTerrainPipeline;
+    private EmbeddiumPrograms embeddiumPrograms;
 
-    @Redirect(at = @At(value = "NEW", target = "(Lnet/irisshaders/iris/pipeline/WorldRenderingPipeline;Lnet/irisshaders/iris/shaderpack/programs/ProgramFallbackResolver;Lnet/irisshaders/iris/shaderpack/programs/ProgramSet;Ljava/util/function/IntFunction;Ljava/util/function/IntFunction;Ljava/util/function/IntFunction;Ljava/util/function/IntFunction;Lnet/irisshaders/iris/targets/RenderTargets;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/irisshaders/iris/gl/framebuffer/GlFramebuffer;Lnet/irisshaders/iris/uniforms/custom/CustomUniforms;)Lnet/irisshaders/iris/pipeline/SodiumTerrainPipeline;"), method = "<init>", remap = false)
-    private SodiumTerrainPipeline makePipeline(WorldRenderingPipeline parent, ProgramFallbackResolver resolver, ProgramSet programSet, IntFunction createTerrainSamplers, IntFunction createShadowSamplers, IntFunction createTerrainImages, IntFunction createShadowImages, RenderTargets targets, ImmutableSet flippedAfterPrepare, ImmutableSet flippedAfterTranslucent, GlFramebuffer shadowFramebuffer, CustomUniforms customUniforms) {
-        embeddiumTerrainPipeline =  new EmbeddiumTerrainPipeline(parent, resolver, programSet, createTerrainSamplers, createShadowSamplers, createTerrainImages, createShadowImages, targets, flippedAfterPrepare, flippedAfterTranslucent, shadowFramebuffer, customUniforms);
-        return new SodiumTerrainPipeline(parent, resolver, programSet, createTerrainSamplers, createShadowSamplers, createTerrainImages, createShadowImages, targets, flippedAfterPrepare, flippedAfterTranslucent, shadowFramebuffer, customUniforms);
+    @Redirect(at = @At(value = "NEW", target ="(Lnet/irisshaders/iris/pipeline/IrisRenderingPipeline;Lnet/irisshaders/iris/shaderpack/programs/ProgramSet;Lnet/irisshaders/iris/shaderpack/programs/ProgramFallbackResolver;Lnet/irisshaders/iris/targets/RenderTargets;Ljava/util/function/Supplier;Lnet/irisshaders/iris/uniforms/custom/CustomUniforms;)Lnet/irisshaders/iris/pipeline/programs/SodiumPrograms;"), method = "<init>", remap = false)
+    private SodiumPrograms makePipeline(IrisRenderingPipeline flipState, ProgramSet framebuffer, ProgramFallbackResolver alphaTest, RenderTargets transformed, Supplier shader, CustomUniforms pass) {
+        embeddiumPrograms =  new EmbeddiumPrograms(flipState, framebuffer, alphaTest, transformed, shader, pass);
+        return new SodiumPrograms(flipState, framebuffer, alphaTest, transformed, shader, pass);
     }
 
     @Override
-    public EmbeddiumTerrainPipeline getEmbeddiumTerrainPipeline() {
-        return embeddiumTerrainPipeline;
+    public EmbeddiumPrograms getEmbeddiumPrograms() {
+        return embeddiumPrograms;
     }
 }

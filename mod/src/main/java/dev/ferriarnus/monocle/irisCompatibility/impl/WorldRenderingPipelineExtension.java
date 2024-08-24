@@ -2,7 +2,7 @@ package dev.ferriarnus.monocle.irisCompatibility.impl;
 
 public interface WorldRenderingPipelineExtension {
 
-    default EmbeddiumTerrainPipeline getEmbeddiumTerrainPipeline() {
+    default EmbeddiumPrograms getEmbeddiumPrograms() {
         return null;
     }
 }
