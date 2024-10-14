@@ -2,6 +2,7 @@ package dev.ferriarnus.monocle.irisCompatibility.impl;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Ints;
+import dev.ferriarnus.monocle.ShaderTransformer;
 import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.IrisModelVertexFormats;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.blending.AlphaTest;
@@ -30,6 +31,7 @@ import org.embeddedt.embeddium.impl.render.chunk.shader.ChunkShaderInterface;
 import org.embeddedt.embeddium.impl.render.chunk.terrain.DefaultTerrainRenderPasses;
 import org.embeddedt.embeddium.impl.render.chunk.terrain.TerrainRenderPass;
 import org.lwjgl.opengl.GL43C;
+import org.taumc.glsl.Main;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -64,19 +66,30 @@ public class EmbeddiumPrograms {
 	}
 
 	private Map<PatchShaderType, String> transformShaders(ProgramSource source, AlphaTest alphaTest, ProgramSet programSet) {
-		Map<PatchShaderType, String> transformed = EmbeddiumTransformPatcher.patchEmbeddium(
-			source.getName(),
-			source.getVertexSource().orElse(null),
-			source.getGeometrySource().orElse(null),
-			source.getTessControlSource().orElse(null),
-			source.getTessEvalSource().orElse(null),
-			source.getFragmentSource().orElse(null),
-			alphaTest, IrisModelVertexFormats.MODEL_VERTEX_XHFP,
-			programSet.getPackDirectives().getTextureMap());
+//		Map<PatchShaderType, String> transformed = EmbeddiumTransformPatcher.patchEmbeddium(
+//			source.getName(),
+//			source.getVertexSource().orElse(null),
+//			source.getGeometrySource().orElse(null),
+//			source.getTessControlSource().orElse(null),
+//			source.getTessEvalSource().orElse(null),
+//			source.getFragmentSource().orElse(null),
+//			alphaTest, IrisModelVertexFormats.MODEL_VERTEX_XHFP,
+//			programSet.getPackDirectives().getTextureMap());
 
-		ShaderPrinter.printProgram("sodium_" + source.getName()).addSources(transformed).print();
+		Map<PatchShaderType, String> transformedNew = ShaderTransformer.transform(
+				source.getName(),
+				source.getVertexSource().orElse(null),
+				source.getGeometrySource().orElse(null),
+				source.getTessControlSource().orElse(null),
+				source.getTessEvalSource().orElse(null),
+				source.getFragmentSource().orElse(null),
+				alphaTest, IrisModelVertexFormats.MODEL_VERTEX_XHFP,
+				programSet.getPackDirectives().getTextureMap());
 
-		return transformed;
+		//ShaderPrinter.printProgram("old_" + source.getName()).addSources(transformed).print();
+		ShaderPrinter.printProgram("new_" + source.getName()).addSources(transformedNew).print();
+
+		return transformedNew;
 	}
 
 	private Map<PatchShaderType, GlShader> createGlShaders(String passName, Map<PatchShaderType, String> transformed) {
@@ -84,24 +97,19 @@ public class EmbeddiumPrograms {
 		for (Map.Entry<PatchShaderType, String> entry : transformed.entrySet()) {
 			if (entry.getValue() == null) continue;
 			newMap.put(entry.getKey(), new GlShader(fromGlShaderType(entry.getKey().glShaderType),
-				ResourceLocation.fromNamespaceAndPath("iris", "sodium-shader-" + passName), entry.getValue()));
+				ResourceLocation.fromNamespaceAndPath("iris", "embeddium-shader-" + passName), entry.getValue()));
 		}
 		return newMap;
 	}
 
 	ShaderType fromGlShaderType(net.irisshaders.iris.gl.shader.ShaderType type) {
-		switch (type) {
-			case VERTEX:
-				return ShaderType.VERTEX;
-			case GEOMETRY:
-				return ShaderType.GEOM;
-			case FRAGMENT:
-				return ShaderType.FRAGMENT;
-			case TESSELATION_CONTROL:
-				return ShaderType.TESS_CTRL;
-			default:
-				return ShaderType.TESS_EVALUATE;
-		}
+        return switch (type) {
+            case VERTEX -> ShaderType.VERTEX;
+            case GEOMETRY -> ShaderType.GEOM;
+            case FRAGMENT -> ShaderType.FRAGMENT;
+            case TESSELATION_CONTROL -> ShaderType.TESS_CTRL;
+            default -> ShaderType.TESS_EVALUATE;
+        };
 	}
 
 	private Supplier<ImmutableSet<Integer>> getFlipState(IrisRenderingPipeline pipeline, Pass pass, boolean isShadowPass) {
@@ -115,7 +123,7 @@ public class EmbeddiumPrograms {
 														 AlphaTest alphaTest,
 														 CustomUniforms customUniforms, Supplier<ImmutableSet<Integer>> flipState,
 														 Map<PatchShaderType, GlShader> transformed) {
-		GlProgram.Builder builder = GlProgram.builder(ResourceLocation.fromNamespaceAndPath("sodium", "chunk_shader_for_" + pass.name().toLowerCase(Locale.ROOT)));
+		GlProgram.Builder builder = GlProgram.builder(ResourceLocation.fromNamespaceAndPath("embeddium", "chunk_shader_for_" + pass.name().toLowerCase(Locale.ROOT)));
 
 		for (GlShader shader : transformed.values()) {
 			builder.attachShader(shader);

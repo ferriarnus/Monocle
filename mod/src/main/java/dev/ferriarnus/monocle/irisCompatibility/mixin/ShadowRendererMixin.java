@@ -10,6 +10,7 @@ import dev.ferriarnus.monocle.irisCompatibility.impl.ReversedAdvancedShadowCulli
 import net.irisshaders.iris.compat.dh.DHCompat;
 import net.irisshaders.iris.shadows.ShadowRenderer;
 import net.irisshaders.iris.shadows.frustum.BoxCuller;
+import net.irisshaders.iris.shadows.frustum.FrustumHolder;
 import net.irisshaders.iris.shadows.frustum.advanced.AdvancedShadowCullingFrustum;
 import net.irisshaders.iris.uniforms.CapturedRenderingState;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -19,7 +20,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ShadowRenderer.class)
 public class ShadowRendererMixin {
@@ -35,6 +38,11 @@ public class ShadowRendererMixin {
     @Unique
     private BoxCuller box;
 
+    @Inject(method = "createShadowFrustum", at = @At("HEAD"))
+    private void resetFrustrum(float renderMultiplier, FrustumHolder holder, CallbackInfoReturnable<FrustumHolder> cir) {
+        this.box = null;
+    }
+
     @ModifyArg(method = "createShadowFrustum", at = @At(ordinal = 0, value = "INVOKE", target = "Lnet/irisshaders/iris/shadows/frustum/FrustumHolder;setInfo(Lnet/minecraft/client/renderer/culling/Frustum;Ljava/lang/String;Ljava/lang/String;)Lnet/irisshaders/iris/shadows/frustum/FrustumHolder;"))
     private Frustum changeEverythingCuller(Frustum frustum) {
         return new CullEverythingFrustum();
@@ -46,7 +54,7 @@ public class ShadowRendererMixin {
         return original.call(instance);
     }
 
-    @WrapOperation(method = "createShadowFrustum", at = @At(value = "NEW", target = "(D)Lnet/irisshaders/iris/shadows/frustum/BoxCuller;"))
+    @WrapOperation(method = "createShadowFrustum", at = @At(value = "NEW", target = "(D)Lnet/irisshaders/iris/shadows/frustum/BoxCuller;", ordinal = 0))
     private BoxCuller captureBox(double maxDistance, Operation<BoxCuller> original) {
         this.box = original.call(maxDistance);
         return this.box;
