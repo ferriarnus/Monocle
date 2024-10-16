@@ -16,6 +16,6 @@ public class MixinRenderRegionArenas {
 			target = "Lorg/embeddedt/embeddium/impl/render/chunk/vertex/format/ChunkMeshFormats;COMPACT:Lorg/embeddedt/embeddium/impl/render/chunk/vertex/format/ChunkVertexType;",
 			remap = false))
 	private ChunkVertexType iris$useExtendedStride() {
-		return WorldRenderingSettings.INSTANCE.shouldUseExtendedVertexFormat() ? IrisModelVertexFormats.MODEL_VERTEX_XHFP : ChunkMeshFormats.COMPACT;
+		return (ChunkVertexType) WorldRenderingSettings.INSTANCE.getVertexFormat();
 	}
 }

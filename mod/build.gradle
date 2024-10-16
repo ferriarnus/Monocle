@@ -133,7 +133,7 @@ dependencies {
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
     //implementation("org.taumc:iris-neoforge-1.21:${iris_chlorinated_version}")
-    implementation "iris:iris-neoforge:1.8.0-beta.2+mc1.21.1"
+    implementation "iris:iris-neoforge:1.8.0-beta.5+mc1.21.1"
     //compileOnly("sodium:sodium-neoforge:0.6.0-alpha.1-modonly")
 
     // Example mod dependency using a file as dependency

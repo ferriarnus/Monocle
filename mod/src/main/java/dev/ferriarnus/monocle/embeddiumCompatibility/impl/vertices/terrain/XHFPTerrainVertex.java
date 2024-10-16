@@ -79,8 +79,7 @@ public class XHFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInter
 
 		MemoryUtil.memPutInt(ptr + 16, vertex.light);
 
-		MemoryUtil.memPutShort(ptr + 32, contextHolder.getBlockId());
-		MemoryUtil.memPutShort(ptr + 34, contextHolder.getRenderType());
+		MemoryUtil.memPutInt(ptr + 32, packBlockId(contextHolder));
 		MemoryUtil.memPutInt(ptr + 36, contextHolder.ignoreMidBlock() ? 0 : ExtendedDataHelper.computeMidBlock(vertex.x, vertex.y, vertex.z, contextHolder.getLocalPosX(), contextHolder.getLocalPosY(), contextHolder.getLocalPosZ()));
 		MemoryUtil.memPutByte(ptr + 39, contextHolder.getBlockEmission());
 
@@ -199,5 +198,9 @@ public class XHFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInter
 
 	private static int floorInt(float x) {
 		return (int)Math.floor((double)x);
+	}
+
+	private int packBlockId(BlockContextHolder contextHolder) {
+		return ((contextHolder.getBlockId() + 1) << 1) | (contextHolder.getRenderType() & 1);
 	}
 }

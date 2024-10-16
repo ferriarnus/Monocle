@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.embeddedt.embeddium.impl.render.chunk.vertex.format.ChunkVertexType;
+import org.taumc.glsl.StorageCollector;
 import org.taumc.glsl.Util;
 import org.taumc.glsl.grammar.GLSLLexer;
 import org.taumc.glsl.grammar.GLSLParser;
@@ -92,12 +93,12 @@ public class ShaderTransformer {
             if (versionString == null) {
                 continue;
             }
-            String profileString = "";
+            String profileString = "#version " + versionString + " " + profile;
             if ((profile == null || !profile.equals("core")) && Integer.parseInt(versionString) < 150) {
                 if (Integer.parseInt(versionString) < 330) {
                     profileString = "#version 330 core";
                 } else {
-                    profileString = "#version " + Integer.parseInt(versionString) + " core";
+                    profileString = "#version " + versionString + " core";
                 }
 
 

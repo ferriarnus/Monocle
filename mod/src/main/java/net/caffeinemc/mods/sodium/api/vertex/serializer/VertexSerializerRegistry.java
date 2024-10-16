@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.api.vertex.serializer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
+import com.mojang.blaze3d.vertex.VertexFormat;
 
 public interface VertexSerializerRegistry {
 
@@ -11,7 +11,7 @@ public interface VertexSerializerRegistry {
         return INSTANCE;
     }
 
-    default void registerSerializer(VertexFormatDescription dummy, VertexFormatDescription dummy2, VertexSerializer serializer) {
+    default void registerSerializer(VertexFormat dummy, VertexFormat dummy2, VertexSerializer serializer) {
 
     }
 

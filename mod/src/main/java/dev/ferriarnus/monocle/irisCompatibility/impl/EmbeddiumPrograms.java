@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Ints;
 import dev.ferriarnus.monocle.ShaderTransformer;
 import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.IrisModelVertexFormats;
+import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.XHFPTerrainVertex;
+import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkVertexType;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.blending.AlphaTest;
 import net.irisshaders.iris.gl.blending.AlphaTests;
@@ -14,6 +16,7 @@ import net.irisshaders.iris.pipeline.transform.PatchShaderType;
 import net.irisshaders.iris.pipeline.transform.ShaderPrinter;
 import net.irisshaders.iris.pipeline.transform.TransformPatcher;
 import net.irisshaders.iris.shaderpack.loading.ProgramId;
+import net.irisshaders.iris.shaderpack.materialmap.WorldRenderingSettings;
 import net.irisshaders.iris.shaderpack.programs.ProgramFallbackResolver;
 import net.irisshaders.iris.shaderpack.programs.ProgramSet;
 import net.irisshaders.iris.shaderpack.programs.ProgramSource;
@@ -21,6 +24,7 @@ import net.irisshaders.iris.shadows.ShadowRenderTargets;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
 import net.irisshaders.iris.targets.RenderTargets;
 import net.irisshaders.iris.uniforms.custom.CustomUniforms;
+import net.irisshaders.iris.vertices.sodium.terrain.FormatAnalyzer;
 import net.minecraft.resources.ResourceLocation;
 import org.embeddedt.embeddium.impl.gl.GlObject;
 import org.embeddedt.embeddium.impl.gl.shader.GlProgram;
@@ -40,6 +44,11 @@ public class EmbeddiumPrograms {
 	private final EnumMap<Pass, GlFramebuffer> framebuffers = new EnumMap<>(Pass.class);
 	private final EnumMap<Pass, GlProgram<ChunkShaderInterface>> shaders = new EnumMap<>(Pass.class);
 
+	private boolean hasBlockId;
+	private boolean hasMidUv;
+	private boolean hasNormal;
+	private boolean hasMidBlock;
+
 	public EmbeddiumPrograms(IrisRenderingPipeline pipeline, ProgramSet programSet, ProgramFallbackResolver resolver,
 							 RenderTargets renderTargets, Supplier<ShadowRenderTargets> shadowRenderTargets,
 							 CustomUniforms customUniforms) {
@@ -58,6 +67,9 @@ public class EmbeddiumPrograms {
 			GlProgram<ChunkShaderInterface> shader = createShader(pipeline, pass, source, alphaTest, customUniforms, flipState, createGlShaders(pass.name().toLowerCase(Locale.ROOT), transformed));
 			shaders.put(pass, shader);
 		}
+
+		WorldRenderingSettings.INSTANCE.setVertexFormat((ChunkVertexType) IrisModelVertexFormats.MODEL_VERTEX_XHFP);
+
 	}
 
 	private AlphaTest getAlphaTest(Pass pass, ProgramSource source) {
@@ -142,7 +154,7 @@ public class EmbeddiumPrograms {
 											Supplier<ShadowRenderTargets> shadowRenderTargets,
 											RenderTargets renderTargets,
 											Supplier<ImmutableSet<Integer>> flipState) {
-		if (pass == Pass.SHADOW || pass == Pass.SHADOW_CUTOUT) {
+		if (pass == Pass.SHADOW || pass == Pass.SHADOW_CUTOUT || pass == Pass.SHADOW_TRANS) {
 			return shadowRenderTargets.get().createShadowFramebuffer(ImmutableSet.of(),
 				source == null ? new int[]{0, 1} : (source.getDirectives().hasUnknownDrawBuffers() ? new int[]{0, 1} : source.getDirectives().getDrawBuffers()));
 		} else {
@@ -178,7 +190,11 @@ public class EmbeddiumPrograms {
 			.link((shader) -> {
 				int handle = ((GlObject) shader).handle();
 				GLDebug.nameObject(GL43C.GL_PROGRAM, handle, "sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT));
-				return new EmbeddiumShader(pipeline, pass, shader, handle, source.getDirectives().getBlendModeOverride(),
+				if (!hasNormal) hasNormal = GL43C.glGetAttribLocation(handle, "iris_Normal") != -1;
+				if (!hasMidBlock) hasMidBlock = GL43C.glGetAttribLocation(handle, "at_midBlock") != -1;
+				if (!hasBlockId) hasBlockId = GL43C.glGetAttribLocation(handle, "mc_Entity") != -1;
+				if (!hasMidUv) hasMidUv = GL43C.glGetAttribLocation(handle, "mc_midTexCoord") != -1;
+				return new EmbeddiumShader(pipeline, pass, shader, handle, source.getDirectives().getBlendModeOverride().orElse(null),
 					createBufferBlendOverrides(source), customUniforms, flipState,
 					alphaTest.reference(), containsTessellation);
 			});
@@ -209,6 +225,7 @@ public class EmbeddiumPrograms {
 	public enum Pass {
 		SHADOW(ProgramId.ShadowSolid),
 		SHADOW_CUTOUT(ProgramId.ShadowCutout),
+		SHADOW_TRANS(ProgramId.ShadowWater),
 		TERRAIN(ProgramId.TerrainSolid),
 		TERRAIN_CUTOUT(ProgramId.TerrainCutout),
 		TRANSLUCENT(ProgramId.Water);

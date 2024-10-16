@@ -53,7 +53,7 @@ public class EmbeddiumShader extends ChunkShaderInterface {
 	public static final ChunkShaderOptions OPTS = new ChunkShaderOptions(ChunkFogMode.NONE, null, null);
 
 	public EmbeddiumShader(IrisRenderingPipeline pipeline, EmbeddiumPrograms.Pass pass, ShaderBindingContext context,
-						   int handle, Optional<BlendModeOverride> blendModeOverride,
+						   int handle, BlendModeOverride blendModeOverride,
 						   List<BufferBlendOverride> bufferBlendOverrides,
 						   CustomUniforms customUniforms, Supplier<ImmutableSet<Integer>> flipState, float alphaTest,
 						   boolean containsTessellation) {
@@ -100,7 +100,7 @@ public class EmbeddiumShader extends ChunkShaderInterface {
 		this.samplers = buildSamplers(pipeline, pass, handle, isShadowPass, flipState);
 		this.images = buildImages(pipeline, pass, handle, isShadowPass, flipState);
 
-		this.blendModeOverride = blendModeOverride.orElse(null);
+		this.blendModeOverride = blendModeOverride;
 		this.bufferBlendOverrides = bufferBlendOverrides;
 	}
 

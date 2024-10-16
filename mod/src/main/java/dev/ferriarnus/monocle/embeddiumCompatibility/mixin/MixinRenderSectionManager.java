@@ -17,14 +17,14 @@ public class MixinRenderSectionManager {
 		at = @At(value = "INVOKE",
 			target = "Lorg/embeddedt/embeddium/impl/render/chunk/DefaultChunkRenderer;<init>(Lorg/embeddedt/embeddium/impl/gl/device/RenderDevice;Lorg/embeddedt/embeddium/impl/render/chunk/vertex/format/ChunkVertexType;)V"))
 	private ChunkVertexType iris$useExtendedVertexFormat$1(ChunkVertexType vertexType) {
-		return WorldRenderingSettings.INSTANCE.shouldUseExtendedVertexFormat() ? IrisModelVertexFormats.MODEL_VERTEX_XHFP : vertexType;
+		return (ChunkVertexType) WorldRenderingSettings.INSTANCE.getVertexFormat();
 	}
 
 	@ModifyArg(method = "<init>",
 		at = @At(value = "INVOKE",
 			target = "Lorg/embeddedt/embeddium/impl/render/chunk/compile/executor/ChunkBuilder;<init>(Lnet/minecraft/client/multiplayer/ClientLevel;Lorg/embeddedt/embeddium/impl/render/chunk/vertex/format/ChunkVertexType;)V"))
 	private ChunkVertexType iris$useExtendedVertexFormat$2(ChunkVertexType vertexType) {
-		return WorldRenderingSettings.INSTANCE.shouldUseExtendedVertexFormat() ? IrisModelVertexFormats.MODEL_VERTEX_XHFP : vertexType;
+		return (ChunkVertexType) WorldRenderingSettings.INSTANCE.getVertexFormat();
 	}
 
 	@Redirect(method = "getSearchDistance", remap = false,

@@ -1,5 +1,7 @@
 package dev.ferriarnus.monocle.irisCompatibility.impl;
 
+import com.sun.management.HotSpotDiagnosticMXBean;
+import com.sun.management.VMOption;
 import net.irisshaders.iris.shadows.frustum.BoxCuller;
 import net.irisshaders.iris.shadows.frustum.advanced.BaseClippingPlanes;
 import net.irisshaders.iris.shadows.frustum.advanced.NeighboringPlaneSet;
@@ -11,6 +13,8 @@ import org.joml.Matrix4fc;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+
+import java.lang.management.ManagementFactory;
 
 /**
  * A Frustum implementation that derives a tightly-fitted shadow pass frustum based on the player's camera frustum and
@@ -65,12 +69,12 @@ public class AdvancedShadowCullingFrustum extends Frustum implements org.embedde
      */
     private final Vector4f[] planes = new Vector4f[MAX_CLIPPING_PLANES];
     private final Vector3f shadowLightVectorFromOrigin;
+    private final Vector3d position = new Vector3d();
     // The center coordinates of this frustum.
     public double x;
     public double y;
     public double z;
     private int planeCount = 0;
-    private final Vector3d position = new Vector3d();
 
     public AdvancedShadowCullingFrustum(Matrix4fc playerView, Matrix4fc playerProjection, Vector3f shadowLightVectorFromOrigin,
                                         BoxCuller boxCuller) {
@@ -314,6 +318,25 @@ public class AdvancedShadowCullingFrustum extends Frustum implements org.embedde
         return this.checkCornerVisibility(f, g, h, i, j, k);
     }
 
+    private static final boolean FMA_SUPPORT;
+
+    static {
+        // Automatically enable `joml.useMathFma` system property if JVM UseFMA is enabled.
+        // The JVM will automatically enable the UseFMA vm option if the cpu supports it.
+        // Thanks to kunzite for making me aware of this.
+        final HotSpotDiagnosticMXBean hotSpotDiagnostic = ManagementFactory.getPlatformMXBean(HotSpotDiagnosticMXBean.class);
+        if (hotSpotDiagnostic == null) {
+            FMA_SUPPORT = false;
+        } else {
+            final VMOption useFMAVMOption = hotSpotDiagnostic.getVMOption("UseFMA");
+            FMA_SUPPORT = Boolean.parseBoolean(useFMAVMOption.getValue());
+        }
+    }
+
+    private static float safeFMA(float a, float b, float c) {
+        return a * b + c;
+    }
+
     /**
      * Checks corner visibility.
      *
@@ -332,13 +355,19 @@ public class AdvancedShadowCullingFrustum extends Frustum implements org.embedde
             // Check if plane is inside or intersecting.
             // This is ported from JOML's FrustumIntersection.
 
-            float outsideBoundX = (plane.x() < 0) ? minX : maxX;
-            float outsideBoundY = (plane.y() < 0) ? minY : maxY;
-            float outsideBoundZ = (plane.z() < 0) ? minZ : maxZ;
+            float outsideBoundX = (plane.x < 0) ? minX : maxX;
+            float outsideBoundY = (plane.y < 0) ? minY : maxY;
+            float outsideBoundZ = (plane.z < 0) ? minZ : maxZ;
 
             // Use Math.fma for the dot product calculation to get vectorization (sorry old Intel users)
-            if (Math.fma(plane.x(), outsideBoundX, Math.fma(plane.y(), outsideBoundY, plane.z() * outsideBoundZ)) < -plane.w()) {
-                return 0;
+            if (FMA_SUPPORT) {
+                if (Math.fma(plane.x, outsideBoundX, Math.fma(plane.y, outsideBoundY, plane.z * outsideBoundZ)) < -plane.w) {
+                    return 0;
+                }
+            } else {
+                if (safeFMA(plane.x, outsideBoundX, safeFMA(plane.y, outsideBoundY, plane.z * outsideBoundZ)) < -plane.w) {
+                    return 0;
+                }
             }
         }
 
