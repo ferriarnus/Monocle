@@ -40,43 +40,14 @@ public class CompTransformer {
         Util.removeUnusedFunctions(root);
         Util.removeConstAssignment(root);
 
+        // rename reserved words within files
+        //Util.rename(root, "texture", "iris_renamed_texture");
+        //Util.rename(root, "sampler", "iris_renamed_sampler");
+
         // transform that moves unsized array specifiers on struct members from the type
         // to the identifier of a type and init declaration. Some drivers appear to not
         // be able to detect the unsized array if it's on the type.
-//        for (StructMember structMember : root.nodeIndex.get(StructMember.class)) {
-//            // check if the type specifier has an array specifier
-//            TypeSpecifier typeSpecifier = structMember.getType().getTypeSpecifier();
-//            ArraySpecifier arraySpecifier = typeSpecifier.getArraySpecifier();
-//            if (arraySpecifier == null) {
-//                continue;
-//            }
-//
-//            // check if the array specifier is unsized
-//            if (!arraySpecifier.getChildren().isNullEmpty()) {
-//                continue;
-//            }
-//
-//            // remove itself from the parent (makes it null)
-//            arraySpecifier.detach();
-//
-//            // move the empty array specifier to all members
-//            boolean reusedOriginal = false;
-//            for (StructDeclarator declarator : structMember.getDeclarators()) {
-//                if (declarator.getArraySpecifier() != null) {
-//                    throw new TransformationException("Member already has an array specifier");
-//                }
-//
-//                // clone the array specifier into this member, re-use if possible
-//                declarator.setArraySpecifier(reusedOriginal ? arraySpecifier.cloneInto(root) : arraySpecifier);
-//                reusedOriginal = true;
-//            }
-//
-//            LOGGER.warn(
-//                    "Moved unsized array specifier (of the form []) from the type to each of the the declaration member(s) "
-//                            + structMember.getDeclarators().stream().map(StructDeclarator::getName).map(Identifier::getName)
-//                            .collect(Collectors.joining(", "))
-//                            + ". See debugging.md for more information.");
-//        }
+        Util.rewriteStructArrays(root);
     }
 
     // does transformations that require cross-shader type data

@@ -203,11 +203,14 @@ public class ShaderTransformer {
     }
 
     public static void applyIntelHd4000Workaround(GLSLParser.Translation_unitContext translationUnit) {
-        //Util.rename(translationUnit, "ftransform", "iris_ftransform");
+        Util.renameFunctionCall(translationUnit, "ftransform", "iris_ftransform");
     }
 
 
-    private static void replaceGlMultiTexCoordBounded(GLSLParser.Translation_unitContext translationUnit, int i, int i1) {
+    private static void replaceGlMultiTexCoordBounded(GLSLParser.Translation_unitContext translationUnit, int min, int max) {
+        for (int i = min; i <= max; i++) {
+            Util.replaceExpression(translationUnit, "gl_MultiTexCoord" + i, "vec4(0.0, 0.0, 0.0, 1.0)");
+        }
     }
 
     private static void patchMultiTexCoord3(GLSLParser.Translation_unitContext translationUnit, EmbeddiumParameters parameters) {
