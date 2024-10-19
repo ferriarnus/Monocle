@@ -135,33 +135,25 @@ configurations {
 }
 
 dependencies {
-    // Example optional mod dependency with JEI
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-    // compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
-    // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
-    // localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
+    compileOnly "maven.modrinth:iris:${iris_modrinth_version}"
 
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
-    //implementation("org.taumc:iris-neoforge-1.21:${iris_chlorinated_version}")
-    implementation "iris:iris-neoforge:1.8.0-beta.5+mc1.21.1"
-    //compileOnly("sodium:sodium-neoforge:0.6.0-alpha.1-modonly")
+    // Must be placed in libs/ folder, and be manually edited to remove the embeddium breaks clause
+    if(file("libs/iris-neoforge-${iris_version}.jar").exists()) {
+        runtimeOnly "iris:iris-neoforge:${iris_version}"
+    } else {
+        print "Iris jar not found in libs. Iris will not be available in dev runs."
+    }
 
-    // Example mod dependency using a file as dependency
-    // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
     implementation("org.embeddedt:embeddium-1.21:${embeddium_version}")
-
-    // Example project dependency using a sister or child project:
-    // implementation project(":myproject")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 
-    jarJar(implementation("org.taumc:glsl-transformation-lib:1.0-SNAPSHOT"))
-    additionalRuntimeClasspath("org.taumc:glsl-transformation-lib:1.0-SNAPSHOT")
-
+    jarJar(implementation("org.taumc:glsl-transformation-lib:1.0-SNAPSHOT")) {
+        transitive = false
+    }
+    additionalRuntimeClasspath("org.taumc:glsl-transformation-lib:1.0-SNAPSHOT") {
+        transitive = false
+    }
 }
 
 jar {
@@ -187,7 +179,8 @@ tasks.withType(ProcessResources).configureEach {
             mod_version            : mod_version,
             mod_authors            : mod_authors,
             mod_description        : mod_description,
-            embeddium_version      : embeddium_version
+            embeddium_version      : embeddium_version,
+            iris_version           : iris_version
     ]
     inputs.properties replaceProperties
 
