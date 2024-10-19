@@ -2,6 +2,7 @@ package dev.ferriarnus.monocle;
 
 import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumParameters;
 import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumPatch;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.irisshaders.iris.gl.blending.AlphaTest;
 import net.irisshaders.iris.gl.shader.ShaderType;
@@ -36,6 +37,11 @@ import java.util.Set;
 public class ShaderTransformer {
     static String tab = "";
 
+    private static final int CACHE_SIZE = 100;
+    private static final Object2ObjectLinkedOpenHashMap<TransformKey, Map<PatchShaderType, String>> shaderTransformationCache = new Object2ObjectLinkedOpenHashMap<>();
+
+    private record TransformKey(EnumMap<PatchShaderType, String> inputs, EmbeddiumParameters params) {}
+
     public static Map<PatchShaderType, String> transform(String name, String vertex, String geometry, String tessControl, String tessEval, String fragment, AlphaTest alpha, ChunkVertexType vertexType, Object2ObjectMap<Tri<String, TextureType, TextureStage>, String> textureMap) {
         EmbeddiumParameters parameters = new EmbeddiumParameters(EmbeddiumPatch.EMBEDDIUM, textureMap, alpha, vertexType);
 
@@ -50,7 +56,19 @@ public class ShaderTransformer {
             inputs.put(PatchShaderType.TESS_CONTROL, tessControl);
             inputs.put(PatchShaderType.TESS_EVAL, tessEval);
             inputs.put(PatchShaderType.FRAGMENT, fragment);
-            result = transformInternal(name, inputs, parameters);
+
+            var key = new TransformKey(inputs, parameters);
+
+            result = shaderTransformationCache.getAndMoveToFirst(key);
+            if(result == null) {
+                result = transformInternal(name, inputs, parameters);
+                // Clear this, we don't want whatever random type was last transformed being considered for the key
+                parameters.type = null;
+                if(shaderTransformationCache.size() >= CACHE_SIZE) {
+                    shaderTransformationCache.removeLast();
+                }
+                shaderTransformationCache.putAndMoveToLast(key, result);
+            }
 
             return result;
         }
