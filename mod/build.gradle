@@ -17,8 +17,10 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-
-    mavenLocal()
+    maven {
+        name = "TauMC"
+        url = "https://maven.taumc.org/releases"
+    }
     maven { url = "https://maven.blamejared.com" }
     maven {
         name = "Modrinth"
@@ -157,8 +159,8 @@ dependencies {
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 
-    jarJar(implementation("glsl-transformation-lib:glsl-transformation-lib:1.0-SNAPSHOT"))
-    additionalRuntimeClasspath("glsl-transformation-lib:glsl-transformation-lib:1.0-SNAPSHOT")
+    jarJar(implementation("org.taumc:glsl-transformation-lib:1.0-SNAPSHOT"))
+    additionalRuntimeClasspath("org.taumc:glsl-transformation-lib:1.0-SNAPSHOT")
 
 }
 
