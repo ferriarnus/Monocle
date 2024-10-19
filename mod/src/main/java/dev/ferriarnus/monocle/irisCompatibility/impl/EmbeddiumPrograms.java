@@ -55,6 +55,7 @@ public class EmbeddiumPrograms {
 							 RenderTargets renderTargets, Supplier<ShadowRenderTargets> shadowRenderTargets,
 							 CustomUniforms customUniforms) {
 		Stopwatch stopwatch = Stopwatch.createStarted();
+		Monocle.LOGGER.info("Transforming Embeddium shaders...");
 
 		for (Pass pass : Pass.values()) {
 			ProgramSource source = resolver.resolveNullable(pass.getOriginalId());
@@ -73,7 +74,7 @@ public class EmbeddiumPrograms {
 		}
 
 		stopwatch.stop();
-		Monocle.LOGGER.info("Transformed Embeddium shaders in {}", stopwatch);
+		Monocle.LOGGER.info("Transforming Embeddium shaders completed in {}", stopwatch);
 
 		WorldRenderingSettings.INSTANCE.setVertexFormat((ChunkVertexType) IrisModelVertexFormats.MODEL_VERTEX_XHFP);
 
