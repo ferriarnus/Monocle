@@ -15,7 +15,7 @@ public class Monocle {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "monocle";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public Monocle(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("Loaded Monocle v{}", modContainer.getModInfo().getVersion().toString());

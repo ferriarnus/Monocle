@@ -1,7 +1,9 @@
 package dev.ferriarnus.monocle.irisCompatibility.impl;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Ints;
+import dev.ferriarnus.monocle.Monocle;
 import dev.ferriarnus.monocle.ShaderTransformer;
 import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.IrisModelVertexFormats;
 import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.XHFPTerrainVertex;
@@ -52,6 +54,8 @@ public class EmbeddiumPrograms {
 	public EmbeddiumPrograms(IrisRenderingPipeline pipeline, ProgramSet programSet, ProgramFallbackResolver resolver,
 							 RenderTargets renderTargets, Supplier<ShadowRenderTargets> shadowRenderTargets,
 							 CustomUniforms customUniforms) {
+		Stopwatch stopwatch = Stopwatch.createStarted();
+
 		for (Pass pass : Pass.values()) {
 			ProgramSource source = resolver.resolveNullable(pass.getOriginalId());
 			Supplier<ImmutableSet<Integer>> flipState = getFlipState(pipeline, pass, pass == Pass.SHADOW || pass == Pass.SHADOW_CUTOUT);
@@ -67,6 +71,9 @@ public class EmbeddiumPrograms {
 			GlProgram<ChunkShaderInterface> shader = createShader(pipeline, pass, source, alphaTest, customUniforms, flipState, createGlShaders(pass.name().toLowerCase(Locale.ROOT), transformed));
 			shaders.put(pass, shader);
 		}
+
+		stopwatch.stop();
+		Monocle.LOGGER.info("Transformed Embeddium shaders in {}", stopwatch);
 
 		WorldRenderingSettings.INSTANCE.setVertexFormat((ChunkVertexType) IrisModelVertexFormats.MODEL_VERTEX_XHFP);
 
