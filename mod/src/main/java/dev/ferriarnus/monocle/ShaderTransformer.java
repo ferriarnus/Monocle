@@ -2,8 +2,6 @@ package dev.ferriarnus.monocle;
 
 import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumParameters;
 import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumPatch;
-import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.ASTInjectionPoint;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.irisshaders.iris.gl.blending.AlphaTest;
 import net.irisshaders.iris.gl.shader.ShaderType;
@@ -408,7 +406,7 @@ public class ShaderTransformer {
 
 
 
-    public static void upgradeStorageQualifiers(GLSLParser.Translation_unitContext root, Parameters parameters) {
+    public static void upgradeStorageQualifiers(GLSLParser.Translation_unitContext root, EmbeddiumParameters parameters) {
         List<TerminalNode> tokens = new ArrayList<>();
         ParseTreeWalker.DEFAULT.walk(new StorageCollector(tokens), root);
 

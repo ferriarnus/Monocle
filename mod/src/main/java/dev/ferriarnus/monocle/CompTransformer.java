@@ -1,8 +1,6 @@
 package dev.ferriarnus.monocle;
 
-import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
-import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.ASTParser;
+import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumParameters;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.shader.ShaderType;
 import net.irisshaders.iris.pipeline.transform.PatchShaderType;
@@ -19,7 +17,7 @@ public class CompTransformer {
 
     private static final ShaderType[] pipeline = {ShaderType.VERTEX, ShaderType.TESSELATION_CONTROL, ShaderType.TESSELATION_EVAL, ShaderType.GEOMETRY, ShaderType.FRAGMENT};
 
-    public static void transformEach(GLSLParser.Translation_unitContext root, Parameters parameters) {
+    public static void transformEach(GLSLParser.Translation_unitContext root, EmbeddiumParameters parameters) {
         if (parameters.type == PatchShaderType.VERTEX) {
             if ( Util.containsCall(root, "fract(worldpos.y + 0.001)")) {
                 Iris.logger.warn("Patched fract(worldpos.y + 0.001) to fract(worldpos.y + 0.01) to fix " +
@@ -51,7 +49,7 @@ public class CompTransformer {
     }
 
     // does transformations that require cross-shader type data
-    public static void transformGrouped(Map<PatchShaderType, GLSLParser.Translation_unitContext> trees, Parameters parameters) {
+    public static void transformGrouped(Map<PatchShaderType, GLSLParser.Translation_unitContext> trees, EmbeddiumParameters parameters) {
 		/*
 		  find attributes that are declared as "in" in geometry or fragment but not
 		  declared as "out" in the previous stage. The missing "out" declarations for
@@ -136,7 +134,7 @@ public class CompTransformer {
 
     }
 
-    public static void transformFragmentCore(ASTParser t, TranslationUnit tree, Root root, Parameters parameters) {
+  //  public static void transformFragmentCore(ASTParser t, TranslationUnit tree, Root root, Parameters parameters) {
         // do layout attachment (attaches a location(layout = 4) to the out declaration
         // outColor4 for example)
 
@@ -214,5 +212,5 @@ public class CompTransformer {
 //            newDeclarations.add(newDeclaration);
 //        }
 //        tree.injectNodes(ASTInjectionPoint.BEFORE_DECLARATIONS, newDeclarations);
-    }
+  //  }
 }

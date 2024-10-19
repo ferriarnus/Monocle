@@ -15,7 +15,8 @@ import java.util.Map;
 public class EmbeddiumTransformPatcher {
 
     public static Map<PatchShaderType, String> patchEmbeddium(String name, String vertex, String geometry, String tessControl, String tessEval, String fragment, AlphaTest alpha, ChunkVertexType vertexType, Object2ObjectMap<Tri<String, TextureType, TextureStage>, String> textureMap) {
-        return TransformPatcherInvoker.transform(name, vertex, geometry, tessControl, tessEval, fragment,
-                new EmbeddiumParameters(EmbeddiumPatch.EMBEDDIUM, textureMap, alpha, vertexType));
+        throw new UnsupportedOperationException("TODO");
+       // return TransformPatcherInvoker.transform(name, vertex, geometry, tessControl, tessEval, fragment,
+       //         new EmbeddiumParameters(EmbeddiumPatch.EMBEDDIUM, textureMap, alpha, vertexType));
     }
 }
