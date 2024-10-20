@@ -1,5 +1,6 @@
 {
   "package": "dev.ferriarnus.monocle.irisCompatibility.mixin",
+  "plugin": "dev.ferriarnus.monocle.core.MonocleMixinPlugin",
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "refmap": "monocle.refmap.json",
@@ -13,11 +14,11 @@
     "ClientPacketListenerMixin",
     "CrashReportExtenderMixin",
     "DebugScreenOverlayMixin",
+    "FrustumSwapperMixin",
     "IrisRenderingPipelineMixin",
     "TransformPatcherInvoker",
     "PatchInvoker",
     "PatchMixin",
-    "WorldRenderingPipelineMixin",
-    "ShadowRendererMixin"
+    "WorldRenderingPipelineMixin"
   ]
 }
