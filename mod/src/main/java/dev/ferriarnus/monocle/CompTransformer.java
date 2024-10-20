@@ -113,13 +113,19 @@ public class CompTransformer {
                             continue;
                         }
 
-                        Util.makeOutDeclaration(prevTree, inDec.get(in));
+                        makeOutDeclarationtemp(prevTree, inDec.get(in), in);
 
-                        Util.initialize(prevTree, inDec.get(in), in);
+                        if (!Util.hasAssigment(prevTree, in)) {
+                            Util.initialize(prevTree, inDec.get(in), in);
+                        }
 
                     } else {
                         var outType = outDec.get(in).fully_specified_type().type_specifier().type_specifier_nonarray().children.get(0);
                         var inType = inDec.get(in).fully_specified_type().type_specifier().type_specifier_nonarray().children.get(0);
+
+                        if (outDec.get(in).fully_specified_type().type_specifier().array_specifier() != null) {
+                            continue;
+                        }
 
                         if (inType.getText().equals(outType.getText())) {
                             if (!Util.hasAssigment(prevTree, in)) {
@@ -130,11 +136,18 @@ public class CompTransformer {
                     }
                 }
             }
-        }
 
+            prevType = type;
+        }
     }
 
-  //  public static void transformFragmentCore(ASTParser t, TranslationUnit tree, Root root, Parameters parameters) {
+    private static void makeOutDeclarationtemp(GLSLParser.Translation_unitContext root, GLSLParser.Single_declarationContext inDeclarationContext, String name) {
+        String insert = ShaderTransformer.getFormattedShader(inDeclarationContext.fully_specified_type(), "") + name + ";";
+        insert = insert.replaceFirst("in", "out");
+        Util.injectVariable(root, insert);
+    }
+
+    //  public static void transformFragmentCore(ASTParser t, TranslationUnit tree, Root root, Parameters parameters) {
         // do layout attachment (attaches a location(layout = 4) to the out declaration
         // outColor4 for example)
 

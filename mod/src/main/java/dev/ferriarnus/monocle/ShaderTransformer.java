@@ -110,20 +110,19 @@ public class ShaderTransformer {
                 continue;
             }
             String profileString = "#version " + versionString + " " + profile;
-            if ((profile == null || !profile.equals("core")) && Integer.parseInt(versionString) < 150) {
+            if ((profile == null && Integer.parseInt(versionString) >= 150 || profile != null && profile.equals("core"))) {
+                if (Integer.parseInt(versionString) < 330) {
+                    profileString = "#version 330 core";
+                }
+
+                ShaderTransformer.patchCore(translationUnit, parameters);
+            } else {
                 if (Integer.parseInt(versionString) < 330) {
                     profileString = "#version 330 core";
                 } else {
                     profileString = "#version " + versionString + " core";
                 }
-
-
                 ShaderTransformer.patch(translationUnit, parameters);
-            } else {
-                if (Integer.parseInt(versionString) < 330) {
-                    profileString = "#version 330 core";
-                }
-                ShaderTransformer.patchCore(translationUnit, parameters);
             }
             CompTransformer.transformEach(translationUnit, parameters);
             types.put(type, translationUnit);
@@ -256,6 +255,7 @@ public class ShaderTransformer {
             Util.rename(translationUnit,"vaUV2", "a_LightCoord");
 
             Util.replaceExpression(translationUnit, "textureMatrix", "mat4(1.0f)");
+            replaceMidTexCoord(translationUnit, 1.0f / 32768.0f);
 
             injectVertInit(translationUnit, parameters);
         }
@@ -268,8 +268,10 @@ public class ShaderTransformer {
         }
         Util.replaceExpression(translationUnit, "mc_midTexCoord", "iris_MidTex");
         switch (type) {
+            case 0:
+                return;
             case GLSLLexer.BOOL:
-                break;
+                return;
             case GLSLLexer.FLOAT:
                 Util.injectFunction(translationUnit, "float iris_MidTex = (mc_midTexCoord.x * " + textureScale + ").x;"); //TODO go back to variable if order is fixed
                 break;
@@ -448,7 +450,7 @@ public class ShaderTransformer {
         }
     }
 
-    private static String getFormattedShader(ParseTree tree, String string) {
+    public static String getFormattedShader(ParseTree tree, String string) {
         StringBuilder sb = new StringBuilder(string + "\n");
         getFormattedShader(tree, sb);
         return sb.toString();
