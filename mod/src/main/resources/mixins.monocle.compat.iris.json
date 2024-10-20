@@ -10,6 +10,7 @@
     "conformVisibility": true
   },
   "client": [
+    "ClientPacketListenerMixin",
     "CrashReportExtenderMixin",
     "DebugScreenOverlayMixin",
     "IrisRenderingPipelineMixin",
