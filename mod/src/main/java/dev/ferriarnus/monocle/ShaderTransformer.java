@@ -139,6 +139,7 @@ public class ShaderTransformer {
         commonPatch(translationUnit, parameters);
 
         replaceMidTexCoord(translationUnit, 1.0f / 32768.0f);
+        replaceMCEntity(translationUnit);
 
         Util.replaceExpression(translationUnit, "gl_TextureMatrix[0]", "mat4(1.0f)");
         Util.replaceExpression(translationUnit, "gl_TextureMatrix[1]", "iris_LightmapTextureMatrix");
@@ -256,6 +257,7 @@ public class ShaderTransformer {
 
             Util.replaceExpression(translationUnit, "textureMatrix", "mat4(1.0f)");
             replaceMidTexCoord(translationUnit, 1.0f / 32768.0f);
+            replaceMCEntity(translationUnit);
 
             injectVertInit(translationUnit, parameters);
         }
@@ -289,6 +291,49 @@ public class ShaderTransformer {
         }
 
         Util.injectVariable(translationUnit, "in vec2 mc_midTexCoord;"); //TODO why is this inserted oddly?
+
+    }
+
+    public static void replaceMCEntity(GLSLParser.Translation_unitContext translationUnit) {
+        int type = Util.findType(translationUnit, "mc_Entity");
+        if (type != 0) {
+            Util.removeVariable(translationUnit, "mc_Entity");
+        }
+        Util.replaceExpression(translationUnit, "mc_Entity", "iris_Entity");
+        switch (type) {
+            case 0:
+                return;
+            case GLSLLexer.BOOL:
+                return;
+            case GLSLLexer.FLOAT:
+                Util.injectFunction(translationUnit, "float iris_Entity = int(mc_Entity >> 1u) - 1;");
+                break;
+            case GLSLLexer.VEC2:
+                Util.injectFunction(translationUnit, "vec2 iris_Entity = vec2(int(mc_Entity >> 1u) - 1, mc_Entity & 1u);");
+                break;
+            case GLSLLexer.VEC3:
+                Util.injectFunction(translationUnit, "vec3 iris_Entity = vec3(int(mc_Entity >> 1u) - 1, mc_Entity & 1u, 0.0);");
+                break;
+            case GLSLLexer.VEC4:
+                Util.injectFunction(translationUnit, "vec4 iris_Entity = vec4(int(mc_Entity >> 1u) - 1, mc_Entity & 1u, 0.0, 1.0);");
+                break;
+            case GLSLLexer.UINT:
+                Util.injectFunction(translationUnit, "uint iris_Entity = int(mc_Entity >> 1u) - 1;");
+                break;
+            case GLSLLexer.IVEC2:
+                Util.injectFunction(translationUnit, "ivec2 iris_Entity = ivec2(int(mc_Entity >> 1u) - 1, mc_Entity & 1u);");
+                break;
+            case GLSLLexer.IVEC3:
+                Util.injectFunction(translationUnit, "ivec3 iris_Entity = ivec3(int(mc_Entity >> 1u) - 1, mc_Entity & 1u, 0);");
+                break;
+            case GLSLLexer.IVEC4:
+                Util.injectFunction(translationUnit, "ivec4 iris_Entity = ivec4(int(mc_Entity >> 1u) - 1, mc_Entity & 1u, 0, 1);");
+                break;
+            default:
+
+        }
+
+        Util.injectVariable(translationUnit, "in uint mc_Entity;"); //TODO why is this inserted oddly?
 
     }
 
@@ -414,6 +459,8 @@ public class ShaderTransformer {
         Util.renameFunctionCall(root, "texture3D", "texture");
         Util.renameFunctionCall(root, "texture2DLod", "textureLod");
         Util.renameFunctionCall(root, "texture3DLod", "textureLod");
+        Util.renameFunctionCall(root, "texture2DProj", "textureProj");
+        Util.renameFunctionCall(root, "texture3DProj", "textureProj");
         Util.renameFunctionCall(root, "texture2DGrad", "textureGrad");
         Util.renameFunctionCall(root, "texture2DGradARB", "textureGrad");
         Util.renameFunctionCall(root, "texture3DGrad", "textureGrad");

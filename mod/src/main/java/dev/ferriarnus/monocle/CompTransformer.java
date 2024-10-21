@@ -4,13 +4,10 @@ import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumParameters;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.shader.ShaderType;
 import net.irisshaders.iris.pipeline.transform.PatchShaderType;
-import net.irisshaders.iris.pipeline.transform.parameter.Parameters;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.taumc.glsl.Util;
 import org.taumc.glsl.grammar.GLSLLexer;
 import org.taumc.glsl.grammar.GLSLParser;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CompTransformer {
@@ -113,7 +110,7 @@ public class CompTransformer {
                             continue;
                         }
 
-                        makeOutDeclarationtemp(prevTree, inDec.get(in), in);
+                        Util.makeOutDeclaration(prevTree, inDec.get(in), in);
 
                         if (!Util.hasAssigment(prevTree, in)) {
                             Util.initialize(prevTree, inDec.get(in), in);
