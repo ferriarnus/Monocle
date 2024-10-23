@@ -17,10 +17,8 @@ public class CompTransformer {
     public static void transformEach(GLSLParser.Translation_unitContext root, EmbeddiumParameters parameters) {
         if (parameters.type == PatchShaderType.VERTEX) {
             if ( Util.containsCall(root, "fract(worldpos.y + 0.001)")) {
-                Iris.logger.warn("Patched fract(worldpos.y + 0.001) to fract(worldpos.y + 0.01) to fix " +
-                        "waving water disconnecting from other water blocks; See https://github.com/IrisShaders/Iris/issues/509");
+                Util.replaceExpression(root, "fract(worldpos.y + 0.001)", "fract(worldpos.y + 0.01)");
             }
-            Util.replaceExpression(root, "fract(worldpos.y + 0.001)", "fract(worldpos.y + 0.01)");
         }
 
 		/*
