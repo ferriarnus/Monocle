@@ -19,6 +19,7 @@
     "TransformPatcherInvoker",
     "PatchInvoker",
     "PatchMixin",
-    "WorldRenderingPipelineMixin"
+    "WorldRenderingPipelineMixin",
+    "IrisMixin"
   ]
 }
