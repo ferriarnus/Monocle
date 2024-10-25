@@ -509,6 +509,10 @@ public class ShaderTransformer {
             if (text.equals("<EOF>")) {
                 return;
             }
+            if (text.equals("#")) {
+                stringBuilder.append("\n#");
+                return;
+            }
             stringBuilder.append(text);
             if (text.equals("{")) {
                 stringBuilder.append(" \n\t");
@@ -519,7 +523,6 @@ public class ShaderTransformer {
                 stringBuilder.deleteCharAt(stringBuilder.length() - 2);
                 tab = "";
             }
-
             stringBuilder.append(text.equals(";") ? " \n" + tab : " ");
         } else {
             for(int i = 0; i < tree.getChildCount(); ++i) {
