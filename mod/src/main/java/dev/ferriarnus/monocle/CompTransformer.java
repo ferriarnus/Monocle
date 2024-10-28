@@ -1,10 +1,9 @@
 package dev.ferriarnus.monocle;
 
 import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumParameters;
-import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.shader.ShaderType;
 import net.irisshaders.iris.pipeline.transform.PatchShaderType;
-import org.taumc.glsl.Util;
+import org.taumc.glsl.Transformer;
 import org.taumc.glsl.grammar.GLSLLexer;
 import org.taumc.glsl.grammar.GLSLParser;
 
@@ -15,9 +14,10 @@ public class CompTransformer {
     private static final ShaderType[] pipeline = {ShaderType.VERTEX, ShaderType.TESSELATION_CONTROL, ShaderType.TESSELATION_EVAL, ShaderType.GEOMETRY, ShaderType.FRAGMENT};
 
     public static void transformEach(GLSLParser.Translation_unitContext root, EmbeddiumParameters parameters) {
+        Transformer transformer = new Transformer(root);
         if (parameters.type == PatchShaderType.VERTEX) {
-            if ( Util.containsCall(root, "fract(worldpos.y + 0.001)")) {
-                Util.replaceExpression(root, "fract(worldpos.y + 0.001)", "fract(worldpos.y + 0.01)");
+            if (transformer.containsCall("fract(worldpos.y + 0.001)")) {
+                transformer.replaceExpression("fract(worldpos.y + 0.001)", "fract(worldpos.y + 0.01)");
             }
         }
 
@@ -30,17 +30,17 @@ public class CompTransformer {
 		  identifiers from which the declaration was removed previously.
 		  See https://wiki.shaderlabs.org/wiki/Compiler_Behavior_Notes
 		 */
-        Util.removeUnusedFunctions(root);
-        Util.removeConstAssignment(root);
+        transformer.removeUnusedFunctions();
+        transformer.removeConstAssignment();
 
         // rename reserved words within files
-        //Util.rename(root, "texture", "iris_renamed_texture");
-        //Util.rename(root, "sampler", "iris_renamed_sampler");
+        //transformer.rename "texture", "iris_renamed_texture");
+        //transformer.rename "sampler", "iris_renamed_sampler");
 
         // transform that moves unsized array specifiers on struct members from the type
         // to the identifier of a type and init declaration. Some drivers appear to not
         // be able to detect the unsized array if it's on the type.
-        Util.rewriteStructArrays(root);
+        transformer.rewriteStructArrays();
     }
 
     // does transformations that require cross-shader type data
@@ -85,16 +85,18 @@ public class CompTransformer {
 
             PatchShaderType prevPatchTypes = PatchShaderType.fromGlShaderType(prevType)[0];
             var prevTree = trees.get(prevPatchTypes);
+            Transformer prevtransformer = new Transformer(prevTree);
 
-            Map<String, GLSLParser.Single_declarationContext> outDec = Util.findQualifiers(prevTree, GLSLLexer.OUT);
+            Map<String, GLSLParser.Single_declarationContext> outDec = prevtransformer.findQualifiers(GLSLLexer.OUT);
             for (PatchShaderType currentType : patchTypes) {
                 var currentTree = trees.get(currentType);
-
+                var currentTransformer = new Transformer(currentTree);
+                
                 if (currentTree == null) {
                     continue;
                 }
 
-                Map<String, GLSLParser.Single_declarationContext> inDec = Util.findQualifiers(currentTree, GLSLLexer.IN);
+                Map<String, GLSLParser.Single_declarationContext> inDec = currentTransformer.findQualifiers(GLSLLexer.IN);
 
                 for (String in : inDec.keySet()) {
 
@@ -104,14 +106,14 @@ public class CompTransformer {
 
                     if (!outDec.containsKey(in)) {
 
-                        if (!Util.containsCall(currentTree, in)) {
+                        if (!currentTransformer.containsCall(in)) {
                             continue;
                         }
 
-                        Util.makeOutDeclaration(prevTree, inDec.get(in), in);
+                        prevtransformer.makeOutDeclaration(inDec.get(in), in);
 
-                        if (!Util.hasAssigment(prevTree, in)) {
-                            Util.initialize(prevTree, inDec.get(in), in);
+                        if (!prevtransformer.hasAssigment(in)) {
+                            prevtransformer.initialize(inDec.get(in), in);
                         }
 
                     } else {
@@ -123,8 +125,8 @@ public class CompTransformer {
                         }
 
                         if (inType.getText().equals(outType.getText())) {
-                            if (!Util.hasAssigment(prevTree, in)) {
-                                Util.initialize(prevTree, inDec.get(in), in);
+                            if (!prevtransformer.hasAssigment(in)) {
+                                prevtransformer.initialize(inDec.get(in), in);
                             }
                         }
 
@@ -134,12 +136,6 @@ public class CompTransformer {
 
             prevType = type;
         }
-    }
-
-    private static void makeOutDeclarationtemp(GLSLParser.Translation_unitContext root, GLSLParser.Single_declarationContext inDeclarationContext, String name) {
-        String insert = ShaderTransformer.getFormattedShader(inDeclarationContext.fully_specified_type(), "") + name + ";";
-        insert = insert.replaceFirst("in", "out");
-        Util.injectVariable(root, insert);
     }
 
     //  public static void transformFragmentCore(ASTParser t, TranslationUnit tree, Root root, Parameters parameters) {
