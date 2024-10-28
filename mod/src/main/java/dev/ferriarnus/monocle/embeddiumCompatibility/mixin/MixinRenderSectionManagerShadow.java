@@ -38,20 +38,12 @@ public class MixinRenderSectionManagerShadow {
 	@Redirect(method = {
 		"getRenderLists",
 		"getVisibleChunkCount",
-		"renderLayer"
+		"renderLayer",
+		"scheduleTranslucencyUpdates",
+		"getSortingStrings"
 	}, at = @At(value = "FIELD", target = "Lorg/embeddedt/embeddium/impl/render/chunk/RenderSectionManager;renderLists:Lorg/embeddedt/embeddium/impl/render/chunk/lists/SortedRenderLists;"), remap = false)
 	private SortedRenderLists useShadowRenderList2(RenderSectionManager instance) {
 		return ShadowRenderingState.areShadowsCurrentlyBeingRendered() ? shadowRenderLists : renderLists;
-	}
-
-	@Inject(method = "updateChunks", at = @At("HEAD"), cancellable = true, remap = false)
-	private void doNotUpdateDuringShadow(boolean updateImmediately, CallbackInfo ci) {
-		if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) ci.cancel();
-	}
-
-	@Inject(method = "uploadChunks", at = @At("HEAD"), cancellable = true, remap = false)
-	private void doNotUploadDuringShadow(CallbackInfo ci) {
-		if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) ci.cancel();
 	}
 
 	@Redirect(method = {
