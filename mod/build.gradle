@@ -148,10 +148,10 @@ dependencies {
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 
-    jarJar(implementation("org.taumc:glsl-transformation-lib:0.2.0-8.g7ed010b")) {
+    jarJar(implementation("org.taumc:glsl-transformation-lib:0.2.0-9.gf84d6b9")) {
         transitive = false
     }
-    additionalRuntimeClasspath("org.taumc:glsl-transformation-lib:0.2.0-8.g7ed010b") {
+    additionalRuntimeClasspath("org.taumc:glsl-transformation-lib:0.2.0-9.gf84d6b9") {
         transitive = false
     }
 }
