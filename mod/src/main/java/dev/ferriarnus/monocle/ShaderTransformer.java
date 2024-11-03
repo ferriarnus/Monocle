@@ -21,9 +21,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.embeddedt.embeddium.impl.render.chunk.vertex.format.ChunkVertexType;
-import org.taumc.glsl.StorageCollector;
+import org.taumc.glsl.ShaderParser;
 import org.taumc.glsl.Transformer;
-import org.taumc.glsl.Util;
 import org.taumc.glsl.grammar.GLSLLexer;
 import org.taumc.glsl.grammar.GLSLParser;
 import org.taumc.glsl.grammar.GLSLPreParser;
@@ -85,12 +84,9 @@ public class ShaderTransformer {
             if (inputs.get(type) == null) {
                 continue;
             }
-            GLSLLexer lexer = new GLSLLexer(CharStreams.fromString(inputs.get(type)));
-            GLSLPreParser preParser = new GLSLPreParser(new BufferedTokenStream(lexer));
-            GLSLParser parser = new GLSLParser(new CommonTokenStream(lexer));
-            parser.setBuildParseTree(true);
-            var pre = preParser.translation_unit();
-            var translationUnit = parser.translation_unit();
+            var parsedShader = ShaderParser.parseShader(inputs.get(type));
+            var pre = parsedShader.pre();
+            var translationUnit = parsedShader.full();
             var preparsed = pre.compiler_directive();
             String profile = null;
             String versionString = null;
