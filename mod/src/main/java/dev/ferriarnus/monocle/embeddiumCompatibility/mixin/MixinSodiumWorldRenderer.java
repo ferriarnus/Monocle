@@ -2,6 +2,7 @@ package dev.ferriarnus.monocle.embeddiumCompatibility.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.irisshaders.iris.mixin.LevelRendererAccessor;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
 import net.irisshaders.iris.uniforms.CapturedRenderingState;
@@ -37,7 +38,8 @@ public class MixinSodiumWorldRenderer {
 		ShadowRenderingState.setBlockEntityRenderFunction((shadowRenderer, bufferSource, modelView, camera, cameraX, cameraY, cameraZ, tickDelta, hasEntityFrustum, lightsOnly) -> {
 			renderLightsOnly = lightsOnly;
 
-			EmbeddiumWorldRenderer.instance().renderBlockEntities(modelView.last().pose(), bufferSource, ((LevelRendererAccessor) Minecraft.getInstance().levelRenderer).getDestructionProgress(), camera, tickDelta);
+			((EmbeddiumWorldRendererAssessor)EmbeddiumWorldRenderer.instance()).invokeRenderBlockEntities(modelView, Minecraft.getInstance().renderBuffers(), Long2ObjectMaps.emptyMap(), tickDelta, bufferSource.bufferSource(), cameraX, cameraY, cameraZ, Minecraft.getInstance().getBlockEntityRenderDispatcher());
+			((EmbeddiumWorldRendererAssessor)EmbeddiumWorldRenderer.instance()).invokeRenderGlobalBlockEntities(modelView, Minecraft.getInstance().renderBuffers(), Long2ObjectMaps.emptyMap(), tickDelta, bufferSource.bufferSource(), cameraX, cameraY, cameraZ, Minecraft.getInstance().getBlockEntityRenderDispatcher());
 
 			int finalBeList = beList;
 

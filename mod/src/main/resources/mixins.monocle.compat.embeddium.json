@@ -14,7 +14,7 @@
     "entity.MixinCommonVertexAttribute",
     "MixinChunkBuildBuffers",
     "MixinChunkMeshBuildTask",
-    //"MixinCloudRenderer",
+    "MixinCloudRenderer",
     "MixinChunkMeshBufferBuilder",
     "MixinDefaultChunkRenderer",
     "MixinGlRenderDevice",
@@ -32,6 +32,7 @@
     "MixinVertexSerializerCache",
     "MixinChunkShaderInterface",
     "MixinGlVertexFormatbuilder",
-    "MixinChunkVertexType"
+    "MixinChunkVertexType",
+    "EmbeddiumWorldRendererAssessor"
   ]
 }

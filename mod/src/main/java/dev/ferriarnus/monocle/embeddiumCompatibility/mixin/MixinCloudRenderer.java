@@ -1,138 +1,205 @@
-package dev.ferriarnus.monocle.embeddiumCompatibility.mixin;//package net.irisshaders.iris.compat.sodium.mixin;
-//
-//import com.llamalad7.mixinextras.sugar.Local;
-//import com.mojang.blaze3d.vertex.VertexFormat;
-//import net.irisshaders.iris.Iris;
-//import net.irisshaders.iris.api.v0.IrisApi;
-//import net.irisshaders.iris.pipeline.ShaderRenderingPipeline;
-//import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
-//import net.irisshaders.iris.pipeline.programs.ShaderKey;
-//import net.irisshaders.iris.vertices.IrisVertexFormats;
-//import net.irisshaders.iris.vertices.sodium.CloudVertex;
-//import net.minecraft.client.renderer.ShaderInstance;
-//import org.embeddedt.embeddium.api.util.NormI8;
-//import org.embeddedt.embeddium.api.vertex.buffer.VertexBufferWriter;
-//import org.embeddedt.embeddium.api.vertex.format.VertexFormatDescription;
-//import org.embeddedt.embeddium.api.vertex.format.common.ColorVertex;
-//import org.embeddedt.embeddium.impl.render.immediate.CloudRenderer;
-//import org.jetbrains.annotations.Nullable;
-//import org.spongepowered.asm.mixin.Mixin;
-//import org.spongepowered.asm.mixin.Shadow;
-//import org.spongepowered.asm.mixin.Unique;
-//import org.spongepowered.asm.mixin.injection.At;
-//import org.spongepowered.asm.mixin.injection.Inject;
-//import org.spongepowered.asm.mixin.injection.ModifyArg;
-//import org.spongepowered.asm.mixin.injection.Redirect;
-//import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-//import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//
-//@Mixin(CloudRenderer.class)
-//public abstract class MixinCloudRenderer {
-//	@Unique
-//	private static final int[] NORMALS = new int[]{
-//		NormI8.pack(0.0f, -1.0f, 0.0f), // NEG_Y
-//		NormI8.pack(0.0f, 1.0f, 0.0f), // POS_Y
-//		NormI8.pack(-1.0f, 0.0f, 0.0f), //	NEG_X
-//		NormI8.pack(1.0f, 0.0f, 0.0f), // POS_X
-//		NormI8.pack(0.0f, 0.0f, -1.0f), // NEG_Z
-//		NormI8.pack(0.0f, 0.0f, 1.0f) // POS_Z
-//	};
-//
-//	@Unique
-//	private static int computedNormal;
-//
-//	@Shadow
-//	private ShaderInstance shaderProgram;
-//
-//	@Shadow(remap = false)
-//	@Nullable
-//	private CloudRenderer.@Nullable CloudGeometry cachedGeometry;
-//
-//	@Unique
-//	private @Nullable CloudRenderer.CloudGeometry cachedGeometryIris;
-//
-//	@Inject(method = "writeVertex", at = @At("HEAD"), cancellable = true, remap = false)
-//	private static void writeIrisVertex(long buffer, float x, float y, float z, int color, CallbackInfoReturnable<Long> cir) {
-//		if (IrisApi.getInstance().isShaderPackInUse()) {
-//			CloudVertex.put(buffer, x, y, z, color, computedNormal);
-//			cir.setReturnValue(buffer + 20L);
-//		}
-//	}
-//
-//	@Inject(method = "emitCellGeometry2D", at = @At("HEAD"), remap = false)
-//	private static void computeNormal2D(VertexBufferWriter writer, int faces, int color, float x, float z, CallbackInfo ci) {
-//		computedNormal = NORMALS[0];
-//	}
-//
-//	@Inject(method = "emitCellGeometry3D", at = @At(value = "INVOKE", target = "Lnet/caffeinemc/mods/sodium/client/render/immediate/CloudRenderer$CloudFace;ordinal()I"), remap = false)
-//	private static void computeNormal3D(VertexBufferWriter writer, int visibleFaces, int baseColor, float posX, float posZ, boolean interior, CallbackInfo ci, @Local(ordinal = 4) int face) {
-//		computedNormal = NORMALS[face];
-//	}
-//
-//	@ModifyArg(remap = false, method = "emitCellGeometry3D", at = @At(value = "INVOKE", target = "Lorg/lwjgl/system/MemoryStack;nmalloc(I)J"))
-//	private static int allocateNewSize(int size) {
-//		return IrisApi.getInstance().isShaderPackInUse() ? 480 : size;
-//	}
-//
-//	@ModifyArg(method = "rebuildGeometry", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/Tesselator;begin(Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;Lcom/mojang/blaze3d/vertex/VertexFormat;)Lcom/mojang/blaze3d/vertex/BufferBuilder;"), index = 1)
-//	private static VertexFormat rebuild(VertexFormat p_350837_) {
-//		return IrisApi.getInstance().isShaderPackInUse() ? IrisVertexFormats.CLOUDS : p_350837_;
-//	}
-//
-//	@ModifyArg(remap = false, method = "emitCellGeometry3D", at = @At(value = "INVOKE", target = "Lnet/caffeinemc/mods/sodium/api/vertex/buffer/VertexBufferWriter;push(Lorg/lwjgl/system/MemoryStack;JILnet/caffeinemc/mods/sodium/api/vertex/format/VertexFormatDescription;)V"), index = 3)
-//	private static VertexFormatDescription modifyArgIris(VertexFormatDescription vertexFormatDescription) {
-//		if (IrisApi.getInstance().isShaderPackInUse()) {
-//			return CloudVertex.FORMAT;
-//		} else {
-//			return ColorVertex.FORMAT;
-//		}
-//	}
-//
-//	@ModifyArg(remap = false, method = "emitCellGeometry2D", at = @At(value = "INVOKE", target = "Lorg/lwjgl/system/MemoryStack;nmalloc(I)J"))
-//	private static int allocateNewSize2D(int size) {
-//		return IrisApi.getInstance().isShaderPackInUse() ? 80 : size;
-//	}
-//
-//	@ModifyArg(remap = false, method = "emitCellGeometry2D", at = @At(value = "INVOKE", target = "Lnet/caffeinemc/mods/sodium/api/vertex/buffer/VertexBufferWriter;push(Lorg/lwjgl/system/MemoryStack;JILnet/caffeinemc/mods/sodium/api/vertex/format/VertexFormatDescription;)V"), index = 3)
-//	private static VertexFormatDescription modifyArgIris2D(VertexFormatDescription vertexFormatDescription) {
-//		if (IrisApi.getInstance().isShaderPackInUse()) {
-//			return CloudVertex.FORMAT;
-//		} else {
-//			return ColorVertex.FORMAT;
-//		}
-//	}
-//
-//	@Redirect(method = "render", at = @At(remap = false, value = "FIELD", target = "Lnet/caffeinemc/mods/sodium/client/render/immediate/CloudRenderer;cachedGeometry:Lnet/caffeinemc/mods/sodium/client/render/immediate/CloudRenderer$CloudGeometry;", ordinal = 0))
-//	private CloudRenderer.@Nullable CloudGeometry changeGeometry(CloudRenderer instance) {
-//		if (IrisApi.getInstance().isShaderPackInUse()) {
-//			return cachedGeometryIris;
-//		} else {
-//			return cachedGeometry;
-//		}
-//	}
-//
-//	@Redirect(method = "render", at = @At(remap = false, value = "FIELD", target = "Lnet/caffeinemc/mods/sodium/client/render/immediate/CloudRenderer;cachedGeometry:Lnet/caffeinemc/mods/sodium/client/render/immediate/CloudRenderer$CloudGeometry;", ordinal = 1))
-//	private void changeGeometry2(CloudRenderer instance, CloudRenderer.CloudGeometry value) {
-//		if (IrisApi.getInstance().isShaderPackInUse()) {
-//			cachedGeometryIris = value;
-//		} else {
-//			cachedGeometry = value;
-//		}
-//	}
-//
-//	@Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/caffeinemc/mods/sodium/client/render/immediate/CloudRenderer;shaderProgram:Lnet/minecraft/client/renderer/ShaderInstance;"))
-//	private ShaderInstance changeShader(CloudRenderer instance) {
-//		return getClouds();
-//	}
-//
-//	@Unique
-//	private ShaderInstance getClouds() {
-//		WorldRenderingPipeline pipeline = Iris.getPipelineManager().getPipelineNullable();
-//
-//		if (pipeline instanceof ShaderRenderingPipeline) {
-//			return ((ShaderRenderingPipeline) pipeline).getShaderMap().getShader(ShaderKey.CLOUDS_SODIUM);
-//		}
-//
-//		return shaderProgram;
-//	}
-//}
+package dev.ferriarnus.monocle.embeddiumCompatibility.mixin;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexBuffer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.CloudVertex;
+import net.irisshaders.iris.Iris;
+import net.irisshaders.iris.api.v0.IrisApi;
+import net.irisshaders.iris.pipeline.ShaderRenderingPipeline;
+import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
+import net.irisshaders.iris.pipeline.programs.ShaderKey;
+import net.irisshaders.iris.vertices.IrisVertexFormats;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.world.phys.Vec3;
+import org.embeddedt.embeddium.api.vertex.format.VertexFormatDescription;
+import org.embeddedt.embeddium.api.vertex.format.common.ColorVertex;
+import org.embeddedt.embeddium.impl.render.immediate.CloudRenderer;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL30C;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(CloudRenderer.class)
+public abstract class MixinCloudRenderer {
+    @Shadow
+    private ShaderInstance shader;
+    @Shadow
+    @Final
+    private FogRenderer.FogData fogData;
+    @Unique
+    private VertexBuffer vertexBufferWithNormals;
+    @Unique
+    private int prevCenterCellXIris, prevCenterCellYIris, cachedRenderDistanceIris;
+
+    @Inject(method = "writeVertex", at = @At("HEAD"), cancellable = true, remap = false)
+    private static void writeIrisVertex(long buffer, float x, float y, float z, int color, CallbackInfoReturnable<Long> cir) {
+        if (IrisApi.getInstance().isShaderPackInUse()) {
+            CloudVertex.write(buffer, x, y, z, color);
+            cir.setReturnValue(buffer + 20L);
+        }
+    }
+
+    @Shadow
+    protected abstract void rebuildGeometry(BufferBuilder bufferBuilder, int cloudDistance, int centerCellX, int centerCellZ);
+
+    @Shadow
+    protected abstract void applyFogModifiers(ClientLevel world, FogRenderer.FogData fogData, LocalPlayer player, int cloudDistance, float tickDelta);
+
+    @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true, remap = false)
+    private void buildIrisVertexBuffer(ClientLevel world, LocalPlayer player, PoseStack stack, Matrix4f modelViewMatrix, Matrix4f projectionMatrix, float ticks, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
+        if (IrisApi.getInstance().isShaderPackInUse()) {
+            ci.cancel();
+            renderIris(world, player, stack, projectionMatrix, ticks, tickDelta, cameraX, cameraY, cameraZ);
+        }
+    }
+
+    public void renderIris(@Nullable ClientLevel world, LocalPlayer player, PoseStack matrices, Matrix4f projectionMatrix, float ticks, float tickDelta, double cameraX, double cameraY, double cameraZ) {
+        if (world == null) {
+            return;
+        }
+
+        float cloudHeight = world.effects().getCloudHeight();
+
+        // Vanilla uses NaN height as a way to disable cloud rendering
+        if (Float.isNaN(cloudHeight)) {
+            return;
+        }
+
+        Vec3 color = world.getCloudColor(tickDelta);
+
+        double cloudTime = (ticks + tickDelta) * 0.03F;
+        double cloudCenterX = (cameraX + cloudTime);
+        double cloudCenterZ = (cameraZ) + 0.33D;
+
+        int renderDistance = Minecraft.getInstance().options.getEffectiveRenderDistance();
+        int cloudDistance = Math.max(32, (renderDistance * 2) + 9);
+
+        int centerCellX = (int) (Math.floor(cloudCenterX / 12));
+        int centerCellZ = (int) (Math.floor(cloudCenterZ / 12));
+
+        if (this.vertexBufferWithNormals == null || this.prevCenterCellXIris != centerCellX || this.prevCenterCellYIris != centerCellZ || this.cachedRenderDistanceIris != renderDistance) {
+            BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, IrisVertexFormats.CLOUDS);
+
+            // Give some space for shaders
+            this.rebuildGeometry(bufferBuilder, cloudDistance + 4, centerCellX, centerCellZ);
+
+            if (this.vertexBufferWithNormals == null) {
+                this.vertexBufferWithNormals = new VertexBuffer(VertexBuffer.Usage.DYNAMIC);
+            }
+
+            this.vertexBufferWithNormals.bind();
+            this.vertexBufferWithNormals.upload(bufferBuilder.build());
+
+            VertexBuffer.unbind();
+
+            this.prevCenterCellXIris = centerCellX;
+            this.prevCenterCellYIris = centerCellZ;
+            this.cachedRenderDistanceIris = renderDistance;
+        }
+
+        float previousEnd = RenderSystem.getShaderFogEnd();
+        float previousStart = RenderSystem.getShaderFogStart();
+        fogData.end = cloudDistance * 8;
+        fogData.start = (cloudDistance * 8) - 16;
+
+        applyFogModifiers(world, fogData, player, cloudDistance * 8, tickDelta);
+
+
+        RenderSystem.setShaderFogEnd(fogData.end);
+        RenderSystem.setShaderFogStart(fogData.start);
+
+        float translateX = (float) (cloudCenterX - (centerCellX * 12));
+        float translateZ = (float) (cloudCenterZ - (centerCellZ * 12));
+
+        RenderSystem.enableDepthTest();
+
+        this.vertexBufferWithNormals.bind();
+
+        boolean insideClouds = cameraY < cloudHeight + 4.5f && cameraY > cloudHeight - 0.5f;
+
+        if (insideClouds) {
+            RenderSystem.disableCull();
+        } else {
+            RenderSystem.enableCull();
+        }
+
+        RenderSystem.setShaderColor((float) color.x, (float) color.y, (float) color.z, 0.8f);
+
+        matrices.pushPose();
+
+        Matrix4f modelViewMatrix = matrices.last().pose();
+        modelViewMatrix.translate(-translateX, cloudHeight - (float) cameraY + 0.33F, -translateZ);
+
+        // PASS 1: Set up depth buffer
+        RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
+        RenderSystem.colorMask(false, false, false, false);
+
+        this.vertexBufferWithNormals.drawWithShader(modelViewMatrix, projectionMatrix, getClouds());
+
+        // PASS 2: Render geometry
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.depthMask(false);
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthFunc(GL30C.GL_EQUAL);
+        RenderSystem.colorMask(true, true, true, true);
+
+        this.vertexBufferWithNormals.drawWithShader(modelViewMatrix, projectionMatrix, getClouds());
+
+        matrices.popPose();
+
+        VertexBuffer.unbind();
+
+        RenderSystem.disableBlend();
+        RenderSystem.depthFunc(GL30C.GL_LEQUAL);
+
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+        RenderSystem.enableCull();
+
+        RenderSystem.setShaderFogEnd(previousEnd);
+        RenderSystem.setShaderFogStart(previousStart);
+    }
+
+    @ModifyArg(method = "rebuildGeometry", at = @At(value = "INVOKE", target = "Lorg/lwjgl/system/MemoryStack;nmalloc(I)J"), remap = false)
+    private int allocateNewSize(int size) {
+        return IrisApi.getInstance().isShaderPackInUse() ? 480 : size;
+    }
+
+    @ModifyArg(method = "rebuildGeometry", at = @At(value = "INVOKE", target = "Lorg/embeddedt/embeddium/api/vertex/buffer/VertexBufferWriter;push(Lorg/lwjgl/system/MemoryStack;JILorg/embeddedt/embeddium/api/vertex/format/VertexFormatDescription;)V"), index = 3, remap = false)
+    private VertexFormatDescription modifyArgIris(VertexFormatDescription vertexFormatDescription) {
+        if (IrisApi.getInstance().isShaderPackInUse()) {
+            return CloudVertex.FORMAT;
+        } else {
+            return ColorVertex.FORMAT;
+        }
+    }
+
+    private ShaderInstance getClouds() {
+        WorldRenderingPipeline pipeline = Iris.getPipelineManager().getPipelineNullable();
+
+        if (pipeline instanceof ShaderRenderingPipeline) {
+            return ((ShaderRenderingPipeline) pipeline).getShaderMap().getShader(ShaderKey.CLOUDS_SODIUM);
+        }
+
+        return shader;
+    }
+}
