@@ -111,3 +111,6 @@ config = "mixins.monocle.compat.embeddium.json"
 
 [[mixins]]
 config = "mixins.monocle.compat.iris.json"
+
+[[mixins]]
+config = "mixins.monocle.moddedshaders.json"
