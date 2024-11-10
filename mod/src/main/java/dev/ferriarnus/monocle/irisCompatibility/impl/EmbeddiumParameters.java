@@ -46,4 +46,12 @@ public final class EmbeddiumParameters {
     public AlphaTest getAlphaTest() {
         return alpha;
     }
+
+    public TextureStage getTextureStage() {
+        return TextureStage.GBUFFERS_AND_SHADOW;
+    }
+
+    public Object2ObjectMap<Tri<String, TextureType, TextureStage>, String> getTextureMap() {
+        return textureMap;
+    }
 }
