@@ -1,5 +1,6 @@
 package dev.ferriarnus.monocle;
 
+import dev.ferriarnus.monocle.irisCompatibility.TextureTransformer;
 import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumParameters;
 import dev.ferriarnus.monocle.irisCompatibility.impl.EmbeddiumPatch;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
@@ -122,6 +123,7 @@ public class ShaderTransformer {
                 ShaderTransformer.patch(translationUnit, parameters);
             }
             CompTransformer.transformEach(translationUnit, parameters);
+            TextureTransformer.transform(translationUnit, parameters.getTextureStage(), parameters.getTextureMap());
             types.put(type, translationUnit);
             prepatched.put(type, getFormattedShader(pre, profileString));
         }

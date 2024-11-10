@@ -189,7 +189,7 @@ public class EmbeddiumPrograms {
 			.bindAttribute("a_PosId", ChunkShaderBindingPoints.ATTRIBUTE_POSITION_ID)
 			.bindAttribute("a_Color", ChunkShaderBindingPoints.ATTRIBUTE_COLOR)
 			.bindAttribute("a_TexCoord", ChunkShaderBindingPoints.ATTRIBUTE_BLOCK_TEXTURE)
-			.bindAttribute("a_LightAndData", ChunkShaderBindingPoints.ATTRIBUTE_LIGHT_TEXTURE)
+			.bindAttribute("a_LightCoord", ChunkShaderBindingPoints.ATTRIBUTE_LIGHT_TEXTURE)
 			.bindAttribute("mc_Entity", 11)
 			.bindAttribute("mc_midTexCoord", 12)
 			.bindAttribute("at_tangent", 13)
@@ -197,7 +197,7 @@ public class EmbeddiumPrograms {
 			.bindAttribute("at_midBlock", 14)
 			.link((shader) -> {
 				int handle = ((GlObject) shader).handle();
-				GLDebug.nameObject(GL43C.GL_PROGRAM, handle, "sodium-terrain-" + pass.toString().toLowerCase(Locale.ROOT));
+				GLDebug.nameObject(GL43C.GL_PROGRAM, handle, "embeddium-terrain-" + pass.toString().toLowerCase(Locale.ROOT));
 				if (!hasNormal) hasNormal = GL43C.glGetAttribLocation(handle, "iris_Normal") != -1;
 				if (!hasMidBlock) hasMidBlock = GL43C.glGetAttribLocation(handle, "at_midBlock") != -1;
 				if (!hasBlockId) hasBlockId = GL43C.glGetAttribLocation(handle, "mc_Entity") != -1;
