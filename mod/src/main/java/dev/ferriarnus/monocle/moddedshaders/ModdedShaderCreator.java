@@ -13,6 +13,7 @@ import net.irisshaders.iris.gl.blending.BufferBlendOverride;
 import net.irisshaders.iris.gl.framebuffer.GlFramebuffer;
 import net.irisshaders.iris.gl.state.FogMode;
 import net.irisshaders.iris.gl.state.ShaderAttributeInputs;
+import net.irisshaders.iris.gl.uniform.DynamicUniformHolder;
 import net.irisshaders.iris.pipeline.IrisRenderingPipeline;
 import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
 import net.irisshaders.iris.pipeline.programs.ExtendedShader;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ModdedShaderCreator {
@@ -144,7 +146,7 @@ public class ModdedShaderCreator {
         }, (samplerHolder, imageHolder) -> parent.addGbufferOrShadowSamplers(samplerHolder, imageHolder, flipped, isShadowPass, inputs.hasTex(), inputs.hasLight(), inputs.hasOverlay()), isIntensity, parent, overrides, customUniforms);
     }
 
-    public static Shader createShader(String name, ProgramSource source, AlphaTest alpha, VertexFormat vertexFormat, String json, IrisRenderingPipeline pipeline) throws IOException {
+    public static ExtendedShader createShader(String name, ProgramSource source, AlphaTest alpha, VertexFormat vertexFormat, String json, IrisRenderingPipeline pipeline) throws IOException {
         var extenedPipeline = (IrisRenderingPipelineExtension) pipeline;
         GlFramebuffer beforeTranslucent = extenedPipeline.getRenderTargets().createGbufferFramebuffer(pipeline.getFlippedAfterPrepare(), source.getDirectives().getDrawBuffers());
         GlFramebuffer afterTranslucent = extenedPipeline.getRenderTargets().createGbufferFramebuffer(pipeline.getFlippedAfterTranslucent(), source.getDirectives().getDrawBuffers());

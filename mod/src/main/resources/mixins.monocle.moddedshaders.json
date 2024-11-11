@@ -15,6 +15,10 @@
     "ProgramSetMixin",
     "ShaderAccessMixin",
     "BillboardingEffectRendererMixin",
-    "IrisRenderingPipelineMixin"
+    "IrisRenderingPipelineMixin",
+    "MixinProgramDirectives",
+    "MixinXYShaders",
+    "MixinXynergyGraphRenderer",
+    "MixinIcoSphere"
   ]
 }

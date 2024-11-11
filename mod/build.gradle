@@ -32,6 +32,9 @@ repositories {
     repositories {
         maven { url 'https://modmaven.dev/' }
     }
+    maven {
+        url "https://cursemaven.com"
+    }
 }
 
 base {
@@ -150,6 +153,10 @@ dependencies {
     implementation("org.embeddedt:embeddium-1.21:${embeddium_version}")
 
     runtimeOnly("mekanism:Mekanism:1.21.1-10.7.0.55")
+
+    runtimeOnly("curse.maven:xycraft-653786:5601037")
+    runtimeOnly("curse.maven:xycraft-machines-653791:5601045")
+    runtimeOnly("curse.maven:xycraft-world-653789:5601038")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 

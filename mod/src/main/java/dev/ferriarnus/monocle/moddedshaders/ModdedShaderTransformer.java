@@ -29,6 +29,7 @@ public class ModdedShaderTransformer {
 
     private static final int CACHE_SIZE = 100;
     private static final Object2ObjectLinkedOpenHashMap<TransformKey, Map<PatchShaderType, String>> shaderTransformationCache = new Object2ObjectLinkedOpenHashMap<>();
+    public static final String[] REPLACE = new String[] {"Position", "Color", "UV0", "UV1", "UV2", "Normal"};
 
     private record TransformKey(EnumMap<PatchShaderType, String> inputs, VanillaParameters params) {}
 
@@ -96,7 +97,7 @@ public class ModdedShaderTransformer {
             if (versionString == null) {
                 continue;
             }
-            String profileString = "#version " + versionString + " " + profile;
+            String profileString = "#version " + versionString + " " + (profile == null ? "" : profile);
             if ((profile == null && Integer.parseInt(versionString) >= 150 || profile != null && profile.equals("core"))) {
                 if (Integer.parseInt(versionString) < 330) {
                     profileString = "#version 330 core";
@@ -124,40 +125,23 @@ public class ModdedShaderTransformer {
 
     private static void patch(GLSLParser.Translation_unitContext root, VanillaParameters parameters) {
         Transformer transformer = new Transformer(root);
-
-
     }
 
 
     private static void patchCore(GLSLParser.Translation_unitContext root, VanillaParameters parameters) {
         Transformer transformer = new Transformer(root);
 
-        transformer.rename("ModelViewMat", "iris_ModelViewMat");
-        transformer.rename("ProjMat", "iris_ProjMat");
+        for (String value : REPLACE) {
+            transformer.rename(value, "iris_" + value);
+        }
 
-        transformer.rename("chunkOffset", "u_RegionOffset");
-        transformer.rename("ColorModulator", "iris_ColorModulator");
-
-        transformer.rename("FogStart", "iris_FogStart");
-        transformer.rename("FogEnd", "iris_FogEnd");
-        transformer.rename("FogColor", "iris_FogColor");
-        transformer.rename("FogShape", "iris_FogShape");
+        for (String value : ModdedShaderPipeline.UNIFORMS) {
+            transformer.rename(value, "iris_" + value);
+        }
 
         transformer.rename("Sampler0", "gtexture");
         transformer.rename("Sampler1", "iris_overlay");
         transformer.rename("Sampler2", "lightmap");
-
-        transformer.rename("Position", "iris_Position");
-        transformer.rename("Color", "iris_Color");
-
-        transformer.rename("UV0", "iris_UV0");
-        transformer.rename("UV1", "iris_UV1");
-        transformer.rename("UV2", "iris_UV2");
-        transformer.rename("Normal", "iris_NormalMatrix");
-
-        //transformer.prependMain("vec2 UV1 = (iris_TextureMat * vec4(iris_UV0, 0.0, 1.0)).xy;");
-        //transformer.prependMain("vec2 UV2 = (mat4(vec4(0.00390625, 0.0, 0.0, 0.0), vec4(0.0, 0.00390625, 0.0, 0.0), vec4(0.0, 0.0, 0.00390625, 0.0), vec4(0.03125, 0.03125, 0.03125, 1.0)) * vec4(iris_UV2, 0.0, 1.0)).xy;");
-
     }
 
     public static String getFormattedShader(ParseTree tree, String string) {

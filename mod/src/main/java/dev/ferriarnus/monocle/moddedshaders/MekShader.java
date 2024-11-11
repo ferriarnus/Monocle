@@ -8,6 +8,7 @@ import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.blending.AlphaTests;
 import net.irisshaders.iris.helpers.FakeChainedJsonException;
 import net.irisshaders.iris.pipeline.IrisRenderingPipeline;
+import net.irisshaders.iris.shaderpack.loading.ProgramId;
 import net.irisshaders.iris.shaderpack.programs.ProgramSet;
 import net.irisshaders.iris.shaderpack.programs.ProgramSource;
 import net.irisshaders.iris.vertices.IrisVertexFormats;
@@ -17,14 +18,16 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.fml.common.Mod;
 
+import java.io.IOException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MekShader {
 
-    public static final ResourceLocation MEKASUIT = ResourceLocation.fromNamespaceAndPath("mekanism", "mekasuit");
-    public static final ResourceLocation SPS = ResourceLocation.fromNamespaceAndPath("mekanism", "sps");
+    public static final ResourceLocation SPS = ResourceLocation.fromNamespaceAndPath("mekanism", "rendertype_sps");
+    public static final ResourceLocation MEKASUIT = ResourceLocation.fromNamespaceAndPath("mekanism", "rendertype_mekasuit");
 
     static {
         init();
@@ -41,36 +44,8 @@ public class MekShader {
     });
 
     public static void init() {
-        ModdedShaderPipeline.addShader(MEKASUIT, MekShader::createMekasuit);
-        ModdedShaderPipeline.addShader(SPS, MekShader::createSPS);
-    }
-
-    private static ShaderInstance createMekasuit() {
-        try {
-            if (Iris.getPipelineManager().getPipelineNullable() instanceof IrisRenderingPipeline pipeline && pipeline instanceof WorldRenderingPipelineExtension extension) {
-                return ModdedShaderCreator.createShader("mekasuit", getSource("mekasuit", extension.getProgramSet()), AlphaTests.ONE_TENTH_ALPHA,
-                        IrisVertexFormats.ENTITY, false, false, false, false, pipeline);
-            }
-        } catch (FakeChainedJsonException json) {
-            throw json.getTrueException();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create mekasuit", e);
-        }
-        return null;
-    }
-
-    private static ShaderInstance createSPS() {
-        try {
-            if (Iris.getPipelineManager().getPipelineNullable() instanceof IrisRenderingPipeline pipeline && pipeline instanceof WorldRenderingPipelineExtension extension) {
-                return ModdedShaderCreator.createShader("sps", getSource("sps", extension.getProgramSet()), AlphaTests.ONE_TENTH_ALPHA,
-                        DefaultVertexFormat.POSITION_TEX_COLOR, false, false, false, false, pipeline);
-            }
-        } catch (FakeChainedJsonException json) {
-            throw json.getTrueException();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create mekasuit", e);
-        }
-        return null;
+        ModdedShaderPipeline.addShaderFromJson(MEKASUIT, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.NEW_ENTITY, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(SPS, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, ProgramId.EntitiesTrans);
     }
 
     private static ProgramSource getSource(String program, ProgramSet programSet) {
@@ -105,7 +80,7 @@ public class MekShader {
             }
             ProgramSource source = new ProgramSource(program, vertexSource, geometrySource, tessControlSource, tessEvalSource, fragmentSource, programSet, ((ProgramSetExtension)programSet).getShaderProperties(), null);
             return source;
-        }catch (Exception ignored) {
+        } catch (Exception ignored) {
 
         }
         return null;
