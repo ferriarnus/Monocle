@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 
 public class ModdedShaderPipeline {
 
-    private static final Pattern UNIFORM_REGEX = Pattern.compile("\"name\":[\\s]*?\"([\\s\\S]*?)\",");
     public static final List<String> UNIFORMS = new ArrayList<>();
     private static final Map<ResourceLocation, ShaderInstance> loadedShaders = new HashMap<>();
     private static final Map<ResourceLocation, Supplier<ShaderInstance>> shaders = new HashMap<>();
@@ -81,7 +80,6 @@ public class ModdedShaderPipeline {
             String fragment = GsonHelper.getAsString(jsonobject, "fragment");
 
             ResourceLocation vertexRL = ResourceLocation.parse(vertex);
-            //vertexRL = ResourceLocation.parse("monocle:mekasuit");
             jsonobject.remove("vertex");
             jsonobject.addProperty("vertex", vertexRL.getPath());
             var vertexReader = resourceManager.openAsReader(ResourceLocation.fromNamespaceAndPath(vertexRL.getNamespace(), "shaders/core/" + vertexRL.getPath() + ".vsh"));
@@ -91,7 +89,6 @@ public class ModdedShaderPipeline {
             vertexSource = JcppProcessor.glslPreprocessSource(vertexSource, StandardMacros.createStandardEnvironmentDefines());
 
             ResourceLocation fragmentRL = ResourceLocation.parse(fragment);
-            //fragmentRL = ResourceLocation.parse("monocle:mekasuit");
             jsonobject.remove("fragment");
             jsonobject.addProperty("fragment", fragmentRL.getPath());
             var fragmentReader = resourceManager.openAsReader(ResourceLocation.fromNamespaceAndPath(vertexRL.getNamespace(), "shaders/core/" + fragmentRL.getPath() + ".fsh"));
@@ -104,18 +101,8 @@ public class ModdedShaderPipeline {
 
             String json = jsonobject.toString();
 
-//            Matcher matcher = UNIFORM_REGEX.matcher(json);
-//            matcher.replaceAll(r -> {
-//                UNIFORMS.add(r.group(0));
-//                return "\"name\": \"" + r.group(0) + "\",";
-//            });
-
             for (String value : ModdedShaderTransformer.REPLACE) {
                 json = json.replaceAll("\"" + value + "\"", "\"iris_" + value + "\"");
-            }
-
-            for (String value : UNIFORMS) {
-            //    json = json.replaceAll("\"" + value + "\"", "\"iris_" + value + "\"");
             }
 
             var source = new ProgramSource(shader.getPath(), vertexSource, null, null, null, fragmentSource, extension.getProgramSet(), ((ProgramSetExtension) extension.getProgramSet()).getShaderProperties(), null);
@@ -140,8 +127,6 @@ public class ModdedShaderPipeline {
                 continue;
             }
             UNIFORMS.add(name);
-            String type = GsonHelper.getAsString(jsonobject, "type");
-            type = type + GsonHelper.getAsString(jsonobject, "count");
             jsonobject.remove("name");
             jsonobject.addProperty("name", "iris_" + name);
         }

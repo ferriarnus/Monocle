@@ -28,6 +28,7 @@ public class MekShader {
 
     public static final ResourceLocation SPS = ResourceLocation.fromNamespaceAndPath("mekanism", "rendertype_sps");
     public static final ResourceLocation MEKASUIT = ResourceLocation.fromNamespaceAndPath("mekanism", "rendertype_mekasuit");
+    public static final ResourceLocation FLAME = ResourceLocation.fromNamespaceAndPath("mekanism", "rendertype_flame");
 
     static {
         init();
@@ -46,6 +47,7 @@ public class MekShader {
     public static void init() {
         ModdedShaderPipeline.addShaderFromJson(MEKASUIT, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.NEW_ENTITY, ProgramId.EntitiesTrans);
         ModdedShaderPipeline.addShaderFromJson(SPS, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(FLAME, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, ProgramId.SpiderEyes);
     }
 
     private static ProgramSource getSource(String program, ProgramSet programSet) {

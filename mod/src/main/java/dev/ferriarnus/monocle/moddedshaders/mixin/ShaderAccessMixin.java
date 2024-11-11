@@ -21,4 +21,12 @@ public class ShaderAccessMixin {
         }
         return ModdedShaderPipeline.getShader(MekShader.MEKASUIT);
     }
+
+    @Redirect(method = "getMekanismFlameShader", at = @At(value = "INVOKE", target = "Lnet/irisshaders/iris/pipeline/programs/ShaderMap;getShader(Lnet/irisshaders/iris/pipeline/programs/ShaderKey;)Lnet/minecraft/client/renderer/ShaderInstance;"))
+    private static ShaderInstance replaceFlame(ShaderMap instance, ShaderKey id) {
+        if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
+            return instance.getShader(id);
+        }
+        return ModdedShaderPipeline.getShader(MekShader.FLAME);
+    }
 }

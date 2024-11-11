@@ -2,6 +2,7 @@ package dev.ferriarnus.monocle.moddedshaders;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.irisshaders.iris.gl.blending.AlphaTest;
 import net.irisshaders.iris.gl.blending.AlphaTests;
 import net.irisshaders.iris.shaderpack.loading.ProgramId;
 import net.minecraft.Util;
@@ -39,8 +40,8 @@ public class XYShaders {
         RenderType.CompositeState rendertype$state = RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(() -> ModdedShaderPipeline.getShader(LASER)))
                 .setTextureState(RenderStateShard.NO_TEXTURE)
-                .setCullState(RenderStateShard.NO_CULL).
-                setTransparencyState(RenderStateShard.LIGHTNING_TRANSPARENCY)
+                .setCullState(RenderStateShard.NO_CULL)
+                .setTransparencyState(RenderStateShard.LIGHTNING_TRANSPARENCY)
                 .setLightmapState(RenderType.NO_LIGHTMAP)
                 .setOverlayState(RenderType.NO_OVERLAY)
                 .setWriteMaskState(RenderStateShard.COLOR_WRITE)
@@ -63,8 +64,8 @@ public class XYShaders {
     });
 
     public static void init() {
-        ModdedShaderPipeline.addShaderFromJson(LASER_NODE, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
-        ModdedShaderPipeline.addShaderFromJson(LASER, AlphaTests.VERTEX_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(LASER_NODE, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(LASER, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
         ModdedShaderPipeline.addShaderFromJson(ICOSPHERE, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
     }
 
