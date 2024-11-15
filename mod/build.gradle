@@ -158,6 +158,23 @@ dependencies {
     runtimeOnly("curse.maven:xycraft-machines-653791:5601045")
     runtimeOnly("curse.maven:xycraft-world-653789:5601038")
 
+    compileOnly("curse.maven:just-dire-things-1002348:5894465")
+    runtimeOnly("curse.maven:just-dire-things-1002348:5894465")
+
+    runtimeOnly("curse.maven:the-bumblezone-forge-362479:5895588")
+
+    implementation("curse.maven:the-twilight-forest-227639:5759335")
+
+    runtimeOnly("curse.maven:framedblocks-441647:5863919")
+
+    runtimeOnly("curse.maven:immersive-engineering-231951:5828000")
+
+    runtimeOnly("curse.maven:supplementaries-412082:5902251")
+    runtimeOnly("curse.maven:selene-499980:5902944")
+
+    compileOnly("curse.maven:cc-tweaked-282001:5714512")
+    runtimeOnly("curse.maven:cc-tweaked-282001:5714512")
+
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 
     jarJar(implementation("org.taumc:glsl-transformation-lib:0.2.0-20.ge3cb096")) {

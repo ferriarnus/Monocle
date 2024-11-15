@@ -1,8 +1,7 @@
-package dev.ferriarnus.monocle.moddedshaders.mixin;
+package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 
-import dev.ferriarnus.monocle.moddedshaders.XYShaders;
+import dev.ferriarnus.monocle.moddedshaders.mods.XYShaders;
 import net.irisshaders.iris.Iris;
-import net.irisshaders.iris.pipeline.ShaderRenderingPipeline;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
 import net.irisshaders.iris.vertices.ImmediateState;
 import net.minecraft.client.renderer.RenderType;

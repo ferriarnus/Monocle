@@ -1,30 +1,23 @@
-package dev.ferriarnus.monocle.moddedshaders;
+package dev.ferriarnus.monocle.moddedshaders.mods;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import dev.ferriarnus.monocle.moddedshaders.impl.WorldRenderingPipelineExtension;
+import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
 import dev.ferriarnus.monocle.moddedshaders.impl.ProgramSetExtension;
-import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.blending.AlphaTests;
-import net.irisshaders.iris.helpers.FakeChainedJsonException;
-import net.irisshaders.iris.pipeline.IrisRenderingPipeline;
 import net.irisshaders.iris.shaderpack.loading.ProgramId;
 import net.irisshaders.iris.shaderpack.programs.ProgramSet;
 import net.irisshaders.iris.shaderpack.programs.ProgramSource;
-import net.irisshaders.iris.vertices.IrisVertexFormats;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.fml.common.Mod;
 
-import java.io.IOException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class MekShader {
+public class MekShaders {
 
     public static final ResourceLocation SPS = ResourceLocation.fromNamespaceAndPath("mekanism", "rendertype_sps");
     public static final ResourceLocation MEKASUIT = ResourceLocation.fromNamespaceAndPath("mekanism", "rendertype_mekasuit");
@@ -45,9 +38,9 @@ public class MekShader {
     });
 
     public static void init() {
-        ModdedShaderPipeline.addShaderFromJson(MEKASUIT, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.NEW_ENTITY, ProgramId.EntitiesTrans);
-        ModdedShaderPipeline.addShaderFromJson(SPS, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, ProgramId.EntitiesTrans);
-        ModdedShaderPipeline.addShaderFromJson(FLAME, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, ProgramId.SpiderEyes);
+        ModdedShaderPipeline.addShaderFromJson(MEKASUIT, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.NEW_ENTITY, false, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(SPS, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, false, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(FLAME, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, false, ProgramId.SpiderEyes);
     }
 
     private static ProgramSource getSource(String program, ProgramSet programSet) {

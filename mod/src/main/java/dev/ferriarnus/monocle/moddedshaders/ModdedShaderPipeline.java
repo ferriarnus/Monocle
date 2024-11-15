@@ -59,10 +59,10 @@ public class ModdedShaderPipeline {
         loadedShaders.clear();
     }
 
-    public static void addShaderFromJson(ResourceLocation shader, AlphaTest alpha, VertexFormat format, ProgramId fallback) {
+    public static void addShaderFromJson(ResourceLocation shader, AlphaTest alpha, VertexFormat format, boolean isFullbright, ProgramId fallback) {
         addShader(shader, () -> {
             try {
-                return getShaderFromJson(shader, alpha, format, fallback);
+                return getShaderFromJson(shader, alpha, format, isFullbright, fallback);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -70,7 +70,7 @@ public class ModdedShaderPipeline {
         });
     }
 
-    public static ShaderInstance getShaderFromJson(ResourceLocation shader, AlphaTest alpha, VertexFormat format, ProgramId fallback) throws IOException {
+    public static ShaderInstance getShaderFromJson(ResourceLocation shader, AlphaTest alpha, VertexFormat format, boolean isFullbright, ProgramId fallback) throws IOException {
         if (Iris.getPipelineManager().getPipelineNullable() instanceof IrisRenderingPipeline pipeline && pipeline instanceof WorldRenderingPipelineExtension extension) {
             ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
             Reader reader = resourceManager.openAsReader(ResourceLocation.fromNamespaceAndPath(shader.getNamespace(), "shaders/core/" + shader.getPath() + ".json"));
@@ -114,7 +114,7 @@ public class ModdedShaderPipeline {
                 opt.ifPresent(p -> ((ProgramDirectivesAccessor) source.getDirectives()).setDrawBuffers(p.getDirectives().getDrawBuffers()));
             }
 
-            return ModdedShaderCreator.createShader(shader.getPath(), source, alpha, format, json, pipeline);
+            return ModdedShaderCreator.createShader(shader.getPath(), source, alpha, format, json, pipeline, isFullbright);
         }
         return null;
     }

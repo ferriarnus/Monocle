@@ -1,6 +1,7 @@
-package dev.ferriarnus.monocle.moddedshaders.mixin;
+package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 
-import dev.ferriarnus.monocle.moddedshaders.MekShader;
+import dev.ferriarnus.monocle.moddedshaders.mods.IEShaders;
+import dev.ferriarnus.monocle.moddedshaders.mods.MekShaders;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
 import net.irisshaders.iris.pipeline.programs.ShaderAccess;
 import net.irisshaders.iris.pipeline.programs.ShaderKey;
@@ -19,7 +20,7 @@ public class ShaderAccessMixin {
         if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
             return instance.getShader(id);
         }
-        return ModdedShaderPipeline.getShader(MekShader.MEKASUIT);
+        return ModdedShaderPipeline.getShader(MekShaders.MEKASUIT);
     }
 
     @Redirect(method = "getMekanismFlameShader", at = @At(value = "INVOKE", target = "Lnet/irisshaders/iris/pipeline/programs/ShaderMap;getShader(Lnet/irisshaders/iris/pipeline/programs/ShaderKey;)Lnet/minecraft/client/renderer/ShaderInstance;"))
@@ -27,6 +28,14 @@ public class ShaderAccessMixin {
         if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
             return instance.getShader(id);
         }
-        return ModdedShaderPipeline.getShader(MekShader.FLAME);
+        return ModdedShaderPipeline.getShader(MekShaders.FLAME);
+    }
+
+    @Redirect(method = "getIEVBOShader", at = @At(value = "INVOKE", target = "Lnet/irisshaders/iris/pipeline/programs/ShaderMap;getShader(Lnet/irisshaders/iris/pipeline/programs/ShaderKey;)Lnet/minecraft/client/renderer/ShaderInstance;"))
+    private static ShaderInstance replaceVBO(ShaderMap instance, ShaderKey id) {
+        if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
+            return instance.getShader(id);
+        }
+        return ModdedShaderPipeline.getShader(IEShaders.VBO);
     }
 }

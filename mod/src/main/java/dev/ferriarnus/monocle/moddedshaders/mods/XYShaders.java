@@ -1,8 +1,8 @@
-package dev.ferriarnus.monocle.moddedshaders;
+package dev.ferriarnus.monocle.moddedshaders.mods;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.irisshaders.iris.gl.blending.AlphaTest;
+import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
 import net.irisshaders.iris.gl.blending.AlphaTests;
 import net.irisshaders.iris.shaderpack.loading.ProgramId;
 import net.minecraft.Util;
@@ -64,9 +64,9 @@ public class XYShaders {
     });
 
     public static void init() {
-        ModdedShaderPipeline.addShaderFromJson(LASER_NODE, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
-        ModdedShaderPipeline.addShaderFromJson(LASER, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
-        ModdedShaderPipeline.addShaderFromJson(ICOSPHERE, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.BLOCK, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(LASER_NODE, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.BLOCK, false, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(LASER, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.BLOCK, false, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(ICOSPHERE, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.BLOCK, false, ProgramId.EntitiesTrans);
     }
 
 }

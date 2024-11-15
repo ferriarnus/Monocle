@@ -142,6 +142,13 @@ public class ModdedShaderTransformer {
         transformer.rename("Sampler0", "gtexture");
         transformer.rename("Sampler1", "iris_overlay");
         transformer.rename("Sampler2", "lightmap");
+
+        if (!parameters.inputs.hasLight()) {
+            transformer.rename("iris_UV1", "iris_OverlayUV");
+            transformer.removeVariable("iris_OverlayUV");
+            transformer.prependMain("ivec2 iris_OverlayUV = ivec2(0, 0);");
+            transformer.injectVariable("in ivec2 iris_UV1;");
+        }
     }
 
     public static String getFormattedShader(ParseTree tree, String string) {

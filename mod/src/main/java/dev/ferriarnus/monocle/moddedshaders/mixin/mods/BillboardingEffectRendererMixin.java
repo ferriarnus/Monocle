@@ -1,9 +1,7 @@
-package dev.ferriarnus.monocle.moddedshaders.mixin;
+package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 
-import dev.ferriarnus.monocle.moddedshaders.MekShader;
+import dev.ferriarnus.monocle.moddedshaders.mods.MekShaders;
 import net.irisshaders.iris.Iris;
-import net.irisshaders.iris.pathways.LightningHandler;
-import net.irisshaders.iris.pipeline.ShaderRenderingPipeline;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
 import net.irisshaders.iris.vertices.ImmediateState;
 import net.minecraft.client.renderer.RenderType;
@@ -30,7 +28,7 @@ public class BillboardingEffectRendererMixin {
     @Redirect(method = "render(Lnet/minecraft/resources/ResourceLocation;Ljava/lang/String;Ljava/util/function/Supplier;)V", at = @At(value = "FIELD", target = "Lmekanism/client/render/MekanismRenderType;SPS:Ljava/util/function/Function;"))
     private static Function<ResourceLocation, RenderType> doNotSwitchShaders() {
         if (Iris.isPackInUseQuick() && ImmediateState.isRenderingLevel && !ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
-            return MekShader.SPS_RENDERTYPE;
+            return MekShaders.SPS_RENDERTYPE;
         } else {
             return (Function<ResourceLocation, RenderType>) SPS;
         }

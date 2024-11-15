@@ -146,13 +146,13 @@ public class ModdedShaderCreator {
         }, (samplerHolder, imageHolder) -> parent.addGbufferOrShadowSamplers(samplerHolder, imageHolder, flipped, isShadowPass, inputs.hasTex(), inputs.hasLight(), inputs.hasOverlay()), isIntensity, parent, overrides, customUniforms);
     }
 
-    public static ExtendedShader createShader(String name, ProgramSource source, AlphaTest alpha, VertexFormat vertexFormat, String json, IrisRenderingPipeline pipeline) throws IOException {
+    public static ExtendedShader createShader(String name, ProgramSource source, AlphaTest alpha, VertexFormat vertexFormat, String json, IrisRenderingPipeline pipeline, boolean isFullbright) throws IOException {
         var extenedPipeline = (IrisRenderingPipelineExtension) pipeline;
         GlFramebuffer beforeTranslucent = extenedPipeline.getRenderTargets().createGbufferFramebuffer(pipeline.getFlippedAfterPrepare(), source.getDirectives().getDrawBuffers());
         GlFramebuffer afterTranslucent = extenedPipeline.getRenderTargets().createGbufferFramebuffer(pipeline.getFlippedAfterTranslucent(), source.getDirectives().getDrawBuffers());
 
 
-        ShaderAttributeInputs inputs = new ShaderAttributeInputs(vertexFormat, false, false, false, false, false);
+        ShaderAttributeInputs inputs = new ShaderAttributeInputs(vertexFormat, isFullbright, false, false, false, false);
 
         Supplier<ImmutableSet<Integer>> flipped =
                 () -> pipeline.isBeforeTranslucent ? pipeline.getFlippedAfterPrepare() : pipeline.getFlippedAfterTranslucent();
