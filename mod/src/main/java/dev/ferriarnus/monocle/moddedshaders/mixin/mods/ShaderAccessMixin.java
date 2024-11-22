@@ -31,6 +31,14 @@ public class ShaderAccessMixin {
         return ModdedShaderPipeline.getShader(MekShaders.FLAME);
     }
 
+    @Redirect(method = "getSPSShader", at = @At(value = "INVOKE", target = "Lnet/irisshaders/iris/pipeline/programs/ShaderMap;getShader(Lnet/irisshaders/iris/pipeline/programs/ShaderKey;)Lnet/minecraft/client/renderer/ShaderInstance;"))
+    private static ShaderInstance replaceSPS(ShaderMap instance, ShaderKey id) {
+        if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
+            return instance.getShader(id);
+        }
+        return ModdedShaderPipeline.getShader(MekShaders.SPS);
+    }
+
     @Redirect(method = "getIEVBOShader", at = @At(value = "INVOKE", target = "Lnet/irisshaders/iris/pipeline/programs/ShaderMap;getShader(Lnet/irisshaders/iris/pipeline/programs/ShaderKey;)Lnet/minecraft/client/renderer/ShaderInstance;"))
     private static ShaderInstance replaceVBO(ShaderMap instance, ShaderKey id) {
         if (ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {

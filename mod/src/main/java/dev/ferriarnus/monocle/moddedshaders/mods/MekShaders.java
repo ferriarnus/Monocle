@@ -27,16 +27,6 @@ public class MekShaders {
         init();
     }
 
-    public static final Function<ResourceLocation, RenderType> SPS_RENDERTYPE = Util.memoize(resourceLocation -> {
-        RenderType.CompositeState state = RenderType.CompositeState.builder()
-                .setShaderState(new RenderStateShard.ShaderStateShard(() -> ModdedShaderPipeline.getShader(SPS)))
-                .setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false))
-                .setTransparencyState(RenderType.LIGHTNING_TRANSPARENCY)
-                .setOutputState(RenderType.TRANSLUCENT_TARGET)
-                .createCompositeState(false);
-        return RenderType.create("mek_sps", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 1_536, false, true, state);
-    });
-
     public static void init() {
         ModdedShaderPipeline.addShaderFromJson(MEKASUIT, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.NEW_ENTITY, false, ProgramId.EntitiesTrans);
         ModdedShaderPipeline.addShaderFromJson(SPS, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_TEX_COLOR, false, ProgramId.EntitiesTrans);

@@ -17,7 +17,6 @@
     "MixinProgramDirectives",
 
     "mods.ShaderAccessMixin",
-    "mods.BillboardingEffectRendererMixin",
 
     "mods.MixinXYShaders",
     "mods.MixinXynergyGraphRenderer",
