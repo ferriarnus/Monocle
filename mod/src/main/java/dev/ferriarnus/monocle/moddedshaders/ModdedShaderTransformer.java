@@ -143,7 +143,7 @@ public class ModdedShaderTransformer {
         transformer.rename("Sampler1", "iris_overlay");
         transformer.rename("Sampler2", "lightmap");
 
-        if (!parameters.inputs.hasLight()) {
+        if (!parameters.inputs.hasLight() && transformer.hasVariable("iris_UV1")) {
             transformer.rename("iris_UV1", "iris_OverlayUV");
             transformer.removeVariable("iris_OverlayUV");
             transformer.prependMain("ivec2 iris_OverlayUV = ivec2(0, 0);");

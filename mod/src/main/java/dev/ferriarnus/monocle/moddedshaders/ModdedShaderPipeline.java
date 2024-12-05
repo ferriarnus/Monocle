@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import dev.ferriarnus.monocle.Monocle;
 import dev.ferriarnus.monocle.moddedshaders.impl.ProgramDirectivesAccessor;
 import dev.ferriarnus.monocle.moddedshaders.impl.ProgramSetExtension;
 import dev.ferriarnus.monocle.moddedshaders.impl.WorldRenderingPipelineExtension;
@@ -48,7 +49,7 @@ public class ModdedShaderPipeline {
             loadedShaders.put(name, instance);
             return instance;
         }
-        return null;
+        throw new IllegalStateException("Unknown shader: " + name);
     }
 
     public static void destroyShaders() {
@@ -64,9 +65,9 @@ public class ModdedShaderPipeline {
             try {
                 return getShaderFromJson(shader, alpha, format, isFullbright, fallback);
             } catch (IOException e) {
-                e.printStackTrace();
+                Monocle.LOGGER.error("Could not load shader from: " + shader);
+                throw new RuntimeException(e);
             }
-            return null;
         });
     }
 
@@ -116,7 +117,7 @@ public class ModdedShaderPipeline {
 
             return ModdedShaderCreator.createShader(shader.getPath(), source, alpha, format, json, pipeline, isFullbright);
         }
-        return null;
+        throw new IllegalStateException("Pipeline is not a shader pipeline for shader: " + shader);
     }
 
     private static void parseUniforms(JsonArray array) {
