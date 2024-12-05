@@ -3,7 +3,7 @@ plugins {
 }
 
 allprojects {
-    version = mod_version
+    version = mod_version + ".ms"
     group = mod_group_id
 }
 
