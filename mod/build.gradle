@@ -175,6 +175,20 @@ dependencies {
     compileOnly("curse.maven:cc-tweaked-282001:5714512")
     runtimeOnly("curse.maven:cc-tweaked-282001:5714512")
 
+    compileOnly("curse.maven:ars-nouveau-401955:5955247")
+    runtimeOnly("curse.maven:ars-nouveau-401955:5955247")
+    runtimeOnly("curse.maven:curios-continuation-1037991:5888964")
+    runtimeOnly("curse.maven:geckolib-388172:5874016")
+
+    compileOnly("curse.maven:forbidden-arcanus-309858:5966516")
+    runtimeOnly("curse.maven:forbidden-arcanus-309858:5966516")
+    runtimeOnly("curse.maven:valhelsia-core-416935:5847440")
+
+    compileOnly("curse.maven:enchanted-witchcraft-560363:5921287")
+    runtimeOnly("curse.maven:enchanted-witchcraft-560363:5921287")
+    runtimeOnly("curse.maven:stateobserver-701213:5888686")
+    runtimeOnly("curse.maven:smartbrainlib-661293:5723837")
+
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 
     jarJar(implementation("org.taumc:glsl-transformation-lib:0.2.0-20.ge3cb096")) {

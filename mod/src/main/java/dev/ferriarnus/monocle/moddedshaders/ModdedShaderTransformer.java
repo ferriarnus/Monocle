@@ -139,8 +139,8 @@ public class ModdedShaderTransformer {
             transformer.rename(value, "iris_" + value);
         }
 
-        transformer.rename("Sampler0", "gtexture");
-        transformer.rename("Sampler1", "iris_overlay");
+        //transformer.rename("Sampler0", "gtexture");
+        //transformer.rename("Sampler1", "iris_overlay");
         transformer.rename("Sampler2", "lightmap");
 
         if (!parameters.inputs.hasLight() && transformer.hasVariable("iris_UV1")) {

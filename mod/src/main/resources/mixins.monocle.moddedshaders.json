@@ -31,13 +31,21 @@
     "mods.MixinIEGLShaders",
 
     "mods.MixinRedThreadRenderer",
-    "mods.MixinKnightPhantomModel",
     "mods.MixinClientEvents",
 
     "mods.MixinBlackboardBlockTileRenderer",
     "mods.MixinGlobeBlockTileRenderer",
     "mods.MixinSlimedLayer",
 
-    "mods.MixinMonitorBlockEntityRenderer"
+    "mods.MixinMonitorBlockEntityRenderer",
+
+    "mods.MixinShaderRegistry",
+
+    "mods.MixinFAShaders",
+
+    "mods.MixinEParticleRenderTypes",
+
+    "mods.MixinRenderType",
+    "mods.MixinGameRenderer"
   ]
 }
