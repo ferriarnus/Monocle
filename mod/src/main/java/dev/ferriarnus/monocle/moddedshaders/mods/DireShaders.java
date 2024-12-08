@@ -7,6 +7,7 @@ import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -21,15 +22,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.lwjgl.opengl.GL32;
 
 import java.util.List;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class DireShaders {
 
     public static RenderTarget GOO_TARGET;
@@ -53,18 +51,6 @@ public class DireShaders {
         }
     };
 
-    public static RenderType RenderBlockBackface = RenderType.create("GadgetRenderBlockBackface",DefaultVertexFormat.BLOCK,
-            VertexFormat.Mode.QUADS, 256, false, false,
-            RenderType.CompositeState.builder()
-                    .setShaderState(RENDERTYPE_TRANSLUCENT_SHADER)
-                    .setLightmapState(RenderType.LIGHTMAP)
-                    .setTextureState(RenderType.BLOCK_SHEET)
-                    .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-                    .setDepthTestState(RenderType.EQUAL_DEPTH_TEST)
-                    .setCullState(RenderType.CULL)
-                    .setOverlayState(RenderStateShard.OVERLAY)
-                    .createCompositeState(false));
-
     public static final RenderStateShard.ShaderStateShard RENDERTYPE_ENTITY_ALPHA_SHADER = new RenderStateShard.ShaderStateShard(
             () -> GameRenderer.rendertypeEntityAlphaShader) {
         @Override
@@ -80,8 +66,20 @@ public class DireShaders {
         }
     };
 
-    public static RenderType GooPattern = RenderType.create("GooPattern",DefaultVertexFormat.BLOCK,
-            VertexFormat.Mode.QUADS, 256, false, false,
+    public static RenderType RenderBlockBackface = RenderType.create("GadgetRenderBlockBackface", DefaultVertexFormat.BLOCK,
+            VertexFormat.Mode.QUADS,  256,  false,  false,
+            RenderType.CompositeState.builder()
+                    .setShaderState(RENDERTYPE_TRANSLUCENT_SHADER)
+                    .setLightmapState(RenderType.LIGHTMAP)
+                    .setTextureState(RenderType.BLOCK_SHEET)
+                    .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+                    .setDepthTestState(RenderType.EQUAL_DEPTH_TEST)
+                    .setCullState(RenderType.CULL)
+                    .setOverlayState(RenderStateShard.OVERLAY)
+                    .createCompositeState(false));
+
+    public static RenderType GooPattern = RenderType.create("GooPattern", DefaultVertexFormat.BLOCK,
+            VertexFormat.Mode.QUADS,  256,  false,  false,
             RenderType.CompositeState.builder()
                     .setShaderState(RENDERTYPE_ENTITY_ALPHA_SHADER)
                     .setLightmapState(RenderType.LIGHTMAP)
@@ -92,6 +90,7 @@ public class DireShaders {
 
     static {
         init();
+        NeoForge.EVENT_BUS.addListener(DireShaders::renderLevel);
     }
 
     public static void init() {
@@ -109,10 +108,7 @@ public class DireShaders {
 
     public static boolean nightVision(LivingEntity livingEntity) {
         ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
-        if (helmet.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(helmet, Ability.NIGHTVISION)) {
-            return true;
-        }
-        return false;
+        return helmet.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(helmet, Ability.NIGHTVISION);
     }
 
     public static void setupRenderTarget() {
@@ -123,12 +119,12 @@ public class DireShaders {
         GOO_TARGET = new TextureTarget(window.getWidth(), window.getHeight(), true, Minecraft.ON_OSX);
     }
 
-    @SubscribeEvent
     public static void renderLevel(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS) {
             setupRenderTarget();
         }
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES) {
+
             RenderSystem.setShader(MinecraftShaders::getScreenShader);
             RenderSystem.setShaderTexture(0, GOO_TARGET.getColorTextureId());
             RenderSystem.setShaderTexture(3, GOO_TARGET.getDepthTextureId()); //Vanilla
@@ -137,6 +133,7 @@ public class DireShaders {
             RenderSystem.enableDepthTest();
             RenderSystem.depthFunc(GL32.GL_LESS);
             RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
 
             BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
             bufferbuilder.addVertex( -1, -1, 0).setUv(0, 0);
