@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
-import net.favouriteless.enchanted.client.EShaders;
 import net.irisshaders.iris.gl.blending.AlphaTests;
 import net.irisshaders.iris.shaderpack.loading.ProgramId;
 import net.minecraft.client.particle.ParticleRenderType;

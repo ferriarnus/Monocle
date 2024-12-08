@@ -9,11 +9,7 @@ import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.ferriarnus.monocle.moddedshaders.mods.DireShaders;
-import net.irisshaders.iris.Iris;
-import net.irisshaders.iris.pipeline.IrisRenderingPipeline;
-import net.irisshaders.iris.pipeline.programs.ShaderKey;
-import net.irisshaders.iris.shadows.ShadowRenderingState;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -29,21 +25,40 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GooBlockRender_Base.class)
 public class MixinGooBlockRender_Base {
 
+//    @WrapOperation(method = "renderTexturePattern", at = @At(value = "FIELD", target = "Lcom/direwolf20/justdirethings/client/renderers/OurRenderTypes;GooPattern:Lnet/minecraft/client/renderer/RenderType;"))
+//    public RenderType WrapBuffer(Operation<RenderType> original) {
+//        return DireShaders.GooPattern;
+//    }
+//
+//    @WrapOperation(method = "renderTexturePattern", at = @At(value = "FIELD", target = "Lcom/direwolf20/justdirethings/client/renderers/OurRenderTypes;RenderBlockBackface:Lnet/minecraft/client/renderer/RenderType;"))
+//    public RenderType WrapBuffer2(Operation<RenderType> original) {
+//        return DireShaders.RenderBlockBackface;
+//    }
+
     @Unique
     private MultiBufferSource.BufferSource bufferSource = MultiBufferSource.immediate(new ByteBufferBuilder(786432));
     private MultiBufferSource.BufferSource bufferSource2 = MultiBufferSource.immediate(new ByteBufferBuilder(786432));
 
+    @Inject(method = "renderTexturePattern", at = @At("HEAD"))
+    public void head(Direction direction, Level level, BlockPos pos, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedOverlayIn, float transparency, BlockState pattern, BlockState renderState, GooBlockBE_Base gooBlockBE_base, CallbackInfo ci) {
+        DireShaders.GOO_TARGET.bindWrite(true);
+    }
+
+    @Inject(method = "renderTexturePattern", at = @At("TAIL"))
+    public void tail(Direction direction, Level level, BlockPos pos, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedOverlayIn, float transparency, BlockState pattern, BlockState renderState, GooBlockBE_Base gooBlockBE_base, CallbackInfo ci) {
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
+    }
 
     @WrapOperation(method = "renderTexturePattern",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource;getBuffer(Lnet/minecraft/client/renderer/RenderType;)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 0))
     public VertexConsumer WrapBuffer(MultiBufferSource instance, RenderType renderType, Operation<VertexConsumer> original) {
-        return bufferSource.getBuffer(OurRenderTypes.GooPattern);
+        return bufferSource.getBuffer(DireShaders.GooPattern);
     }
 
     @WrapOperation(method = "renderTexturePattern",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource;getBuffer(Lnet/minecraft/client/renderer/RenderType;)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 1))
     public VertexConsumer WrapBuffer2(MultiBufferSource instance, RenderType renderType, Operation<VertexConsumer> original) {
-        return bufferSource2.getBuffer(OurRenderTypes.RenderBlockBackface);
+        return bufferSource2.getBuffer(DireShaders.RenderBlockBackface);
     }
 
     @Inject(method = "renderTexturePattern",
@@ -53,7 +68,7 @@ public class MixinGooBlockRender_Base {
     }
 
     @Inject(method = "renderTexturePattern",
-            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = At.Shift.AFTER))
+                at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = At.Shift.AFTER))
     public void injectEnd2(Direction direction, Level level, BlockPos pos, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedOverlayIn, float transparency, BlockState pattern, BlockState renderState, GooBlockBE_Base gooBlockBE_base, CallbackInfo ci) {
         bufferSource2.endBatch();
     }

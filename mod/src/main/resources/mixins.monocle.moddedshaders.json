@@ -46,6 +46,7 @@
     "mods.MixinEParticleRenderTypes",
 
     "mods.MixinRenderType",
+    "mods.MixinIrisSamplers",
     "mods.MixinGameRenderer"
   ]
 }
