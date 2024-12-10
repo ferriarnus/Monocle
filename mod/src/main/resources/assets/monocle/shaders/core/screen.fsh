@@ -1,7 +1,7 @@
 #version 150
 
 uniform sampler2D Sampler0;
-uniform sampler2D Sampler3;
+uniform sampler2D MonocleDepth;
 
 uniform vec4 ColorModulator;
 
@@ -15,5 +15,5 @@ void main() {
         discard;
     }
     fragColor = color * ColorModulator;
-    gl_FragDepth = texture(Sampler3, texCoord0).r;
+    gl_FragDepth = texture(MonocleDepth, texCoord0).r;
 }

@@ -16,7 +16,7 @@ public class MixinIrisSamplers {
     @Inject(method = "addWorldDepthSamplers", at = @At("TAIL"))
     private static void addDepth(SamplerHolder samplers, RenderTargets renderTargets, CallbackInfo ci) {
         if (MinecraftShaders.needsDepth()) {
-            samplers.addDynamicSampler(MinecraftShaders::getDepthId, "Sampler3");
+            samplers.addDynamicSampler(MinecraftShaders::getDepthId, "MonocleDepth");
         }
     }
 }

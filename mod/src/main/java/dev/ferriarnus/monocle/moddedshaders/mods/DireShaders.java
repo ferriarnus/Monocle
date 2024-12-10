@@ -7,11 +7,11 @@ import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
+import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.blending.AlphaTests;
 import net.irisshaders.iris.shaderpack.loading.ProgramId;
 import net.minecraft.client.Minecraft;
@@ -40,8 +40,8 @@ public class DireShaders {
             () -> GameRenderer.rendertypeTranslucentShader) {
         @Override
         public void setupRenderState() {
-            GOO_TARGET.bindWrite(true);
             super.setupRenderState();
+            GOO_TARGET.bindWrite(true);
         }
 
         @Override
@@ -55,8 +55,8 @@ public class DireShaders {
             () -> GameRenderer.rendertypeEntityAlphaShader) {
         @Override
         public void setupRenderState() {
-            GOO_TARGET.bindWrite(true);
             super.setupRenderState();
+            GOO_TARGET.bindWrite(true);
         }
 
         @Override
@@ -117,9 +117,17 @@ public class DireShaders {
             GOO_TARGET.destroyBuffers();
         }
         GOO_TARGET = new TextureTarget(window.getWidth(), window.getHeight(), true, Minecraft.ON_OSX);
+        GOO_TARGET.bindWrite(true);
+        RenderSystem.clearColor(0,0,0,0);
+        GL32.glClear(GL32.GL_COLOR_BUFFER_BIT);
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
+        RenderSystem.clearColor(1,1,1,1);
     }
 
     public static void renderLevel(RenderLevelStageEvent event) {
+        if (!Iris.isPackInUseQuick()) {
+            return;
+        }
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS) {
             setupRenderTarget();
         }
@@ -127,7 +135,6 @@ public class DireShaders {
 
             RenderSystem.setShader(MinecraftShaders::getScreenShader);
             RenderSystem.setShaderTexture(0, GOO_TARGET.getColorTextureId());
-            RenderSystem.setShaderTexture(3, GOO_TARGET.getDepthTextureId()); //Vanilla
             MinecraftShaders.setDepthTexture(GOO_TARGET.getDepthTextureId()); //Iris
 
             RenderSystem.enableDepthTest();
@@ -144,8 +151,6 @@ public class DireShaders {
 
             RenderSystem.disableBlend();
             RenderSystem.disableDepthTest();
-
-            GOO_TARGET.blitToScreen(Minecraft.getInstance().getWindow().getGuiScaledWidth(), Minecraft.getInstance().getWindow().getGuiScaledHeight());
         }
     }
 }
