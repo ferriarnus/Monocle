@@ -45,7 +45,10 @@
 
     "mods.MixinEParticleRenderTypes",
 
-    "mods.MixinRenderType",
+    "mods.MixinRenderTypes",
+
+    "mods.MixinCaxtonTextRenderLayers",
+
     "mods.MixinIrisSamplers",
     "mods.MixinGameRenderer"
   ]

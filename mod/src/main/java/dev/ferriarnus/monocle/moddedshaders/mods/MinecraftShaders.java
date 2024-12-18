@@ -31,32 +31,6 @@ public class MinecraftShaders {
     public static ResourceLocation END_GATEWAY = ResourceLocation.parse("rendertype_end_gateway");
     public static ResourceLocation SCREEN = ResourceLocation.fromNamespaceAndPath(Monocle.MODID, "screen");
 
-    public static final RenderType END_PORTAL_TYPE = RenderType.create(
-            "end_portal",
-            DefaultVertexFormat.POSITION,
-            VertexFormat.Mode.QUADS,
-            1536,
-            false,
-            false,
-            RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> ModdedShaderPipeline.getShader(END_PORTAL)))
-                    .setTextureState(new RenderStateShard.TextureStateShard(TheEndPortalRenderer.END_PORTAL_LOCATION, false, false))
-                    .createCompositeState(false)
-    );
-
-    public static final RenderType END_GATEWAY_TYPE = RenderType.create(
-            "end_gateway",
-            DefaultVertexFormat.POSITION,
-            VertexFormat.Mode.QUADS,
-            1536,
-            false,
-            false,
-            RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> ModdedShaderPipeline.getShader(END_GATEWAY)))
-                    .setTextureState(new RenderStateShard.TextureStateShard(TheEndPortalRenderer.END_PORTAL_LOCATION, false, false))
-                    .createCompositeState(false)
-    );
-
     private static ShaderInstance SCREEN_SHADER;
 
     static {

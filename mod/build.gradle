@@ -152,40 +152,52 @@ dependencies {
 
     implementation("org.embeddedt:embeddium-1.21:${embeddium_version}")
 
-    //runtimeOnly("mekanism:Mekanism:1.21.1-10.7.0.55")
+    runtimeOnly("mekanism:Mekanism:1.21.1-10.7.0.55")
 
-    //runtimeOnly("curse.maven:xycraft-653786:5601037")
-    //runtimeOnly("curse.maven:xycraft-machines-653791:5601045")
-    //runtimeOnly("curse.maven:xycraft-world-653789:5601038")
+    runtimeOnly("curse.maven:xycraft-653786:5601037")
+    runtimeOnly("curse.maven:xycraft-machines-653791:5601045")
+    runtimeOnly("curse.maven:xycraft-world-653789:5601038")
 
     compileOnly("curse.maven:just-dire-things-1002348:5894465")
     runtimeOnly("curse.maven:just-dire-things-1002348:5894465")
 
-    //runtimeOnly("curse.maven:the-bumblezone-forge-362479:5895588")
+    runtimeOnly("curse.maven:the-bumblezone-forge-362479:5895588")
 
     compileOnly("curse.maven:the-twilight-forest-227639:5759335")
-    //runtimeOnly("curse.maven:the-twilight-forest-227639:5759335")
+    runtimeOnly("curse.maven:the-twilight-forest-227639:5759335")
 
     //runtimeOnly("curse.maven:framedblocks-441647:5863919")
 
-    //runtimeOnly("curse.maven:immersive-engineering-231951:5828000")
+    runtimeOnly("curse.maven:immersive-engineering-231951:5828000")
 
-    //runtimeOnly("curse.maven:supplementaries-412082:5902251")
-    //runtimeOnly("curse.maven:selene-499980:5902944")
+    runtimeOnly("curse.maven:supplementaries-412082:5902251")
+    runtimeOnly("curse.maven:selene-499980:5902944")
 
     compileOnly("curse.maven:cc-tweaked-282001:5714512")
-    //runtimeOnly("curse.maven:cc-tweaked-282001:5714512")
+    runtimeOnly("curse.maven:cc-tweaked-282001:5714512")
 
-    //runtimeOnly("curse.maven:ars-nouveau-401955:5955247")
-    //runtimeOnly("curse.maven:curios-continuation-1037991:5888964")
-    //runtimeOnly("curse.maven:geckolib-388172:5874016")
+    runtimeOnly("curse.maven:ars-nouveau-401955:5955247")
+    runtimeOnly("curse.maven:curios-continuation-1037991:5888964")
+    runtimeOnly("curse.maven:geckolib-388172:5874016")
 
-    //runtimeOnly("curse.maven:forbidden-arcanus-309858:5966516")
-    //runtimeOnly("curse.maven:valhelsia-core-416935:5847440")
+    runtimeOnly("curse.maven:forbidden-arcanus-309858:5966516")
+    runtimeOnly("curse.maven:valhelsia-core-416935:5847440")
 
-    //runtimeOnly("curse.maven:enchanted-witchcraft-560363:5921287")
-    //runtimeOnly("curse.maven:stateobserver-701213:5888686")
-    //runtimeOnly("curse.maven:smartbrainlib-661293:5723837")
+    runtimeOnly("curse.maven:enchanted-witchcraft-560363:5921287")
+    runtimeOnly("curse.maven:stateobserver-701213:5888686")
+    runtimeOnly("curse.maven:smartbrainlib-661293:5723837")
+
+    runtimeOnly("curse.maven:creeper-overhaul-561625:5725480")
+    runtimeOnly("curse.maven:resourceful-config-714059:5753339")
+    runtimeOnly("curse.maven:resourceful-lib-570073:5793500")
+    runtimeOnly("curse.maven:geckolib-388172:5874016")
+
+    runtimeOnly("curse.maven:tesseract-379232:5657067")
+    runtimeOnly("curse.maven:supermartijn642s-config-lib-438332:5546996")
+    runtimeOnly("curse.maven:supermartijn642s-core-lib-454372:5713682")
+
+    runtimeOnly("maven.modrinth:caxton:0.6.0-alpha.5+1.21.1-NEOFORGE")
+
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 
