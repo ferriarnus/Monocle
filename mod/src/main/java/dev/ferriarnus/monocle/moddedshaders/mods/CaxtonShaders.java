@@ -17,8 +17,8 @@ public class CaxtonShaders {
     }
 
     private static void init() {
-        ModdedShaderPipeline.addShaderFromJson(TEXT, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, true, ProgramId.BlockTrans);
-        ModdedShaderPipeline.addShaderFromJson(TEXT_SEE_THROUGH, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, true, ProgramId.BlockTrans);
-        ModdedShaderPipeline.addShaderFromJson(TEXT_OUTLINE, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, true, ProgramId.BlockTrans);
+        ModdedShaderPipeline.addShaderFromJson(TEXT, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, true, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(TEXT_SEE_THROUGH, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, true, ProgramId.EntitiesTrans);
+        ModdedShaderPipeline.addShaderFromJson(TEXT_OUTLINE, AlphaTests.ONE_TENTH_ALPHA, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, true, ProgramId.EntitiesTrans);
     }
 }
