@@ -151,7 +151,7 @@ dependencies {
     }
 
     implementation("org.embeddedt:embeddium-1.21:${embeddium_version}")
-
+    
     runtimeOnly("mekanism:Mekanism:1.21.1-10.7.0.55")
 
     runtimeOnly("curse.maven:xycraft-653786:5601037")
@@ -166,7 +166,8 @@ dependencies {
     compileOnly("curse.maven:the-twilight-forest-227639:5759335")
     runtimeOnly("curse.maven:the-twilight-forest-227639:5759335")
 
-    //runtimeOnly("curse.maven:framedblocks-441647:5863919")
+    compileOnly("curse.maven:framedblocks-441647:5863919")
+    runtimeOnly("curse.maven:framedblocks-441647:5863919")
 
     runtimeOnly("curse.maven:immersive-engineering-231951:5828000")
 

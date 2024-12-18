@@ -25,6 +25,8 @@ import java.io.IOException;
 @EventBusSubscriber(modid = Monocle.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class MinecraftShaders {
 
+    public static final boolean JUSTDIRETHINGS = LoadingModList.get().getModFileById("justdirethings") != null;
+
     private static int DEPTH_ID;
 
     public static ResourceLocation END_PORTAL = ResourceLocation.parse("rendertype_end_portal");
@@ -51,7 +53,7 @@ public class MinecraftShaders {
     }
 
     public static boolean needsDepth() {
-        return LoadingModList.get().getModFileById("justdirethings") != null;
+        return JUSTDIRETHINGS;
     }
 
     @SubscribeEvent
