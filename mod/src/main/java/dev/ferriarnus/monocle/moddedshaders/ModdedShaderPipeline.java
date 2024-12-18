@@ -82,7 +82,7 @@ public class ModdedShaderPipeline {
 
             ResourceLocation vertexRL = ResourceLocation.parse(vertex);
             jsonobject.remove("vertex");
-            jsonobject.addProperty("vertex", vertexRL.getPath());
+            jsonobject.addProperty("vertex", vertexRL.getPath() + "_monocle");
             var vertexReader = resourceManager.openAsReader(ResourceLocation.fromNamespaceAndPath(vertexRL.getNamespace(), "shaders/core/" + vertexRL.getPath() + ".vsh"));
             String vertexSource = IOUtils.toString(vertexReader);
             MojGlslPreprocessor vert = new MojGlslPreprocessor("shaders/core/" + vertexRL.getPath() + ".vsh", resourceManager);
@@ -91,7 +91,7 @@ public class ModdedShaderPipeline {
 
             ResourceLocation fragmentRL = ResourceLocation.parse(fragment);
             jsonobject.remove("fragment");
-            jsonobject.addProperty("fragment", fragmentRL.getPath());
+            jsonobject.addProperty("fragment", fragmentRL.getPath() + "_monocle");
             var fragmentReader = resourceManager.openAsReader(ResourceLocation.fromNamespaceAndPath(vertexRL.getNamespace(), "shaders/core/" + fragmentRL.getPath() + ".fsh"));
             String fragmentSource = IOUtils.toString(fragmentReader);
             MojGlslPreprocessor frag = new MojGlslPreprocessor("shaders/core/" + vertexRL.getPath() + ".fsh", resourceManager);
@@ -121,6 +121,7 @@ public class ModdedShaderPipeline {
     }
 
     private static void parseUniforms(JsonArray array) {
+        UNIFORMS.clear();
         for (var element: array) {
             JsonObject jsonobject = GsonHelper.convertToJsonObject(element, "uniform");
             String name = GsonHelper.getAsString(jsonobject, "name");
