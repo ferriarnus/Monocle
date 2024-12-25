@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.TWFShaders;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import twilightforest.client.TFShaders;
 
+@Config("twilightforest")
 @Mixin(targets = "twilightforest/client/event/ClientEvents", remap = false)
 public class MixinClientEvents {
 

@@ -1,6 +1,6 @@
 {
   "package": "dev.ferriarnus.monocle.moddedshaders.mixin",
-  "plugin": "dev.ferriarnus.monocle.core.MonocleMixinPlugin",
+  "plugin": "dev.ferriarnus.monocle.moddedshaders.config.ConfigPlugin",
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "refmap": "monocle.refmap.json",

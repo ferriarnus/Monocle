@@ -151,7 +151,8 @@ dependencies {
     }
 
     implementation("org.embeddedt:embeddium-1.21:${embeddium_version}")
-    
+
+    compileOnly("mekanism:Mekanism:1.21.1-10.7.0.55")
     runtimeOnly("mekanism:Mekanism:1.21.1-10.7.0.55")
 
     runtimeOnly("curse.maven:xycraft-653786:5601037")
@@ -198,6 +199,12 @@ dependencies {
     runtimeOnly("curse.maven:supermartijn642s-core-lib-454372:5713682")
 
     runtimeOnly("maven.modrinth:caxton:0.6.0-alpha.5+1.21.1-NEOFORGE")
+
+    runtimeOnly("curse.maven:industrial-foregoing-266515:5951082")
+    runtimeOnly("curse.maven:titanium-287342:5897690")
+
+    compileOnly("curse.maven:mekanism-covers-1119874:5831284")
+    runtimeOnly("curse.maven:mekanism-covers-1119874:5831284")
 
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")

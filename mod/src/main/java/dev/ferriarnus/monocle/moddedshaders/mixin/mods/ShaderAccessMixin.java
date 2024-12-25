@@ -1,5 +1,6 @@
 package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.IEShaders;
 import dev.ferriarnus.monocle.moddedshaders.mods.MekShaders;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+@Config("mekanism")
 @Mixin(ShaderAccess.class)
 public class ShaderAccessMixin {
 

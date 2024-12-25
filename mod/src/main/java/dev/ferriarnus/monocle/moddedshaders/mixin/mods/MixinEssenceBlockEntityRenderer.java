@@ -1,5 +1,6 @@
 package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.BumbleShaders;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@Config("the_bumblezone")
 @Mixin(targets = "com/telepathicgrunt/the_bumblezone/client/blockentityrenderer/EssenceBlockEntityRenderer", remap = false)
 public class MixinEssenceBlockEntityRenderer {
 

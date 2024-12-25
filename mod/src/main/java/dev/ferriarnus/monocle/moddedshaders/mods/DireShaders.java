@@ -36,40 +36,10 @@ public class DireShaders {
 
     public static final RenderType PORTAL_TYPE = getPortalType();
 
-    public static final RenderStateShard.ShaderStateShard RENDERTYPE_TRANSLUCENT_SHADER = new RenderStateShard.ShaderStateShard(
-            () -> GameRenderer.rendertypeTranslucentShader) {
-        @Override
-        public void setupRenderState() {
-            super.setupRenderState();
-            GOO_TARGET.bindWrite(true);
-        }
-
-        @Override
-        public void clearRenderState() {
-            super.clearRenderState();
-            Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        }
-    };
-
-    public static final RenderStateShard.ShaderStateShard RENDERTYPE_ENTITY_ALPHA_SHADER = new RenderStateShard.ShaderStateShard(
-            () -> GameRenderer.rendertypeEntityAlphaShader) {
-        @Override
-        public void setupRenderState() {
-            super.setupRenderState();
-            GOO_TARGET.bindWrite(true);
-        }
-
-        @Override
-        public void clearRenderState() {
-            super.clearRenderState();
-            Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        }
-    };
-
     public static RenderType RenderBlockBackface = RenderType.create("GadgetRenderBlockBackface", DefaultVertexFormat.BLOCK,
             VertexFormat.Mode.QUADS,  256,  false,  false,
             RenderType.CompositeState.builder()
-                    .setShaderState(RENDERTYPE_TRANSLUCENT_SHADER)
+                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> GameRenderer.rendertypeTranslucentShader))
                     .setLightmapState(RenderType.LIGHTMAP)
                     .setTextureState(RenderType.BLOCK_SHEET)
                     .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
@@ -81,7 +51,7 @@ public class DireShaders {
     public static RenderType GooPattern = RenderType.create("GooPattern", DefaultVertexFormat.BLOCK,
             VertexFormat.Mode.QUADS,  256,  false,  false,
             RenderType.CompositeState.builder()
-                    .setShaderState(RENDERTYPE_ENTITY_ALPHA_SHADER)
+                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> GameRenderer.rendertypeEntityAlphaShader))
                     .setLightmapState(RenderType.LIGHTMAP)
                     .setTextureState(RenderType.BLOCK_SHEET)
                     .setCullState(RenderType.NO_CULL)

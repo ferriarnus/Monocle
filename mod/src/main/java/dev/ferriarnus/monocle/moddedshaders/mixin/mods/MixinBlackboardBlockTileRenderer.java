@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.shaders.Uniform;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.SuppShaders;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.function.Function;
 
+@Config("supplementaries")
 @Mixin(targets = "net/mehvahdjukaar/supplementaries/client/renderers/tiles/BlackboardBlockTileRenderer", remap = false)
 public class MixinBlackboardBlockTileRenderer {
 

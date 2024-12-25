@@ -1,6 +1,7 @@
 package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.FAShaders;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@Config("forbidden_arcanus")
 @Mixin(targets = "com/stal111/forbidden_arcanus/client/FAShaders")
 public class MixinFAShaders {
 

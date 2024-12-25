@@ -2,6 +2,7 @@ package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.EWShaders;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
@@ -10,6 +11,7 @@ import net.minecraft.client.particle.ParticleRenderType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+@Config("enchanted")
 @Mixin(targets = "net/favouriteless/enchanted/client/EParticleRenderTypes", remap = false)
 public class MixinEParticleRenderTypes {
 

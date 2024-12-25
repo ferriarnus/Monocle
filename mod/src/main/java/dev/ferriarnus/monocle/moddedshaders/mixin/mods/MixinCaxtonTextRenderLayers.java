@@ -3,6 +3,7 @@ package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.CaxtonShaders;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.pipeline.WorldRenderingPhase;
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
+@Config("caxton")
 @Mixin(targets = "xyz/flirora/caxton/render/CaxtonTextRenderLayers$RenderLayerFunctions")
 public class MixinCaxtonTextRenderLayers {
 

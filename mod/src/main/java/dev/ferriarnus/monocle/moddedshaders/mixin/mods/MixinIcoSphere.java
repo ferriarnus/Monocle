@@ -3,6 +3,7 @@ package dev.ferriarnus.monocle.moddedshaders.mixin.mods;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.ferriarnus.monocle.moddedshaders.ModdedShaderPipeline;
+import dev.ferriarnus.monocle.moddedshaders.config.Config;
 import dev.ferriarnus.monocle.moddedshaders.mods.XYShaders;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.ShaderInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+@Config("xycraft")
 @Mixin(targets = "tv/soaryn/xycraft/machines/client/render/instanced/InstancedIcosphere", remap = false)
 public class MixinIcoSphere {
 
