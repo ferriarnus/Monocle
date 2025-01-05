@@ -200,12 +200,19 @@ dependencies {
 
     runtimeOnly("maven.modrinth:caxton:0.6.0-alpha.5+1.21.1-NEOFORGE")
 
-    runtimeOnly("curse.maven:industrial-foregoing-266515:5951082")
+    runtimeOnly("curse.maven:industrial-foregoing-266515:6030556")
     runtimeOnly("curse.maven:titanium-287342:5897690")
 
-    compileOnly("curse.maven:mekanism-covers-1119874:5831284")
-    runtimeOnly("curse.maven:mekanism-covers-1119874:5831284")
+    compileOnly("curse.maven:mekanism-covers-1119874:6020891")
+    runtimeOnly("curse.maven:mekanism-covers-1119874:6020891")
 
+    runtimeOnly("curse.maven:modern-industrialization-405388:6026073")
+    runtimeOnly("curse.maven:cloth-config-348521:5729127")
+
+    compileOnly("curse.maven:applied-energistics-2-223794:6014429")
+    runtimeOnly("curse.maven:applied-energistics-2-223794:6014429")
+
+    runtimeOnly("curse.maven:jei-238222:5846880")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 

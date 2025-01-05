@@ -30,7 +30,7 @@ import java.util.List;
 
 public class DireShaders {
 
-    public static RenderTarget GOO_TARGET;
+    public static RenderTarget GOO_TARGET = new TextureTarget(1, 1, true, Minecraft.ON_OSX);
 
     public static ResourceLocation PORTAL = ResourceLocation.fromNamespaceAndPath("justdirethings", "portal_entity");
 
@@ -83,15 +83,12 @@ public class DireShaders {
 
     public static void setupRenderTarget() {
         Window window = Minecraft.getInstance().getWindow();
-        if(GOO_TARGET != null){
-            GOO_TARGET.destroyBuffers();
+        GOO_TARGET.setClearColor(0,0,0,0);
+        if (GOO_TARGET.height != window.getHeight() || GOO_TARGET.width != window.getWidth()) {
+            GOO_TARGET.resize(window.getWidth(), window.getHeight(), true);
+        } else {
+            GOO_TARGET.clear(true);
         }
-        GOO_TARGET = new TextureTarget(window.getWidth(), window.getHeight(), true, Minecraft.ON_OSX);
-        GOO_TARGET.bindWrite(true);
-        RenderSystem.clearColor(0,0,0,0);
-        GL32.glClear(GL32.GL_COLOR_BUFFER_BIT);
-        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        RenderSystem.clearColor(1,1,1,1);
     }
 
     public static void renderLevel(RenderLevelStageEvent event) {
