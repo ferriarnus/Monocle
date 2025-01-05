@@ -5,16 +5,15 @@ import net.irisshaders.iris.vertices.NormI8;
 import net.irisshaders.iris.vertices.NormalHelper;
 import net.irisshaders.iris.vertices.sodium.terrain.BlockContextHolder;
 import net.irisshaders.iris.vertices.sodium.terrain.VertexEncoderInterface;
-import net.minecraft.util.Mth;
 import org.embeddedt.embeddium.impl.render.chunk.terrain.material.Material;
 import org.embeddedt.embeddium.impl.render.chunk.vertex.format.ChunkVertexEncoder;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 
-import static dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.XHFPModelVertexType.STRIDE;
+import static dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.XSFPModelVertexType.STRIDE;
 
-public class XHFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInterface {
-	private final QuadViewXHFPTerrain.QuadViewTerrainUnsafe quad = new QuadViewXHFPTerrain.QuadViewTerrainUnsafe();
+public class XSFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInterface {
+	private final QuadViewXSFPTerrain.QuadViewTerrainUnsafe quad = new QuadViewXSFPTerrain.QuadViewTerrainUnsafe();
 	private final Vector3f normal = new Vector3f();
 
 	private BlockContextHolder contextHolder;
@@ -67,21 +66,20 @@ public class XHFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInter
 		vSum += vertex.v;
 		vertexCount++;
 
-		MemoryUtil.memPutShort(ptr, XHFPModelVertexType.encodePosition(vertex.x));
-		MemoryUtil.memPutShort(ptr + 2L, XHFPModelVertexType.encodePosition(vertex.y));
-		MemoryUtil.memPutShort(ptr + 4L, XHFPModelVertexType.encodePosition(vertex.z));
-		MemoryUtil.memPutByte(ptr + 6L, (byte) material.bits());
-		MemoryUtil.memPutByte(ptr + 7L, (byte) chunkId);
+		MemoryUtil.memPutFloat(ptr, vertex.x);
+		MemoryUtil.memPutFloat(ptr + 4, vertex.y);
+		MemoryUtil.memPutFloat(ptr + 8, vertex.z);
 
-		MemoryUtil.memPutInt(ptr + 8, vertex.color);
+		MemoryUtil.memPutInt(ptr + 12, vertex.color);
 
-		MemoryUtil.memPutInt(ptr + 12, XHFPModelVertexType.encodeTexture(vertex.u, vertex.v));
+		MemoryUtil.memPutFloat(ptr + 16, vertex.u);
+		MemoryUtil.memPutFloat(ptr + 20, vertex.v);
 
-		MemoryUtil.memPutInt(ptr + 16, vertex.light);
+		MemoryUtil.memPutInt(ptr + 24, encodeDrawParameters(material, chunkId) << 0 | encodeLight(vertex.light) << 16);
 
-		MemoryUtil.memPutInt(ptr + 32, packBlockId(contextHolder));
-		MemoryUtil.memPutInt(ptr + 36, contextHolder.ignoreMidBlock() ? 0 : ExtendedDataHelper.computeMidBlock(vertex.x, vertex.y, vertex.z, contextHolder.getLocalPosX(), contextHolder.getLocalPosY(), contextHolder.getLocalPosZ()));
-		MemoryUtil.memPutByte(ptr + 39, contextHolder.getBlockEmission());
+		MemoryUtil.memPutInt(ptr + 40, packBlockId(contextHolder));
+		MemoryUtil.memPutInt(ptr + 44, contextHolder.ignoreMidBlock() ? 0 : ExtendedDataHelper.computeMidBlock(vertex.x, vertex.y, vertex.z, contextHolder.getLocalPosX(), contextHolder.getLocalPosY(), contextHolder.getLocalPosZ()));
+		MemoryUtil.memPutByte(ptr + 47, contextHolder.getBlockEmission());
 
 		if (vertexCount == 4) {
 			vertexCount = 0;
@@ -118,10 +116,10 @@ public class XHFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInter
 
 			int midUV = XHFPModelVertexType.encodeTexture(uSum, vSum);
 
-			MemoryUtil.memPutInt(ptr + 20, midUV);
-			MemoryUtil.memPutInt(ptr + 20 - STRIDE, midUV);
-			MemoryUtil.memPutInt(ptr + 20 - STRIDE * 2, midUV);
-			MemoryUtil.memPutInt(ptr + 20 - STRIDE * 3, midUV);
+			MemoryUtil.memPutInt(ptr + 28, midUV);
+			MemoryUtil.memPutInt(ptr + 28 - STRIDE, midUV);
+			MemoryUtil.memPutInt(ptr + 28 - STRIDE * 2, midUV);
+			MemoryUtil.memPutInt(ptr + 28 - STRIDE * 3, midUV);
 
 			uSum = 0;
 			vSum = 0;
@@ -140,64 +138,30 @@ public class XHFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInter
 			int packedNormal = NormI8.pack(normal);
 
 
-			MemoryUtil.memPutInt(ptr + 28, packedNormal);
-			MemoryUtil.memPutInt(ptr + 28 - STRIDE, packedNormal);
-			MemoryUtil.memPutInt(ptr + 28 - STRIDE * 2, packedNormal);
-			MemoryUtil.memPutInt(ptr + 28 - STRIDE * 3, packedNormal);
+			MemoryUtil.memPutInt(ptr + 36, packedNormal);
+			MemoryUtil.memPutInt(ptr + 36 - STRIDE, packedNormal);
+			MemoryUtil.memPutInt(ptr + 36 - STRIDE * 2, packedNormal);
+			MemoryUtil.memPutInt(ptr + 36 - STRIDE * 3, packedNormal);
 
 			int tangent = NormalHelper.computeTangent(normal.x, normal.y, normal.z, quad);
 
-			MemoryUtil.memPutInt(ptr + 24, tangent);
-			MemoryUtil.memPutInt(ptr + 24 - STRIDE, tangent);
-			MemoryUtil.memPutInt(ptr + 24 - STRIDE * 2, tangent);
-			MemoryUtil.memPutInt(ptr + 24 - STRIDE * 3, tangent);
+			MemoryUtil.memPutInt(ptr + 32, tangent);
+			MemoryUtil.memPutInt(ptr + 32 - STRIDE, tangent);
+			MemoryUtil.memPutInt(ptr + 32 - STRIDE * 2, tangent);
+			MemoryUtil.memPutInt(ptr + 32 - STRIDE * 3, tangent);
 		}
 
 		return ptr + STRIDE;
 	}
 
-	private static int packPositionHi(int x, int y, int z) {
-		return (x >>> 10 & 1023) << 0 | (y >>> 10 & 1023) << 10 | (z >>> 10 & 1023) << 20;
-	}
-
-	private static int packPositionLo(int x, int y, int z) {
-		return (x & 1023) << 0 | (y & 1023) << 10 | (z & 1023) << 20;
-	}
-
-	private static int quantizePosition(float position) {
-		return (int)(normalizePosition(position) * 1048576.0F) & 1048575;
-	}
-
-	private static float normalizePosition(float v) {
-		return (8.0F + v) / 32.0F;
-	}
-
-	private static int packTexture(int u, int v) {
-		return (u & '\uffff') << 0 | (v & '\uffff') << 16;
-	}
-
-	private static int encodeTexture(float center, float x) {
-		int bias = x < center ? 1 : -1;
-		int quantized = floorInt(x * 32768.0F) + bias & 32767;
-		if (bias < 0) {
-			quantized = -quantized;
-		}
-
-		return quantized;
+	private static int encodeDrawParameters(Material material, int sectionIndex) {
+		return (sectionIndex & 255) << 8 | (material.bits() & 255) << 0;
 	}
 
 	private static int encodeLight(int light) {
-		int sky = Mth.clamp(light >>> 16 & 255, 8, 248);
-		int block = Mth.clamp(light >>> 0 & 255, 8, 248);
+		int block = light & 255;
+		int sky = light >> 16 & 255;
 		return block << 0 | sky << 8;
-	}
-
-	private static int packLightAndData(int light, int material, int section) {
-		return (light & '\uffff') << 0 | (material & 255) << 16 | (section & 255) << 24;
-	}
-
-	private static int floorInt(float x) {
-		return (int)Math.floor((double)x);
 	}
 
 	private int packBlockId(BlockContextHolder contextHolder) {

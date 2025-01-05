@@ -5,7 +5,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
 
-public abstract class QuadViewTerrain implements QuadView {
+public abstract class QuadViewXHFPTerrain implements QuadView {
 	long writePointer;
 	int stride;
 
@@ -36,7 +36,7 @@ public abstract class QuadViewTerrain implements QuadView {
 
 	abstract short getShort(long writePointer);
 
-	public static class QuadViewTerrainUnsafe extends QuadViewTerrain {
+	public static class QuadViewTerrainUnsafe extends QuadViewXHFPTerrain {
 		public void setup(long writePointer, int stride) {
 			this.writePointer = writePointer;
 			this.stride = stride;
@@ -48,7 +48,7 @@ public abstract class QuadViewTerrain implements QuadView {
 		}
 	}
 
-	public static class QuadViewTerrainNio extends QuadViewTerrain {
+	public static class QuadViewTerrainNio extends QuadViewXHFPTerrain {
 		private ByteBuffer buffer;
 
 		public void setup(ByteBuffer buffer, int writePointer, int stride) {

@@ -6,7 +6,6 @@ import com.google.common.primitives.Ints;
 import dev.ferriarnus.monocle.Monocle;
 import dev.ferriarnus.monocle.ShaderTransformer;
 import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.IrisModelVertexFormats;
-import dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.XHFPTerrainVertex;
 import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkVertexType;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.blending.AlphaTest;
@@ -76,7 +75,7 @@ public class EmbeddiumPrograms {
 		stopwatch.stop();
 		Monocle.LOGGER.info("Transforming Embeddium shaders completed in {}", stopwatch);
 
-		WorldRenderingSettings.INSTANCE.setVertexFormat((ChunkVertexType) IrisModelVertexFormats.MODEL_VERTEX_XHFP);
+		WorldRenderingSettings.INSTANCE.setVertexFormat((ChunkVertexType) Monocle.getVertexFormat());
 
 	}
 
@@ -103,7 +102,7 @@ public class EmbeddiumPrograms {
 				source.getTessControlSource().orElse(null),
 				source.getTessEvalSource().orElse(null),
 				source.getFragmentSource().orElse(null),
-				alphaTest, IrisModelVertexFormats.MODEL_VERTEX_XHFP,
+				alphaTest, Monocle.getVertexFormat(),
 				programSet.getPackDirectives().getTextureMap());
 
 		//ShaderPrinter.printProgram("old_" + source.getName()).addSources(transformed).print();
