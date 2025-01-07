@@ -29,6 +29,7 @@ public class Monocle {
     private static final Properties CONFIG = new Properties();
     public static final Path CONFIG_PATH = FMLPaths.CONFIGDIR.get().resolve("monocle.properties");
     private static boolean ALLOW_FULL_FORMAT = false;
+    private static boolean MOVE_LAST = false;
     public static final String FALSE = "false";
     private static final String[] MODS = new String[]{
             "justdirethings",
@@ -61,17 +62,22 @@ public class Monocle {
         return ALLOW_FULL_FORMAT;
     }
 
+    public static boolean moveRenderLastStage() {
+        return MOVE_LAST;
+    }
+
     public static Properties loadConfig() throws IOException {
         if (!Files.exists(Monocle.CONFIG_PATH)) {
             makeConfig();
         }
         CONFIG.load(Files.newBufferedReader(CONFIG_PATH));
         ALLOW_FULL_FORMAT = !FALSE.equals(CONFIG.getProperty("FullVertexFormat"));
+        MOVE_LAST = !FALSE.equals(CONFIG.getProperty("MoveRenderLastStage"));
         return CONFIG;
     }
 
     private static void makeConfig() {
-        try (var writer = Files.newBufferedWriter(CONFIG_PATH);){
+        try (var writer = Files.newBufferedWriter(CONFIG_PATH);) {
             writer.write("# Modded Shader Config\n");
             writer.write("# ====================\n");
             writer.write("# Enable/disable all modded shader compat (true/false)\n");
@@ -81,8 +87,10 @@ public class Monocle {
             for (String mod : MODS) {
                 writer.write(mod + " = false\n");
             }
-            writer.write("# Allows the use of the full vertex format\n");
+            writer.write("# Allows the use of the full vertex format (true/false)\n");
             writer.write("FullVertexFormat = true\n");
+            writer.write("# Moves the render after level stage (true/false)\n");
+            writer.write("MoveRenderLastStage = true\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -35,6 +35,7 @@ repositories {
     maven {
         url "https://cursemaven.com"
     }
+    maven { url 'https://maven.rover656.dev/releases' }
 }
 
 base {
@@ -211,6 +212,9 @@ dependencies {
 
     compileOnly("curse.maven:applied-energistics-2-223794:6014429")
     runtimeOnly("curse.maven:applied-energistics-2-223794:6014429")
+
+    compileOnly("com.enderio:enderio-machines:7.1.2-alpha")
+    runtimeOnly("curse.maven:ender-io-64578:6050753")
 
     runtimeOnly("curse.maven:jei-238222:5846880")
 

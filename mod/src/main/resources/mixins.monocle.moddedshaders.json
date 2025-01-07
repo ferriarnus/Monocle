@@ -16,6 +16,9 @@
     "IrisRenderingPipelineMixin",
     "MixinProgramDirectives",
 
+    "MixinLevelRenderer",
+    "MixinGameRenderer",
+
     "mods.ShaderAccessMixin",
 
     "mods.MixinXYShaders",
