@@ -54,8 +54,8 @@ public abstract class MixinDefaultChunkRenderer extends ShaderChunkRenderer {
 
 	@Inject(method = "getBindingsForType", at = @At("TAIL"), cancellable = true)
 	private void addType(CallbackInfoReturnable<GlVertexAttributeBinding[]> cir) {
-		if (this.vertexType == IrisModelVertexFormats.MODEL_VERTEX_XHFP) {
-			GlVertexFormat<ChunkMeshAttribute> vertexFormat = XHFPModelVertexType.VERTEX_FORMAT;
+		if (this.vertexType == IrisModelVertexFormats.MODEL_VERTEX_XHFP || this.vertexType == IrisModelVertexFormats.MODEL_VERTEX_XSFP) {
+			GlVertexFormat<ChunkMeshAttribute> vertexFormat = this.vertexType.getVertexFormat();
 			GlVertexAttributeBinding[] attributes = new GlVertexAttributeBinding[]{
 				new GlVertexAttributeBinding(ChunkShaderBindingPoints.ATTRIBUTE_POSITION_ID,
 					vertexFormat.getAttribute(ChunkMeshAttribute.POSITION_MATERIAL_MESH)),

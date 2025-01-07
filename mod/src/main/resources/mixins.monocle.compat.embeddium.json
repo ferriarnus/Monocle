@@ -33,6 +33,10 @@
     "MixinChunkShaderInterface",
     "MixinGlVertexFormatbuilder",
     "MixinChunkVertexType",
-    "EmbeddiumWorldRendererAssessor"
+    "EmbeddiumWorldRendererAssessor",
+
+    "MixinEmbeddiumGameOptionPages",
+    "MixinEmbeddium",
+    "MixinEmbeddiumVideoOptionsScreen"
   ]
 }
