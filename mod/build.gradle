@@ -216,6 +216,10 @@ dependencies {
     compileOnly("com.enderio:enderio-machines:7.1.2-alpha")
     runtimeOnly("curse.maven:ender-io-64578:6050753")
 
+    runtimeOnly("curse.maven:eternal-starlight-1080592:6065746")
+
+    runtimeOnly("curse.maven:mahou-tsukai-342543:6062974")
+
     runtimeOnly("curse.maven:jei-238222:5846880")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")

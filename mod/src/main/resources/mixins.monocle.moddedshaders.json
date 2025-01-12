@@ -52,6 +52,8 @@
 
     "mods.MixinCaxtonTextRenderLayers",
 
+    "mods.MixinESShaders",
+
     "mods.MixinIrisSamplers",
     "mods.MixinGameRenderer"
   ]

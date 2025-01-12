@@ -30,6 +30,7 @@ public class Monocle {
     public static final Path CONFIG_PATH = FMLPaths.CONFIGDIR.get().resolve("monocle.properties");
     private static boolean ALLOW_FULL_FORMAT = false;
     private static boolean MOVE_LAST = false;
+    private static boolean END_BATCH = false;
     public static final String FALSE = "false";
     private static final String[] MODS = new String[]{
             "justdirethings",
@@ -44,7 +45,8 @@ public class Monocle {
             "computercraft",
             "creeperoverhaul",
             "arsnouveau",
-            "mekanism"
+            "mekanism",
+            "eternal_starlight"
     };
 
     public Monocle(IEventBus modEventBus, ModContainer modContainer) {
@@ -66,6 +68,10 @@ public class Monocle {
         return MOVE_LAST;
     }
 
+    public static boolean endBatch() {
+        return END_BATCH;
+    }
+
     public static Properties loadConfig() throws IOException {
         if (!Files.exists(Monocle.CONFIG_PATH)) {
             makeConfig();
@@ -73,6 +79,7 @@ public class Monocle {
         CONFIG.load(Files.newBufferedReader(CONFIG_PATH));
         ALLOW_FULL_FORMAT = !FALSE.equals(CONFIG.getProperty("FullVertexFormat"));
         MOVE_LAST = !FALSE.equals(CONFIG.getProperty("MoveRenderLastStage"));
+        END_BATCH = !FALSE.equals(CONFIG.getProperty("EndBatch"));
         return CONFIG;
     }
 
@@ -91,6 +98,8 @@ public class Monocle {
             writer.write("FullVertexFormat = true\n");
             writer.write("# Moves the render after level stage (true/false)\n");
             writer.write("MoveRenderLastStage = true\n");
+            writer.write("# Causes an endBatch call to happen after the level stage (true/false)\n");
+            writer.write("EndBatch = true\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
