@@ -220,6 +220,9 @@ dependencies {
 
     runtimeOnly("curse.maven:mahou-tsukai-342543:6062974")
 
+    runtimeOnly("curse.maven:refurbished-furniture-897116:5893840")
+    runtimeOnly("curse.maven:framework-549225:5911998")
+
     runtimeOnly("curse.maven:jei-238222:5846880")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")

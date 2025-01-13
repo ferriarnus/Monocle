@@ -53,6 +53,10 @@
     "mods.MixinCaxtonTextRenderLayers",
 
     "mods.MixinESShaders",
+    "mods.MixinESPortalRenderer",
+    "mods.mixinEclipseCoreRenderer",
+
+    "mods.MixinDeferredElectricRenderer",
 
     "mods.MixinIrisSamplers",
     "mods.MixinGameRenderer"

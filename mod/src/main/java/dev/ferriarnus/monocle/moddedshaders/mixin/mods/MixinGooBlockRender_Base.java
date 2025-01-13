@@ -33,14 +33,14 @@ public class MixinGooBlockRender_Base {
     @Inject(method = "renderTexturePattern", at = @At("HEAD"))
     public void head(Direction direction, Level level, BlockPos pos, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedOverlayIn, float transparency, BlockState pattern, BlockState renderState, GooBlockBE_Base gooBlockBE_base, CallbackInfo ci) {
         if (Iris.isPackInUseQuick() && !ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
-            DireShaders.GOO_TARGET.bindWrite(true);
+            DireShaders.GOO_TARGET.bindWrite(false);
         }
     }
 
     @Inject(method = "renderTexturePattern", at = @At("TAIL"))
     public void tail(Direction direction, Level level, BlockPos pos, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedOverlayIn, float transparency, BlockState pattern, BlockState renderState, GooBlockBE_Base gooBlockBE_base, CallbackInfo ci) {
         if (Iris.isPackInUseQuick() && !ShadowRenderingState.areShadowsCurrentlyBeingRendered()) {
-            Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
+            Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
         }
     }
 

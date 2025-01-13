@@ -89,6 +89,7 @@ public class DireShaders {
         } else {
             GOO_TARGET.clear(Minecraft.ON_OSX);
         }
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
     }
 
     public static void renderLevel(RenderLevelStageEvent event) {
