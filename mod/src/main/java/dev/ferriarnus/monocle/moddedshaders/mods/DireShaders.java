@@ -30,7 +30,7 @@ import java.util.List;
 
 public class DireShaders {
 
-    public static RenderTarget GOO_TARGET = new TextureTarget(1, 1, true, Minecraft.ON_OSX);
+    public static final RenderTarget GOO_TARGET = new TextureTarget(1, 1, true, Minecraft.ON_OSX);
 
     public static ResourceLocation PORTAL = ResourceLocation.fromNamespaceAndPath("justdirethings", "portal_entity");
 
@@ -85,9 +85,9 @@ public class DireShaders {
         Window window = Minecraft.getInstance().getWindow();
         GOO_TARGET.setClearColor(0,0,0,0);
         if (GOO_TARGET.height != window.getHeight() || GOO_TARGET.width != window.getWidth()) {
-            GOO_TARGET.resize(window.getWidth(), window.getHeight(), true);
+            GOO_TARGET.resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
         } else {
-            GOO_TARGET.clear(true);
+            GOO_TARGET.clear(Minecraft.ON_OSX);
         }
     }
 
