@@ -28,7 +28,7 @@ public class FurnitureShader {
         if (LIGHTNING.height != window.getHeight() || LIGHTNING.width != window.getWidth()) {
             LIGHTNING.resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
         } else {
-            LIGHTNING.clear(true);
+            LIGHTNING.clear(Minecraft.ON_OSX);
         }
         Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
         return LIGHTNING;
