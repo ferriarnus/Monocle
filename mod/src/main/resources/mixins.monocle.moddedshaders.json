@@ -58,6 +58,8 @@
 
     "mods.MixinDeferredElectricRenderer",
 
+    "mods.MixinRenderCustomEndPortal",
+
     "mods.MixinIrisSamplers",
     "mods.MixinGameRenderer"
   ]

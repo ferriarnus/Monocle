@@ -223,6 +223,10 @@ dependencies {
     runtimeOnly("curse.maven:refurbished-furniture-897116:5893840")
     runtimeOnly("curse.maven:framework-549225:5911998")
 
+    runtimeOnly("curse.maven:ender-storage-1-8-245174:6045204")
+    compileOnly("curse.maven:codechicken-lib-1-8-242818:6061637")
+    runtimeOnly("curse.maven:codechicken-lib-1-8-242818:6061637")
+
     runtimeOnly("curse.maven:jei-238222:5846880")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")

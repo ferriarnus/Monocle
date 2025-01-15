@@ -47,7 +47,8 @@ public class Monocle {
             "arsnouveau",
             "mekanism",
             "eternal_starlight",
-            "refurbished_furniture"
+            "refurbished_furniture",
+            "enderstorage"
     };
 
     public Monocle(IEventBus modEventBus, ModContainer modContainer) {
