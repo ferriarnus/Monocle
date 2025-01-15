@@ -31,6 +31,7 @@ public class MinecraftShaders {
 
     public static ResourceLocation END_PORTAL = ResourceLocation.parse("rendertype_end_portal");
     public static ResourceLocation END_GATEWAY = ResourceLocation.parse("rendertype_end_gateway");
+    public static ResourceLocation POSITION_COLOR_LIGHTMAP = ResourceLocation.parse("position_color_lightmap");
     public static ResourceLocation SCREEN = ResourceLocation.fromNamespaceAndPath(Monocle.MODID, "screen");
 
     private static ShaderInstance SCREEN_SHADER;
@@ -42,6 +43,7 @@ public class MinecraftShaders {
     private static void init() {
         ModdedShaderPipeline.addShaderFromJson(END_PORTAL, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.POSITION, false, ProgramId.Entities);
         ModdedShaderPipeline.addShaderFromJson(END_GATEWAY, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.POSITION, false, ProgramId.Entities);
+        ModdedShaderPipeline.addShaderFromJson(POSITION_COLOR_LIGHTMAP, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP, false, ProgramId.Entities);
         ModdedShaderPipeline.addShaderFromJson(SCREEN, AlphaTests.NON_ZERO_ALPHA, DefaultVertexFormat.POSITION_TEX, false, ProgramId.BlockTrans);
     }
 
