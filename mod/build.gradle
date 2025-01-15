@@ -207,8 +207,11 @@ dependencies {
     compileOnly("curse.maven:mekanism-covers-1119874:6020891")
     runtimeOnly("curse.maven:mekanism-covers-1119874:6020891")
 
-    runtimeOnly("curse.maven:modern-industrialization-405388:6026073")
+    runtimeOnly("curse.maven:modern-industrialization-405388:6049273")
     runtimeOnly("curse.maven:cloth-config-348521:5729127")
+
+    runtimeOnly("maven.modrinth:extended-industrialization:1.11.0-beta-1.21.1")
+    runtimeOnly("maven.modrinth:tesseract-api:1.6.5-beta-1.21.1")
 
     compileOnly("curse.maven:applied-energistics-2-223794:6014429")
     runtimeOnly("curse.maven:applied-energistics-2-223794:6014429")

@@ -60,6 +60,8 @@
 
     "mods.MixinRenderCustomEndPortal",
 
+    "mods.MixinEIClientShaders",
+
     "mods.MixinIrisSamplers",
     "mods.MixinGameRenderer"
   ]
