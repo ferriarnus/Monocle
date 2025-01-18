@@ -18,6 +18,7 @@
 
     "MixinLevelRenderer",
     "MixinGameRenderer",
+    "MixinSegmentedBufferBuilder",
 
     "mods.ShaderAccessMixin",
 

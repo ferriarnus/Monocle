@@ -230,6 +230,8 @@ dependencies {
     compileOnly("curse.maven:codechicken-lib-1-8-242818:6061637")
     runtimeOnly("curse.maven:codechicken-lib-1-8-242818:6061637")
 
+    runtimeOnly("curse.maven:pneumaticcraft-repressurized-281849:6042033")
+    
     runtimeOnly("curse.maven:jei-238222:5846880")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
