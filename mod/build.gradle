@@ -231,7 +231,14 @@ dependencies {
     runtimeOnly("curse.maven:codechicken-lib-1-8-242818:6061637")
 
     runtimeOnly("curse.maven:pneumaticcraft-repressurized-281849:6042033")
-    
+
+    compileOnly("curse.maven:stellarview-865273:6102803")
+    //runtimeOnly("curse.maven:stellarview-865273:6102803")
+
+    runtimeOnly("curse.maven:ping-222967:5644847")
+
+    //runtimeOnly("curse.maven:touhou-little-maid-355044:5896992") crashes due to missing sodium class
+
     runtimeOnly("curse.maven:jei-238222:5846880")
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")

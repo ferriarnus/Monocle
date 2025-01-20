@@ -63,6 +63,10 @@
 
     "mods.MixinEIClientShaders",
 
+    //"mods.MixinStarBuffer",
+
+    "mods.MixinClientHandlerBase",
+
     "mods.MixinIrisSamplers",
     "mods.MixinGameRenderer"
   ]
