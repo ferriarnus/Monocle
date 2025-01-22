@@ -3,6 +3,7 @@ package dev.ferriarnus.monocle.embeddiumCompatibility.mixin;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
@@ -43,6 +44,8 @@ public abstract class MixinCloudRenderer {
     @Shadow
     @Final
     private FogRenderer.FogData fogData;
+    @Shadow
+    private boolean hasCloudGeometry;
     @Unique
     private VertexBuffer vertexBufferWithNormals;
     @Unique
@@ -105,13 +108,26 @@ public abstract class MixinCloudRenderer {
             }
 
             this.vertexBufferWithNormals.bind();
-            this.vertexBufferWithNormals.upload(bufferBuilder.build());
+
+            MeshData meshData = bufferBuilder.build();
+
+            if(meshData != null) {
+                this.vertexBufferWithNormals.upload(meshData);
+                this.hasCloudGeometry = true;
+            } else {
+                this.hasCloudGeometry = false;
+            }
 
             VertexBuffer.unbind();
 
             this.prevCenterCellXIris = centerCellX;
             this.prevCenterCellYIris = centerCellZ;
             this.cachedRenderDistanceIris = renderDistance;
+        }
+
+        // Skip render path if there is no cloud geometry
+        if (!this.hasCloudGeometry) {
+            return;
         }
 
         float previousEnd = RenderSystem.getShaderFogEnd();
