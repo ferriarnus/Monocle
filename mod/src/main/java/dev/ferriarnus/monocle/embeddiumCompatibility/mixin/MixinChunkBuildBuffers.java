@@ -32,6 +32,16 @@ public class MixinChunkBuildBuffers implements BlockSensitiveBufferBuilder {
 	}
 
 	@Override
+	public void overrideBlock(int i) {
+		contextHolder.overrideBlock(i);
+	}
+
+	@Override
+	public void restoreBlock() {
+		contextHolder.restoreBlock();
+	}
+
+	@Override
 	public void endBlock() {
 		contextHolder.setBlockData(0, (byte) 0, (byte) 0, 0, 0, 0);
 	}
