@@ -237,6 +237,8 @@ dependencies {
 
     runtimeOnly("curse.maven:ping-222967:5644847")
 
+    runtimeOnly("curse.maven:modular-routers-250294:5937500")
+
     //runtimeOnly("curse.maven:touhou-little-maid-355044:5896992") crashes due to missing sodium class
 
     runtimeOnly("curse.maven:jei-238222:5846880")

@@ -19,55 +19,63 @@
     "MixinLevelRenderer",
     "MixinGameRenderer",
     "MixinSegmentedBufferBuilder",
+    "MixinClientHooks",
 
-    "mods.ShaderAccessMixin",
+    "shaderchanges.MixinEclipseCoreRenderer",
+    "shaderchanges.MixinESPortalRenderer",
+    "shaderchanges.MixinRenderFlame",
+    "shaderchanges.MixinRenderMekasuit",
+    "shaderchanges.MixinRenderSPS",
+    "shaderchanges.MixinEIClientShaders",
 
-    "mods.MixinXYShaders",
-    "mods.MixinXynergyGraphRenderer",
-    "mods.MixinIcoSphere",
+    "altshaders.ShaderAccessMixin",
 
-    "mods.MixinPortalEntityRender",
-    "mods.MixinGooBlockRender_Base",
-    "mods.MixinCommonUniforms",
+    "altshaders.MixinXYShaders",
+    "altshaders.MixinXynergyGraphRenderer",
+    "altshaders.MixinIcoSphere",
 
-    "mods.MixinEssenceBlockEntityRenderer",
+    "altshaders.MixinPortalEntityRender",
+    "altshaders.MixinGooBlockRender_Base",
+    "altshaders.MixinCommonUniforms",
 
-    "mods.MixinIEGLShaders",
+    "altshaders.MixinEssenceBlockEntityRenderer",
 
-    "mods.MixinRedThreadRenderer",
-    "mods.MixinClientEvents",
+    "altshaders.MixinIEGLShaders",
 
-    "mods.MixinBlackboardBlockTileRenderer",
-    "mods.MixinGlobeBlockTileRenderer",
-    "mods.MixinSlimedLayer",
+    "altshaders.MixinRedThreadRenderer",
+    "altshaders.MixinClientEvents",
 
-    "mods.MixinMonitorBlockEntityRenderer",
+    "altshaders.MixinBlackboardBlockTileRenderer",
+    "altshaders.MixinGlobeBlockTileRenderer",
+    "altshaders.MixinSlimedLayer",
 
-    "mods.MixinShaderRegistry",
+    "altshaders.MixinMonitorBlockEntityRenderer",
 
-    "mods.MixinFAShaders",
+    "altshaders.MixinShaderRegistry",
 
-    "mods.MixinEParticleRenderTypes",
+    "altshaders.MixinFAShaders",
 
-    "mods.MixinRenderTypes",
+    "altshaders.MixinEParticleRenderTypes",
 
-    "mods.MixinCaxtonTextRenderLayers",
+    "altshaders.MixinRenderTypes",
 
-    "mods.MixinESShaders",
-    "mods.MixinESPortalRenderer",
-    "mods.mixinEclipseCoreRenderer",
+    "altshaders.MixinCaxtonTextRenderLayers",
 
-    "mods.MixinDeferredElectricRenderer",
+    "altshaders.MixinESShaders",
+    "altshaders.MixinESPortalRenderer",
+    "altshaders.mixinEclipseCoreRenderer",
 
-    "mods.MixinRenderCustomEndPortal",
+    "altshaders.MixinDeferredElectricRenderer",
 
-    "mods.MixinEIClientShaders",
+    "altshaders.MixinRenderCustomEndPortal",
 
-    //"mods.MixinStarBuffer",
+    "altshaders.MixinEIClientShaders",
 
-    "mods.MixinClientHandlerBase",
+    //"altshaders.MixinStarBuffer",
 
-    "mods.MixinIrisSamplers",
-    "mods.MixinGameRenderer"
+    "altshaders.MixinClientHandlerBase",
+
+    "altshaders.MixinIrisSamplers",
+    "altshaders.MixinGameRenderer"
   ]
 }

@@ -31,6 +31,7 @@ public class Monocle {
     private static boolean ALLOW_FULL_FORMAT = false;
     private static boolean MOVE_LAST = false;
     private static boolean END_BATCH = false;
+    private static boolean NO_SHADOW_STAGE = false;
     public static final String FALSE = "false";
     private static final String[] MODS = new String[]{
             "justdirethings",
@@ -51,7 +52,8 @@ public class Monocle {
             "enderstorage",
             "extended_industrialization",
             "stellarview",
-            "ping"
+            "ping",
+            "minecraft"
     };
 
     public Monocle(IEventBus modEventBus, ModContainer modContainer) {
@@ -77,6 +79,10 @@ public class Monocle {
         return END_BATCH;
     }
 
+    public static boolean noShadowStage() {
+        return NO_SHADOW_STAGE;
+    }
+
     public static Properties loadConfig() throws IOException {
         if (!Files.exists(Monocle.CONFIG_PATH)) {
             makeConfig();
@@ -85,26 +91,33 @@ public class Monocle {
         ALLOW_FULL_FORMAT = !FALSE.equals(CONFIG.getProperty("FullVertexFormat"));
         MOVE_LAST = !FALSE.equals(CONFIG.getProperty("MoveRenderLastStage"));
         END_BATCH = !FALSE.equals(CONFIG.getProperty("EndBatch"));
+        NO_SHADOW_STAGE = !FALSE.equals(CONFIG.get("NoShadowStage"));
         return CONFIG;
     }
 
     private static void makeConfig() {
         try (var writer = Files.newBufferedWriter(CONFIG_PATH);) {
-            writer.write("# Modded Shader Config\n");
+            writer.write("# Alternative Modded Shaders\n");
             writer.write("# ====================\n");
-            writer.write("# Enable/disable all modded shader compat (true/false)\n");
-            writer.write("All = true\n");
-            writer.write("# ====================\n");
-            writer.write("# Enable/disable for individual mods (true/false)\n");
+            writer.write("# Enable/disable alternative shaders (true/false)\n");
+            writer.write("# These are only meant to be used in case they don't work out of a box with Iris's unknown shaders setting\n");
             for (String mod : MODS) {
                 writer.write(mod + " = false\n");
             }
-            writer.write("# Allows the use of the full vertex format (true/false)\n");
-            writer.write("FullVertexFormat = true\n");
+
+            writer.write("# Render Level Event\n");
+            writer.write("# ====================\n");
             writer.write("# Moves the render after level stage (true/false)\n");
             writer.write("MoveRenderLastStage = true\n");
             writer.write("# Causes an endBatch call to happen after the level stage (true/false)\n");
             writer.write("EndBatch = true\n");
+            writer.write("# Stops shadows from being rendered from the level stages (true/false)\n");
+            writer.write("NoShadowStage = true\n");
+
+            writer.write("# Misc Changes\n");
+            writer.write("# ====================\n");
+            writer.write("# Allows the use of the full vertex format (true/false)\n");
+            writer.write("FullVertexFormat = true\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

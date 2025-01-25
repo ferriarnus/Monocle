@@ -48,7 +48,7 @@ public class ConfigPlugin implements IMixinConfigPlugin {
                         if(annotation.values.get(i).equals("value")) {
                             String modId = (String) annotation.values.get(i + 1);
                             if(modId != null) {
-                                if (Monocle.FALSE.equals(config.getProperty("All")) && Monocle.FALSE.equals(config.getProperty(modId))) {
+                                if (Monocle.FALSE.equals(config.getOrDefault(modId, Monocle.FALSE))) {
                                     return false;
                                 }
                             }

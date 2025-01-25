@@ -60,32 +60,32 @@ public class EmbeddiumShader extends ChunkShaderInterface {
 		super(context, OPTS);
 		try {
 			this.uniformModelViewMatrix = context.bindUniform("iris_ModelViewMatrix", GlUniformMatrix4f::new); //Iris uses bindUniformOptional
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			this.uniformModelViewMatrix = null;
 		}
 		try {
 			this.uniformModelViewMatrixInv = context.bindUniform("iris_ModelViewMatrixInverse", GlUniformMatrix4f::new);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			this.uniformModelViewMatrixInv = null;
 		}
 		try {
 			this.uniformNormalMatrix = context.bindUniform("iris_NormalMatrix", GlUniformMatrix3f::new);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			this.uniformNormalMatrix = null;
 		}
 		try {
 			this.uniformProjectionMatrix = context.bindUniform("iris_ProjectionMatrix", GlUniformMatrix4f::new);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			this.uniformProjectionMatrix = null;
 		}
 		try {
 			this.uniformProjectionMatrixInv = context.bindUniform("iris_ProjectionMatrixInv", GlUniformMatrix4f::new);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			this.uniformProjectionMatrixInv = null;
 		}
 		try {
 			this.uniformRegionOffset = context.bindUniform("u_RegionOffset", GlUniformFloat3v::new);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			this.uniformRegionOffset = null;
 		}
 
