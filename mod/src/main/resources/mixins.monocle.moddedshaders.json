@@ -23,10 +23,14 @@
 
     "shaderchanges.MixinEclipseCoreRenderer",
     "shaderchanges.MixinESPortalRenderer",
+
     "shaderchanges.MixinRenderFlame",
     "shaderchanges.MixinRenderMekasuit",
     "shaderchanges.MixinRenderSPS",
+
     "shaderchanges.MixinEIClientShaders",
+
+    "shaderchanges.MixinIEGLShaders",
 
     "altshaders.ShaderAccessMixin",
 
