@@ -96,7 +96,7 @@ file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
     modId="iris"
     type="required"
-    versionRange="[${iris_version}]"
+    versionRange="[1.8.12-snapshot+mc1.21.1-local]" #iris messed up "[${iris_version}]"
     ordering="NONE"
     side="CLIENT"
 
