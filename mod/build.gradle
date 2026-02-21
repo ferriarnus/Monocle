@@ -240,12 +240,17 @@ dependencies {
     runtimeOnly("curse.maven:modular-routers-250294:5937500")
 
     compileOnly("curse.maven:data-essence-1189360:6508079")
-    runtimeOnly("curse.maven:data-essence-1189360:6508079")
-    runtimeOnly("curse.maven:databank-1181408:6508070")
+    //runtimeOnly("curse.maven:data-essence-1189360:6508079")
+    //runtimeOnly("curse.maven:databank-1181408:6508070")
 
     compileOnly("curse.maven:runology-988198:6126814")
-    runtimeOnly("curse.maven:runology-988198:6126814")
-    runtimeOnly("curse.maven:modonomicon-538392:6338537")
+    //runtimeOnly("curse.maven:runology-988198:6126814")
+    //runtimeOnly("curse.maven:modonomicon-538392:6338537")
+
+    compileOnly("curse.maven:draconic-evolution-223565:7584459")
+    runtimeOnly("curse.maven:draconic-evolution-223565:7584459")
+    runtimeOnly("curse.maven:brandons-core-231382:7130990")
+    runtimeOnly("curse.maven:codechicken-lib-1-8-242818:7281427")
 
     //runtimeOnly("curse.maven:touhou-little-maid-355044:5896992") crashes due to missing sodium class
 
@@ -253,10 +258,10 @@ dependencies {
 
     upstreamTransformerImplementation("io.github.douira:glsl-transformer:2.0.1")
 
-    jarJar(implementation("org.taumc:glsl-transformation-lib:0.2.0-20.ge3cb096")) {
+    jarJar(implementation("org.taumc:glsl-transformation-lib:0.2.0-31.g980d228")) {
         transitive = false
     }
-    additionalRuntimeClasspath("org.taumc:glsl-transformation-lib:0.2.0-20.ge3cb096") {
+    additionalRuntimeClasspath("org.taumc:glsl-transformation-lib:0.2.0-31.g980d228") {
         transitive = false
     }
 }

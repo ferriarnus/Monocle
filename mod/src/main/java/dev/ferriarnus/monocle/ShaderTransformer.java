@@ -110,13 +110,13 @@ public class ShaderTransformer {
             }
             String profileString = "#version " + versionString + " " + profile;
             if ((profile == null && Integer.parseInt(versionString) >= 150 || profile != null && profile.equals("core"))) {
-                if (Integer.parseInt(versionString) < 330) {
+                if (Integer.parseInt(versionString) <= 330) {
                     profileString = "#version 330 core";
                 }
 
                 ShaderTransformer.patchCore(translationUnit, parameters);
             } else {
-                if (Integer.parseInt(versionString) < 330) {
+                if (Integer.parseInt(versionString) <= 330) {
                     profileString = "#version 330 core";
                 } else {
                     profileString = "#version " + versionString + " core";
@@ -255,6 +255,7 @@ public class ShaderTransformer {
             transformer.rename("vaNormal", "iris_Normal");
             transformer.replaceExpression("vaUV0", "_vert_tex_diffuse_coord");
             transformer.replaceExpression("vaUV1", "ivec2(0, 10)");
+            transformer.removeVariable("vaUV2");
             transformer.rename("vaUV2", "_vert_tex_light_coord");
 
             transformer.replaceExpression("textureMatrix", "mat4(1.0f)");
