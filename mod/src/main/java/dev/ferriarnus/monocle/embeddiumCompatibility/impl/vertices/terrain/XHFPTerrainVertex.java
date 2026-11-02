@@ -1,10 +1,10 @@
 package dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain;
 
+import dev.ferriarnus.monocle.embeddiumCompatibility.impl.EmbVertexEncoderInterface;
 import net.irisshaders.iris.vertices.ExtendedDataHelper;
 import net.irisshaders.iris.vertices.NormI8;
 import net.irisshaders.iris.vertices.NormalHelper;
 import net.irisshaders.iris.vertices.sodium.terrain.BlockContextHolder;
-import net.irisshaders.iris.vertices.sodium.terrain.VertexEncoderInterface;
 import net.minecraft.util.Mth;
 import org.embeddedt.embeddium.impl.render.chunk.terrain.material.Material;
 import org.embeddedt.embeddium.impl.render.chunk.vertex.format.ChunkVertexEncoder;
@@ -13,7 +13,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import static dev.ferriarnus.monocle.embeddiumCompatibility.impl.vertices.terrain.XHFPModelVertexType.STRIDE;
 
-public class XHFPTerrainVertex implements ChunkVertexEncoder, VertexEncoderInterface {
+public class XHFPTerrainVertex implements ChunkVertexEncoder, EmbVertexEncoderInterface {
 	private final QuadViewXHFPTerrain.QuadViewTerrainUnsafe quad = new QuadViewXHFPTerrain.QuadViewTerrainUnsafe();
 	private final Vector3f normal = new Vector3f();
 

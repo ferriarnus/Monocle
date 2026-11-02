@@ -1,8 +1,8 @@
 package dev.ferriarnus.monocle.embeddiumCompatibility.mixin;
 
+import dev.ferriarnus.monocle.embeddiumCompatibility.impl.EmbVertexEncoderInterface;
 import net.irisshaders.iris.vertices.BlockSensitiveBufferBuilder;
 import net.irisshaders.iris.vertices.sodium.terrain.BlockContextHolder;
-import net.irisshaders.iris.vertices.sodium.terrain.VertexEncoderInterface;
 import org.embeddedt.embeddium.impl.render.chunk.compile.buffers.BakedChunkModelBuilder;
 import org.embeddedt.embeddium.impl.render.chunk.vertex.builder.ChunkMeshBufferBuilder;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ public class MixinBakedChunkModelBuilder implements BlockSensitiveBufferBuilder 
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void setupContextHolder(ChunkMeshBufferBuilder[] vertexBuffers, boolean splitBySide, CallbackInfo ci) {
         for (ChunkMeshBufferBuilder vertexBuffer : vertexBuffers) {
-            ((VertexEncoderInterface) vertexBuffer).iris$setContextHolder(contextHolder);
+            ((EmbVertexEncoderInterface) vertexBuffer).iris$setContextHolder(contextHolder);
         }
     }
 
